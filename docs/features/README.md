@@ -232,25 +232,36 @@ imunify360-agent hook add --event <event name> --path </path/to/hook_script>
 
 
   * **started** - the event is generated when the malware scanning process is started (for on-demand and background scans only, yet not the ftp / waf / inotify)
+
     * params[]
       * scan_id / string / identifier of running scan
       * path / string / path that’s scanning
-      * type / string / type of scanning (“on-demand”, “background”, “ftp”, “rescan“)
+      * started / int / unixtime when scan started
+      * scan_type / string / type of scanning (“on-demand”, “background”, “ftp”, “rescan“)
       * scan_params[]  / initial scanning params
-        * file_mask / string / file mask to scan
+        * file_patterns / string / file mask to scan
+        * exclude_patterns / string / file mask to ignore
         * follow_symlinks / boolean / shall scanner follow symlinks
-        * ignore_mask / string / file mask to ignore
-        * intensity / string / intensity type selected (“low”, “moderate”,  “high”)
+        * intensity_cpu / int / intensity for cpu operations (from 1 to 7)
+        * intensity_io / int / intensity for IO operations (from 1 to 7)
+        * intensity_ram / int / amount of memory allocated to the scan process in MB
 
     <div class="notranslate">
 
     ```
     {
-    "scan_id": "dc3c6061c572410a83be19d153809df1",
-    "home": "/home/a/abdhf/",
-    "user": "abdhf",
-    "type": "background",
-    "scan_params": {"file_mask": "*", "follow_symlinks": true, "ignore_mask": "", "intensity": "low"}
+        "scan_id": "dc3c6061c572410a83be19d153809df1",
+        "home": "/home/a/abdhf/",
+        "user": "abdhf",
+        "type": "background",
+        "scan_params": {
+            "file_patterns": "*",
+            "exclude_patterns": null,
+            "follow_symlinks": true,
+            "intensity_cpu": 2
+            "intensity_io": 2
+            "intensity_ram": 2048
+        }
     }
     ```
 
@@ -261,32 +272,42 @@ imunify360-agent hook add --event <event name> --path </path/to/hook_script>
     * params[]
       * scan_id / string / identifier of running scan
       * path / string / path that’s scanned
-      * users[] / string array/ user that’s scanned
       * started / int / unixtime when scan started
+      * scan_type / string / type of scanning (“on-demand”, “background”, “ftp”, “rescan“)
       * total_files / int / total number of files that were scanned
       * total_malicious / int / number of detected malicious files
-      * errors[] / string / error message if any occurred during scanning
-      * status / string / status of scan (“ok”, “has_errors”, “failed”)
-      * scan_params[] / initial scanning params
-        * file_mask / string / file mask to scan
+      * error / string / error message if any occurred during scanning
+      * status / string / status of scan (“ok”, “failed”)
+      * users[] / string array/ user that’s scanned
+      * scan_params[]  / initial scanning params
+        * file_patterns / string / file mask to scan
+        * exclude_patterns / string / file mask to ignore
         * follow_symlinks / boolean / shall scanner follow symlinks
-        * ignore_mask / string / file mask to ignore
-        * intensity / string / intensity type selected (“low”, “moderate”,  “high”)
+        * intensity_cpu / int / intensity for cpu operations (from 1 to 7)
+        * intensity_io / int / intensity for IO operations (from 1 to 7)
+        * intensity_ram / int / amount of memory allocated to the scan process in MB
 
     <div class="notranslate">
 
     ```
     {
-    "scan_id": "dc3c6061c572410a83be19d153809df1",
-    "home": "/home/a/abdhf/",
-    "user": "abdhf",
-    "started": 1587365282,
-    "total_files": 873535,
-    "total_malicious": 345,
-    "errors": [],
-    "status": "ok",
-    "type": "background",
-    "scan_params": {"file_mask": "*", "follow_symlinks": true, "ignore_mask": "", "intensity": "low"}
+        "scan_id": "dc3c6061c572410a83be19d153809df1",
+        "path": "/home/a/abdhf/",
+        "started": 1587365282,
+        "scan_type": "background",
+        "total_files": 873535,
+        "total_malicious": 345,
+        "error": null,
+        "status": "ok",
+        "users": ["abdhf"],
+        "scan_params": {
+            "file_patterns": "*",
+            "exclude_patterns": null,
+            "follow_symlinks": true,
+            "intensity_cpu": 2
+            "intensity_io": 2
+            "intensity_ram": 2048
+        }
     }
     ```
 
@@ -301,7 +322,8 @@ imunify360-agent hook add --event <event name> --path </path/to/hook_script>
 
     * params[]
       * scan_id / string / unique id of the scan
-      * errors[] / string / error strings that happened during the last scan
+      * scan_type / string / type of scanning (“on-demand”, “background”, “ftp”, “rescan“)
+      * error / string / error message if any occurred during scanning
       * started / int / unixtime when the scan was started
       * path / string / path that was scanned
       * users[] / string array / users that have been scanned (if any)
@@ -313,15 +335,25 @@ imunify360-agent hook add --event <event name> --path </path/to/hook_script>
 
     ```
     {
-    "scan_id": "dc3c6061c572410a83be19d153809df1",
-    "path": "/home/a/abdhf/",
-    "username": ["imunify"],
-    "started": 1587365282,
-    "total_files": 873535,
-    "total_malicious": 345,
-    "errors": [],
-    "files": [
+        "scan_id": "dc3c6061c572410a83be19d153809df1",
+        "scan_type": "on-demand",
+        "path": "/home/a/abdhf/",
+        "users": [
+            "imunify",
+            "u1"
+        ],
+        "started": 1587365282,
+        "total_files": 873535,
+        "total_malicious": 345,
+        "error": null,
+        "tmp_filename": "/var/imunify360/tmp/malware_detected_critical_sldkf2j.json"
+    }
+    ```
+
+    ```
+    [
         {
+          "scan_id": "dc3c6061c572410a83be19d153809df1",
           "username": "imunify",
           "hash": "17c1dd3659578126a32701bb5eaccecc2a6d8307d8e392f5381b7273bfb8a89d",
           "size": "182",
@@ -336,9 +368,10 @@ imunify360-agent hook add --event <event name> --path </path/to/hook_script>
           "file": "/home/imunify/public_html/01102018_2.php",
           "type": "SMW-INJ-04174-bkdr",
           "scan_type": "on-demand",
-          "Created": 1553002672
+          "created": 1553002672
         },
         {
+          "scan_id": "dc3c6061c572410a83be19d153809df1",
           "username": "imunify",
           "hash": "04425f71ae6c3cd04f8a7f156aee57096dd658ce6321c92619a07e122d33bd32",
           "size": "12523",
@@ -353,13 +386,11 @@ imunify360-agent hook add --event <event name> --path </path/to/hook_script>
           "file": "/home/imunify/public_html/22.js",
           "type": "SMW-INJ-04346-js.inj",
           "scan_type": "on-demand",
-          "Created": 1553002672
+          "created": 1553002672
         },
     ...
-
-    }
+    ]
     ```
-
     </div>
 
 
@@ -382,13 +413,10 @@ All results can be saved in a temporary file before handler invocation and then 
 
     ```
     {
-    "scan_id": "dc3c6061c572410a83be19d153809df1",
-    "started": 1587365282,
-    "total_files": 873535,
-    "total_cleaned": 872835,
-    "tmp_filename": "/var/imunify/tmp/hooks/tmp_02q648234692834698456728439587245.json",
-    "errors": [],
-    "status": "ok"
+        "cleanup_id": "dc3c6061c572410a83be19d153809df1",
+        "started": 1587365282,
+        "total_files": 873535,
+        "tmp_filename": "/var/imunify/tmp/hooks/tmp_02q648234692834698456728439587245.json",
     }
     ```
 
@@ -401,20 +429,20 @@ All results can be saved in a temporary file before handler invocation and then 
       * total_files / int / number of files that were sent for cleanup
       * total_cleaned / int / number of files that were successfully cleaned
       * tmp_filename / string / path to a temporary file with a list of results.
-      * errors[] / string / error messages if any occurred during cleanup
-      * errors[] / string / error messages if any occurred during cleanup
+      * error / string / error message if any occurred during cleanup
+      * status / string / status of scan (“ok”, “failed”)
 
     <div class="notranslate">
 
     ```
     {
-    "scan_id": "dc3c6061c572410a83be19d153809df1",
-    "started": 1587365282,
-    "total_files": 873535,
-    "total_cleaned": 872835,
-    "tmp_filename": "/var/imunify/tmp/hooks/tmp_02q648234692834698456728439587245.json",
-    "errors": [],
-    "status": "ok"
+        "cleanup_id": "dc3c6061c572410a83be19d153809df1",
+        "started": 1587365282,
+        "total_files": 873535,
+        "total_cleaned": 872835,
+        "tmp_filename": "/var/imunify/tmp/malware_cleanup_finished_slkj2f.json",
+        "error": null,
+        "status": "ok"
     }
     ```
 
@@ -585,7 +613,81 @@ def im_hook(dict_param):
 
 </div>
 
-## Malware Database Scanner (MDS) <Badge text="Beta" type="warning"/> <Badge text="5.1"/>
+### Notifications
+
+Starting from version 4.10, an administrator is able to configure email addresses to submit reports and execute custom scripts. Go to <span class="notranslate">_Settings_</span> and choose <span class="notranslate">_Notifications_</span> tab.
+
+![](/images/notifications.png)
+
+* <span class="notranslate">**Default admin emails**</span>: specify the default list of emails used for all enabled admin email notifications. 
+* <span class="notranslate">**From**</span>: specify a sender of all emails sent by the Hooks. 
+
+The following events are available.
+
+#### Real-Time scan: malware detected
+
+Occurs when malware is detected during the real-time scanning.
+
+![](/images/RealTimeScanDetected.png)
+
+* <span class="notranslate">**Enable email notifications for admin**</span>: move the slider to <span class="notranslate">ON</span> to notify the administrator and a custom user list via email upon event occurrence. To notify the administrator on the default admin email, tick the <span class="notranslate">_Default admin emails_</span> checkbox. 
+* <span class="notranslate">**Notify every (mins)**</span>: set a notification interval in minutes. The data for all events that happened within the interval will be accumulated and sent altogether.
+* <span class="notranslate">**Admin emails**</span>: tick the <span class="notranslate">_Default admin emails_</span> and/or specify your emails for notifications.
+* <span class="notranslate">**Enable script execution**</span>: move the slide to <span class="notranslate">ON</span> to run a script (event handler) upon event occurrence. 
+* <span class="notranslate">**Notify every (sec)**</span>: set a notification interval in seconds. The data for all events that happened within the interval will be accumulated and sent altogether. 
+* <span class="notranslate">**Run a script**</span>: specify the full path to the script(s) or any other Linux executable to be launched on event occurrence. Make sure that the script has an executable bit (+x) on. A line-separated list of scripts is supported. 
+
+#### User scan: started
+
+Occurs immediately after the user scanning has started.
+
+![](/images/UserScanStarted.png)
+
+
+#### Custom scan: started
+
+![](/images/CustomScanStarted.png)
+
+Occurs immediately after on-demand (manual) scanning has started.
+
+
+#### User scan: finished
+
+Occurs immediately after the user scanning has finished, regardless the malware has found or not.
+
+![](/images/UserScanFinished.png)
+
+#### Custom scan: finished
+
+![](/images/CustomScanFinished.png)
+
+Occurs immediately after on-demand (manual) scanning has finished, regardless the malware has found or not.
+
+
+#### Custom scan: malware detected
+
+Occurs when the on-demand scanning process has finished and malware found.
+
+![](/images/CustomScanDetected.png)
+
+
+#### User scan: malware detected
+
+Occurs when the malware scanning process of a user account has finished and malware found.
+
+![](/images/UserScanDetected.png)
+
+
+#### Script blocked
+
+Occurs when the Proactive Defense has blocked malicious script.
+
+![](/images/ScriptBlocked.png)
+
+Click <span class="notranslate">_Save changes_</span> at the bottom to apply all changes.
+
+
+## Malware Database Scanner (MDS)
 
 <span class="notranslate">Malware Database Scanner (MDS)</span> is designed to solve all malware related problems in the database.
 
@@ -604,6 +706,14 @@ To provide safe work with database MDS supports several methods:
 * <span class="notranslate">`--scan`</span> - only scan the database, no changes will be applied
 * <span class="notranslate">`--clean`</span> - scan database and clean-up malicious
 * <span class="notranslate">`--restore`</span> - restore data affected by clean-up from the backup CSV file
+
+:::tip Note
+“Clean” operation includes “scan”, so you don’t need to run a scan before the cleanup. Whereas the “scan” can be used for non-disruptive checks of the database. Cleanup mode creates a backup file that can be used to rollback all changes back. It makes MDS safe to use and prevents websites from breaking and data loss.
+:::
+
+The easiest way to use MDS is to run it with  <span class="notranslate">`--search-configs`</span> argument: MDS will try to find the config files and print out database credentials that should be later specified for scanning. 
+
+<span class="notranslate">`--creds-from-xargs`</span> argument can be used to run MDS without a need to manually enter credentials. It allows automating the process of credentials discovery and the scan process.
 
 #### Usage
 
@@ -627,6 +737,8 @@ php /opt/ai-bolit/imunify_dbscan.php [OPTIONS] [PATH]
 |<span class="notranslate">`--prefix=<prefix>`</span>|Prefix for table|
 |<span class="notranslate">`--scan`</span>|Do scan|
 |<span class="notranslate">`--clean`</span>|Do clean|
+|<span class="notranslate">`--search-configs`</span>|Find the config files and print out database credentials|
+|<span class="notranslate">`--creds-from-xargs`</span>|Discover credentials and do scan|
 |<span class="notranslate">`--report-file=<filepath>`</span>|Filepath where to put the report|
 |<span class="notranslate">`--signature-db=<filepath>`</span>|Filepath with signatures|
 |<span class="notranslate">`--progress=<filepath>`</span>|Filepath with progress|
@@ -647,7 +759,7 @@ php /opt/ai-bolit/imunify_dbscan.php [OPTIONS] [PATH]
 <div class="notranslate">
 
 ```
-# /opt/alt/php74-imunify/usr/bin/php -n -d extension=json.so -d extension=pdo.so -d extension=mysqlnd.so -d extension=nd_mysqli.so /opt/ai-bolit/imunify_dbscan.php --port=3306 --login=user --password-from-stdin --database=$DATABASE --avdb=`pwd`/mds-ai-bolit-hoster.db --report-file=`pwd`/report.json --scan
+# /opt/alt/php74-imunify/usr/bin/php -n -d extension=json.so -d extension=pdo.so -d extension=mysqlnd.so -d extension=nd_mysqli.so /opt/ai-bolit/imunify_dbscan.php --port=3306 --login=user --password-from-stdin --database=$DATABASE --avdb=/var/imunify360/files/sigs/v1/aibolit/mds-ai-bolit-hoster.db --report-file=`pwd`/report.json --scan
 ```
 </div>
 
@@ -658,11 +770,11 @@ Scan results will be stored in the <span class="notranslate">`results.json`</spa
 <div class="notranslate">
 
 ```
-# /opt/alt/php74-imunify/usr/bin/php -n -d extension=json.so -d extension=pdo.so -d extension=mysqlnd.so -d extension=nd_mysqli.so /opt/ai-bolit/imunify_dbscan.php --port=3306 --login=user --password-from-stdin --database=$DATABASE --avdb=`pwd`/mds-ai-bolit-hoster.db --procudb=`pwd`/procu2.php --report-file=`pwd`/report.json --clean
+#  /opt/alt/php74-imunify/usr/bin/php -n -d extension=json.so -d extension=pdo.so -d extension=mysqlnd.so -d extension=nd_mysqli.so /opt/ai-bolit/imunify_dbscan.php --port=3306 --login=user --password-from-stdin --database=$DATABASE --avdb=/var/imunify360/files/sigs/v1/aibolit/mds-ai-bolit-hoster.db --procudb=/var/imunify360/files/sigs/v1/aibolit/mds-procu2.db --report-file=`pwd`/report.json --clean
 ```
 </div>
 
-Scan results will be stored in the <span class="notranslate">`results.json`</span>. Also, backup of the affected data will be created with a filename similar to the <span class="notranslate">`mds_backup_1597223818.csv`</span>.
+Cleanup results will be stored in the <span class="notranslate">`results.json`</span>. Also, backup of the affected data will be created with a filename similar to the <span class="notranslate">`mds_backup_1597223818.csv`</span>.
 
 
 #### Undo changes (restore)
@@ -675,4 +787,4 @@ Scan results will be stored in the <span class="notranslate">`results.json`</spa
 </div>
 
 
-<Disqus/>
+

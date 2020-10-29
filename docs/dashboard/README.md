@@ -476,7 +476,8 @@ Regardless of switched CSF off or on, blocked by Imunify360 IPs exist along with
 :::
 
 :::warning Warning
-For now, ipset supports only IPv6/64 networks
+For now, ipset supports only IPv6/64 networks. In most cases, it is enough to specify the mask `/64`. An example of 
+ a proper IPv6 address with the subnet mask: `2001:db8:abcd:0012::0/64`.
 :::
 
 #### How to add a country manually
@@ -1036,7 +1037,7 @@ if (strpos($external_code,$pattern)){
     print "Poactive Defence DOESN'T work or NOT in KILL mode";
 }
 else {
-    print "Proactive Defence works fine - file_get_contents function has been BLOCKED, please check Imunify360 Proactive Defence tab for correspondent BLOCK event";
+    print "Proactive Defence works fine - file_get_contents function has been BLOCKED, please check Imunify360 Proactive Defence tab for corresponding BLOCK event";
 }
 ?>
 ```
@@ -1144,7 +1145,7 @@ The following tabs are available:
 * <span class="notranslate">[Backups](/dashboard/#backups)</span>
 * <span class="notranslate">[Disables Rules](/dashboard/#disabled-rules)</span>
 * <span class="notranslate">[Attributions](/dashboard/#attributions)</span>
-* <span class="notranslate">[Notifications](/dashboard/#notifications)</span>
+* <span class="notranslate">[Notifications](/features/#notifications)</span>
 
 ### General
 
@@ -1611,11 +1612,12 @@ Read [CXS integration](/ids_integration/#cxs-integration) documentation carefull
 * <span class="notranslate">_Try to restore from backup first_</span> – allows to restore file as soon as it was detected as malicious from backup if a clean copy exists. If a clean copy does not exist or it is outdated, default action will be applied. See also <span class="notranslate">[CloudLinux Backup](/dashboard/#backups)</span>.
 * <span class="notranslate">_Use backups not older than (days)_</span> – allows to set the a maximum age of a clean file.
 * <span class="notranslate">_Default action on detect_</span> – configure Malware Scanner actions when detecting malicious activity:
-  * <span class="notranslate">Delete permanently</span>
-  * <span class="notranslate">Quarantine file</span>
   * <span class="notranslate">Just display in dashboard</span>
-  * <span class="notranslate">Cleanup</span>
-  * <span class="notranslate">Cleanup, Quarantine as a fallback</span>
+  * <span class="notranslate">Cleanup</span> (default)
+
+  :::warning Warning
+  Starting from Imunify360 v.5.4, the <span class="notranslate">_Delete permanently_</span>, the <span class="notranslate">_Quarantine file_</span>, and the <span class="notranslate">_Cleanup, Quarantine as a fallback_</span> options are available only [via CLI](/config_file_description/). They will be removed completely in Imunify360 v.5.8. For more information see [this blog post](https://blog.imunify360.com/file-quarantine-is-no-longer-effective).
+  :::
 
 
 :::tip Note
@@ -1623,7 +1625,7 @@ Those options may be hidden for end-user if Cleanup is disabled in Features Mana
 :::
 
 * <span class="notranslate">_Enable RapidScan_</span> – dramatically speeds up repeated scans based on smart re-scan approach, local result caching and cloud-assisted scan. When you first enable the RapidScan feature, the first scan will run as before. But subsequent scans will see a dramatic speed improvement, anywhere between 5 to 20 times faster. You can find details [here](/features/#rapidscan).
-* <span class="notranslate">_Binary (ELF) malware detection_</span> – this option allows to scans user home directories for malware.
+* <span class="notranslate">_Binary (ELF) malware detection_</span> – this option allows to search for any binaries (ELF files) in the user home directories and consider them malicious.
 
 Tick required checkboxes and click <span class="notranslate">_Save changes_</span> button.
 
@@ -1997,79 +1999,3 @@ It is possible to enable Service Status checker for Imunify360. Perform the foll
 If succeeded, the status of Imunify360 service will be displayed at Service Status section of Server Status.
 
 ![](/images/service_status.jpg)
-
-
-### Notifications
-
-Starting from version 4.10, an administrator is able to configure email addresses to submit reports and execute custom scripts. Go to <span class="notranslate">_Settings_</span> and choose <span class="notranslate">_Notifications_</span> tab.
-
-![](/images/notifications.png)
-
-* <span class="notranslate">**Default admin emails**</span>: specify the default list of emails used for all enabled admin email notifications. 
-* <span class="notranslate">**From**</span>: specify a sender of all emails sent by the Hooks. 
-
-The following events are available.
-
-#### Real-Time scan: malware detected
-
-Occurs when malware is detected during the real-time scanning.
-
-![](/images/RealTimeScanDetected.png)
-
-* <span class="notranslate">**Enable email notifications for admin**</span>: move the slider to <span class="notranslate">ON</span> to notify the administrator and a custom user list via email upon event occurrence. To notify the administrator on the default admin email, tick the <span class="notranslate">_Default admin emails_</span> checkbox. 
-* <span class="notranslate">**Notify every (mins)**</span>: set a notification interval in minutes. The data for all events that happened within the interval will be accumulated and sent altogether.
-* <span class="notranslate">**Admin emails**</span>: tick the <span class="notranslate">_Default admin emails_</span> and/or specify your emails for notifications.
-* <span class="notranslate">**Enable script execution**</span>: move the slide to <span class="notranslate">ON</span> to run a script (event handler) upon event occurrence. 
-* <span class="notranslate">**Notify every (sec)**</span>: set a notification interval in seconds. The data for all events that happened within the interval will be accumulated and sent altogether. 
-* <span class="notranslate">**Run a script**</span>: specify the full path to the script(s) or any other Linux executable to be launched on event occurrence. Make sure that the script has an executable bit (+x) on. A line-separated list of scripts is supported. 
-
-#### User scan: started
-
-Occurs immediately after the user scanning has started.
-
-![](/images/UserScanStarted.png)
-
-
-#### Custom scan: started
-
-![](/images/CustomScanStarted.png)
-
-Occurs immediately after on-demand (manual) scanning has started.
-
-
-#### User scan: finished
-
-Occurs immediately after the user scanning has finished, regardless the malware has found or not.
-
-![](/images/UserScanFinished.png)
-
-#### Custom scan: finished
-
-![](/images/CustomScanFinished.png)
-
-Occurs immediately after on-demand (manual) scanning has finished, regardless the malware has found or not.
-
-
-#### Custom scan: malware detected
-
-Occurs when the on-demand scanning process has finished and malware found.
-
-![](/images/CustomScanDetected.png)
-
-
-#### User scan: malware detected
-
-Occurs when the malware scanning process of a user account has finished and malware found.
-
-![](/images/UserScanDetected.png)
-
-
-#### Script blocked
-
-Occurs when the Proactive Defense has blocked malicious script.
-
-![](/images/ScriptBlocked.png)
-
-Click <span class="notranslate">_Save changes_</span> at the bottom to apply all changes.
-
-<Disqus/>
