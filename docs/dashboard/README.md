@@ -99,7 +99,7 @@ If your server's settings differ from the recommended, the Imunify Advisor will 
 ![](/images/dashboard_servers2.png)
 
 :::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
 #### **How to get a server key**
@@ -284,7 +284,7 @@ Use filters to show the exact list of the IPs:
 * Use <span class="notranslate">_Items per page_</span> at the page bottom right to set the number of the incidents to be shown on the page.
 
 :::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
 You can perform the following actions with the IPs in the <span class="notranslate">White List</span>:
@@ -377,7 +377,7 @@ Use filters to show the exact list of the IPs:
 * Use <span class="notranslate">_Items per page_</span> at the page bottom right to set the number of the incidents to be shown on the page.
 
 :::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
 You can perform the following actions with the IPs in the <span class="notranslate">Gray List</span>:
@@ -443,7 +443,7 @@ Use filters to show the exact list of the IPs:
 * Use <span class="notranslate">_Items per page_</span> at the page bottom right to set the number of the incidents to be shown on the page.
 
 :::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
 The following actions are available with IPs in the <span class="notranslate">Black List</span>:
@@ -612,7 +612,7 @@ Use filters to show the exact list of the IPs:
 * Use <span class="notranslate">_Items per page_</span> at the page bottom right to set the number of the incidents to be shown on the page.
 
 :::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
 The following actions are available for the ports:
@@ -735,7 +735,7 @@ The following filters are available:
 The table can be sorted by <span class="notranslate">_User name_</span> and <span class="notranslate">_Infection status_</span> (by the date of the last action).
 
 :::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
 ### Files
@@ -786,7 +786,7 @@ The following filters are available:
 * <span class="notranslate">**Items per page displayed**</span> — click the number at the table bottom.
 
 :::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
 The table can be sorted by detection date (detected), user name, file path (file), reason, and status.
@@ -906,7 +906,7 @@ The following filters are available:
 The table can be sorted by <span class="notranslate">_Added_</span> and <span class="notranslate">_Path_</span>. By default, it is sorted from newest to oldest.
 
 :::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
 To search file or folder in the <span class="notranslate">Ignore List</span> use <span class="notranslate">_Search_</span> input field above the table.
