@@ -963,7 +963,7 @@ The items in the <span class="notranslate">_Detected Events_</span> table are di
 To go to the next or the previous page click >> or << button or click a desired page number.
 
 :::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
 The <span class="notranslate">_Detected Events_</span> table includes the following columns:
