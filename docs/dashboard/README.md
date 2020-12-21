@@ -58,7 +58,7 @@ Click <span class="notranslate">_Dashboard_</span> tab to display an overview of
 
 Here you can see notifications about server security and Imunify360 configuration, along with recommendations for making server security effective and proactive.
 
-### Imunify Advisor <Badge text="beta"/> <Badge text="5.2"/>
+### Imunify Advisor
 
 The Imunify Advisor checks your server’s current settings, then provides a list of optimal settings for your individual server. 
 
@@ -98,6 +98,9 @@ If your server's settings differ from the recommended, the Imunify Advisor will 
 
 ![](/images/dashboard_servers2.png)
 
+:::tip Note
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+:::
 
 #### **How to get a server key**
 
@@ -238,7 +241,7 @@ Click an incident to expand the detailed information.
 
 ![](/images/expand.jpg)
 
-**Actions available for the Incidents:**
+#### Actions available for the Incidents
 
 * Disabling the rule of the incident and add it to the list of Disabled rules. Click _Ban_ icon in a proper incident row and confirm the action.
 
@@ -279,6 +282,10 @@ Use filters to show the exact list of the IPs:
 * <span class="notranslate">_Country_</span> – allows filtering the list by country origin. Enter a country name into the input field with autocomplete. Imunify360 will show the list of IPs of the chosen country.
 * <span class="notranslate">Comments</span> – allows filtering the list by comments. Enter a comment into the input field.
 * Use <span class="notranslate">_Items per page_</span> at the page bottom right to set the number of the incidents to be shown on the page.
+
+:::tip Note
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+:::
 
 You can perform the following actions with the IPs in the <span class="notranslate">White List</span>:
 
@@ -369,6 +376,10 @@ Use filters to show the exact list of the IPs:
 * <span class="notranslate">Comments</span> – allows filtering the list by comments. Enter a comment into the input field.
 * Use <span class="notranslate">_Items per page_</span> at the page bottom right to set the number of the incidents to be shown on the page.
 
+:::tip Note
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+:::
+
 You can perform the following actions with the IPs in the <span class="notranslate">Gray List</span>:
 
 * Move IP from the Gray List to the Black List
@@ -430,6 +441,10 @@ Use filters to show the exact list of the IPs:
 * <span class="notranslate">_Country_</span> – allows filtering the list by country origin. Enter a country name into the input field with autocomplete. Imunify360 will show the list of IPs of the chosen country.
 * <span class="notranslate">Comments</span> – allows filtering the list by comments. Enter a comment into the input field.
 * Use <span class="notranslate">_Items per page_</span> at the page bottom right to set the number of the incidents to be shown on the page.
+
+:::tip Note
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+:::
 
 The following actions are available with IPs in the <span class="notranslate">Black List</span>:
 
@@ -596,6 +611,10 @@ Use filters to show the exact list of the IPs:
 * <span class="notranslate">Comments</span> – allows filtering the list by comments. Enter a comment into the input field.
 * Use <span class="notranslate">_Items per page_</span> at the page bottom right to set the number of the incidents to be shown on the page.
 
+:::tip Note
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+:::
+
 The following actions are available for the ports:
 
 * add port to the list of blocked ports
@@ -645,7 +664,7 @@ To delete a port or separate IP/subnet, click _Bin_ icon in the row of the eleme
  The functionality described here depends on <span class="notranslate">[Malware Scanner settings](/dashboard/#malware)</span>.
 :::
 
-Imunify360 <span class="notranslate">Malware Scanner</span> can scan file systems for malware injection and quarantine infected files.
+Imunify360 <span class="notranslate">Malware Scanner</span> can scan file systems for malware injection and clean up infected files.
 
 This is also a real time file scanner for vulnerability and it can:
 
@@ -661,7 +680,7 @@ Malware scanning allows you to:
 
 * observe scanner activity
 * start on-demand file scanner
-* manage malicious and quarantined files
+* manage malicious and cleaned up files
 * manage Ignore List
 
 Click <span class="notranslate">_Malware Scanner_</span> in the main menu of the Imunify360 admin interface.
@@ -715,6 +734,10 @@ The following filters are available:
 
 The table can be sorted by <span class="notranslate">_User name_</span> and <span class="notranslate">_Infection status_</span> (by the date of the last action).
 
+:::tip Note
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+:::
+
 ### Files
 
 Go to <span class="notranslate">Imunify360 → Malware Scanner → Files</span> tab. Here, there is a table with a list of infected files within all domains and user accounts.
@@ -735,18 +758,18 @@ The table has the following columns:
 * <span class="notranslate">**Status**</span> — displays the file status:
   * <span class="notranslate">**Infected**</span> — threat was detected after scanning. If a file was not cleaned after cleanup, the info icon is displayed. Hover mouse over info icon to display the reason;
   * <span class="notranslate">**Cleaned**</span> —  infected file is cleaned up.
-  * <span class="notranslate">**Quarantined**</span> – a file was moved to the quarantine.
   * <span class="notranslate">**Content removed**</span> — a file content was removed after cleanup.
   * <span class="notranslate">**Cleanup in progress**</span> — infected file cleanup is in progress now.
 * <span class="notranslate">**Actions**</span>:
   * <span class="notranslate">**Add to Ignore List**</span> — add file to the <span class="notranslate">Ignore List</span> and remove it from the <span class="notranslate">Malicious files</span> list. Note that if a file is added to the <span class="notranslate">Ignore List</span>, Imunify360 will no longer scan this file. Click the <span class="notranslate">_Gear_</span> symbol ![](/images/gear.png) and select <span class="notranslate">_Add to Ignore List_</span>.
-  * <span class="notranslate">**Delete permanently**</span> — remove the file from the server and from the list of <span class="notranslate">Malicious</span> files. Click the <span class="notranslate">_Gear_ symbol</span> ![](/images/gear.png) and select <span class="notranslate">_Delete permanently_</span>.
   * <span class="notranslate">**View file**</span> — click <span class="notranslate">_View file_</span> symbol ![](/images/view_file_symbol.png) in the file line and the file content will be displayed in the pop-up. Only the first 100Kb of the file content will be shown in case if a file has bigger size.
-  * <span class="notranslate">**Move to quarantine**</span> — move the file to the quarantine. Click <span class="notranslate">_Move to quarantine_</span> symbol ![](/images/movetoquarantine_symbol.png) and confirm the action in the pop-up.
   * <span class="notranslate">**Cleanup file**</span> — click <span class="notranslate">_Clean up_</span> symbol ![](/images/cleanup_symbol.png) to clean up all infected files within the account.
-  * <span class="notranslate">**Restore from quarantine**</span> — click <span class="notranslate">_Restore from quarantine_</span> symbol ![](/images/restore_fromquarantine_symbol.png) to restore the fle from the quarantine.
   * <span class="notranslate">**Restore original file (before cleanup)**</span> — click <span class="notranslate">_Restore original_</span> symbol ![](/images/restore_original_symbol.png) to restore the original content removed as infected.
   * <span class="notranslate">**Restore from backup**</span> — click the <span class="notranslate">_Gear_</span> symbol ![](/images/gear.png) and select <span class="notranslate">_Try to restore from backup_</span> to restore the original file before it got infected if it exists.
+
+:::warning Warning
+  Starting from Imunify360 v.5.5, the <span class="notranslate">_Delete permanently_</span>, the <span class="notranslate">_Quarantine file_</span>, and the <span class="notranslate">_Cleanup, Quarantine as a fallback_</span> options are available only [via CLI](/config_file_description/). They will be removed completely in Imunify360 v.5.9. For more information see [this blog post](https://blog.imunify360.com/file-quarantine-is-no-longer-effective).
+  :::
 
 To perform a bulk action, tick required files and click the corresponding button above the table.
 
@@ -761,6 +784,10 @@ The following filters are available:
 * <span class="notranslate">**Timeframe**</span> — displays the results filtered by chosen period or date.
 * <span class="notranslate">**Status**</span> — displays the results filtered by chosen status.
 * <span class="notranslate">**Items per page displayed**</span> — click the number at the table bottom.
+
+:::tip Note
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+:::
 
 The table can be sorted by detection date (detected), user name, file path (file), reason, and status.
 
@@ -834,15 +861,11 @@ The table has the following columns:
   * <span class="notranslate">**Detected as malicious**</span> — after scanning the file was detected as infected.
   * <span class="notranslate">**Cleaned**</span> — the file is cleaned up.
   * <span class="notranslate">**Failed to clean up**</span> — there was a problem during cleanup. Hover mouse over the info icon to read more.
-  * <span class="notranslate">**Added to Ignore List**</span> — the file was added to the <span class="notranslate">Ignore List</span>. Imunify360 will not scan it but the file is not quarantined.
+  * <span class="notranslate">**Added to Ignore List**</span> — the file was added to the <span class="notranslate">Ignore List</span>. Imunify360 will not scan it.
   * <span class="notranslate">**Restored original**</span> — file content was restored as not malicious.
   * <span class="notranslate">**Cleanup removed content**</span> — file contend was removed after cleanup.
   * <span class="notranslate">**Deleted from Ignore List**</span> — the file was removed from the <span class="notranslate">Ignore List</span>. Imunify360 will scan it.
-  * <span class="notranslate">**Deleted permanently**</span> — the file was deleted.
   * <span class="notranslate">**Submitted for analysis**</span> — the file was submitted to Imunify360 team for analysis.
-  * <span class="notranslate">**Quarantined**</span> — the file was added to quarantine. It is no longer executable.
-  * <span class="notranslate">**Restored from quarantine**</span> — for now, the file is executable.
-  * <span class="notranslate">**Failed to delete**</span> — there was a problem during removal. Hover mouse over the info icon to read more.
   * <span class="notranslate">**Failed to ignore**</span> — there was a problem during adding to the <span class="notranslate">Ignore List</span>. Hover mouse over the info icon to read more.
   * <span class="notranslate">**Failed to delete from ignore**</span> — there was a problem during removal from the <span class="notranslate">Ignore List</span>. Hover mouse over the info icon to read more.
   
@@ -874,12 +897,17 @@ Wildcards are not supported when adding paths to the <span class="notranslate">I
 :::
 
 To perform a bulk action, tick required files and click the corresponding button above the table.
+
 The following filters are available:
 
 * <span class="notranslate">**Timeframe**</span> — displays the results filtered by chosen period or date.
 * <span class="notranslate">**Items per page**</span> — click the number at the table bottom.
 
 The table can be sorted by <span class="notranslate">_Added_</span> and <span class="notranslate">_Path_</span>. By default, it is sorted from newest to oldest.
+
+:::tip Note
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+:::
 
 To search file or folder in the <span class="notranslate">Ignore List</span> use <span class="notranslate">_Search_</span> input field above the table.
 
@@ -929,8 +957,15 @@ The <span class="notranslate">Detected Events</span> table displays all the nece
 ![](/images/proactivedefensedetectedevents_zoom70.png)
 
 You can filter items by time frame in a <span class="notranslate">_Timframe_</span> dropdown and search a certain entity in a search field.
+
 The items in the <span class="notranslate">_Detected Events_</span> table are displayed per 25 on a page. To change a number of items displayed, click the number at the bottom right corner <span class="notranslate">_Items per page_</span> and select a desired number in the dropdown.
+
 To go to the next or the previous page click >> or << button or click a desired page number.
+
+:::tip Note
+Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser’s local storage so you can set up filter preference options as the default option and next time you'll open the tab, the options will be preset.
+:::
+
 The <span class="notranslate">_Detected Events_</span> table includes the following columns:
 * <span class="notranslate">Group/individual action</span> checkbox — allows to perform actions on one or several desired entities
 * <span class="notranslate">Detection Date/Time</span> — displays the date and the exact time of event detected. To view the exact time click the clock icon in the desired event line. To order the events from the last to the first or vice versa click the ▲ icon in the <span class="notranslate">Date/Time</span> of detection column header
@@ -1578,11 +1613,11 @@ Read [CXS integration](/ids_integration/#cxs-integration) documentation carefull
 
 ![](/images/SettingsMalwareResourceConsumption.png)
 
-* <span class="notranslate">_CPU consumption_</span> – enables to set a level of CPU usage by Malware Scanner.
+* <span class="notranslate">_CPU consumption_</span> – allows to set a level of CPU usage by Malware Scanner.
     ::: tip Note
     Low CPU usage means low scanning speed
     :::
-* <span class="notranslate">_I/O consumption_</span> – enables to set a level of I/O usage by Malware Scanner.
+* <span class="notranslate">_I/O consumption_</span> – allows to set a level of I/O usage by Malware Scanner.
     :::tip Note
     Low I/O usage means low scanning speed
     :::
@@ -1616,7 +1651,7 @@ Read [CXS integration](/ids_integration/#cxs-integration) documentation carefull
   * <span class="notranslate">Cleanup</span> (default)
 
   :::warning Warning
-  Starting from Imunify360 v.5.4, the <span class="notranslate">_Delete permanently_</span>, the <span class="notranslate">_Quarantine file_</span>, and the <span class="notranslate">_Cleanup, Quarantine as a fallback_</span> options are available only [via CLI](/config_file_description/). They will be removed completely in Imunify360 v.5.8. For more information see [this blog post](https://blog.imunify360.com/file-quarantine-is-no-longer-effective).
+  Starting from Imunify360 v.5.5, the <span class="notranslate">_Delete permanently_</span>, the <span class="notranslate">_Quarantine file_</span>, and the <span class="notranslate">_Cleanup, Quarantine as a fallback_</span> options are available only [via CLI](/config_file_description/). They will be removed completely in Imunify360 v.5.9. For more information see [this blog post](https://blog.imunify360.com/file-quarantine-is-no-longer-effective).
   :::
 
 
@@ -1953,7 +1988,7 @@ Choose an option for each feature.
 
 <span class="notranslate">**Malware Scanner**</span>
 * <span class="notranslate">_View reports + Cleanup_</span> – a user can view scanning reports and cleanup found malware
-* <span class="notranslate">_View reports only_</span> – a user can view scanning reports but can't cleanup found malware (note that quarantine and file removal functionality is still available in this mode)
+* <span class="notranslate">_View reports only_</span> – a user can view scanning reports but can't cleanup found malware
 * <span class="notranslate">_Not available_</span> – the <span class="notranslate">Malware Scanner</span> is not available for a user, and its tab is hidden on the Imunify360 main menu
 :::tip Note
 The last option is available in the WHM/cPanel Package Manager only and is not available via Imunify360 UI or CLI.

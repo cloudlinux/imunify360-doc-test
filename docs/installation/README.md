@@ -14,6 +14,12 @@
 * CentOS 8 as stand-alone
 * CloudLinux OS 8 with DirectAdmin
 * CloudLinux OS 8 as stand-alone
+* <span class="notranslate">Debian 9</span> with Plesk
+* <span class="notranslate">Debian 9</span> with DirectAdmin
+* <span class="notranslate">Debian 9</span> as stand-alone
+* <span class="notranslate">Debian 10</span> with Plesk
+* <span class="notranslate">Debian 10</span> with DirectAdmin
+* <span class="notranslate">Debian 10</span> as stand-alone
 
 
 
@@ -59,7 +65,7 @@
 |<span class="notranslate">CWAF Agent</span> | No problems detected.|
 |<span class="notranslate">Patchman</span> | No problems detected.|
 |<span class="notranslate">Suhosin</span> | We are ignoring alerts by <span class="notranslate">Suhosin</span>.|
-|<span class="notranslate">Cloudflare</span> | Starting from version 3.8, Imunify360 supports graylisting IP addresses behind <span class="notranslate">Cloudflare</span>. More details [here](/ids_integration/#cloudflare-support).|
+|<span class="notranslate">Cloudflare</span> | Imunify360 supports graylisting IP addresses behind <span class="notranslate">Cloudflare</span>. More details [here](/ids_integration/#cloudflare-support).|
 |<span class="notranslate">CXS</span> | [Special actions required](/ids_integration/#cxs-integration) to use Imunify360 with <span class="notranslate">CXS</span> installed.|
 |<span class="notranslate">cPHulk</span> | Imunify360 disables <span class="notranslate">cPHulk</span> during installation. However in case of enabling it back, Imunify360 integrates with it and shows <span class="notranslate">cPHulk</span> events in the incident screen.|
 |<span class="notranslate">OpenVZ</span> | Works for <span class="notranslate">Virtuozzo</span> 7 with kernel 3.10.0-327.10.1.vz7.12.8 or later.|
@@ -147,6 +153,8 @@ bash i360deploy.sh -h
 
 </div>
 
+### Registering
+
 In a case of registration key is passed later, then you can register an activation key via the <span class="notranslate">Imunify360-agent</span> command:
 
 <div class="notranslate">
@@ -184,6 +192,17 @@ semodule_package -o /var/imunify360/imunify360.pp -m /var/imunify360/imunify360.
 semodule -i /var/imunify360/imunify360.pp
 ```
 </div>
+
+After that, restart imunify360 service.
+For CentOS6/CloudLinux6:
+```
+service imunify360 restart
+```
+
+For other systems:
+```
+systemctl restart imunify360
+```
 
 ## Update Instructions
 
@@ -274,4 +293,4 @@ bash imunify-force-update.sh
 ```
 </div>
 
-<Disqus/>
+
