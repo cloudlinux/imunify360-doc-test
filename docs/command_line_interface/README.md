@@ -145,24 +145,15 @@ imunify360-agent 3rdparty conflicts
 
 </div>
 
-Example of successful output:
 
-<div class="notranslate">
-
-```
-{'scan_intensity_io_cfq': True, 'smtp_blocking_enable': True, 'scan_modsec': True}
-```
-
-</div>
-
-2. The following command lists other IDS that might be running concurrently with Imunify360:
+1. The following command lists other IDS that might be running concurrently with Imunify360. Here is the example of the command and the output on the server with Fail2ban enabled:
 
 <div class="notranslate">
 
 ```
 imunify360-agent 3rdparty list
+fail2ban
 ```
-
 </div>
 
 ## Backup systems
@@ -222,21 +213,13 @@ The <span class="notranslate">`check`</span> command returns <span class="notran
 
    ```
    imunify360-agent backup-systems list
+   acronis 
+   r1soft 
+   cloudlinux
+   cpanel
    ```
 </div>
 
-Example of successful output:
-
-<div class="notranslate">
-
-```
-acronis 
-r1soft 
-cloudlinux
-cpanel
-```
-
-</div>
 
 2. The following command initializes CloudLinux backup system:
 
@@ -244,18 +227,10 @@ cpanel
 
    ```
    imunify360-agent backup-systems init cloudlinux
+   Backup initialization process is in progress
    ```
 </div>
 
-Example of successful output:
-
-<div class="notranslate">
-
-```
-Backup initialization process is in progress
-```
-
-</div>
 
 3. The following command checks if the CloudLinux backup system is connected:
 
@@ -263,17 +238,8 @@ Backup initialization process is in progress
 
    ```
    imunify360-agent backup-systems check cloudlinux
+   {'url': 'https://cln.cloudlinux.com/clweb/cb/buy.html?id=YourServerIdHere', 'status': 'unpaid'}
    ```
-</div>
-
-Example of successful output:
-
-<div class="notranslate">
-
-```
-{'url': 'https://cln.cloudlinux.com/clweb/cb/buy.html?id=YourServerIdHere', 'status': 'unpaid'}
-```
-
 </div>
 
 At first, it shows that it isn't, so you should open the URL from the JSON response in the browser to activate the backup. Once this is done, it shows in the CLN.
@@ -287,15 +253,6 @@ Run the check again and now it returns the size and that the backup has been pai
    ```
 </div>
 
-Example of successful output:
-
-<div class="notranslate">
-
-```
-{'size': 10, 'status': 'paid'}
-```
-
-</div>
 
 The above commands create a new cloudlinuxbackup.com account and link that account to this server after following the link and confirming the payment of $0.00 for free 10GB.
 
@@ -331,13 +288,13 @@ imunify360-agent blacklist [subject] [command] <value> [--option]
 |<span class="notranslate">`list`</span>| list items(-s) in <span class="notranslate">Black List</span>|
 
 
-Please note that by default <span class="notranslate">`list`</span> command outputs only first 100 items in the list as if it was run as <span class="notranslate">`blacklist ip list --limit 100`</span>.
+Please note that by default <span class="notranslate">`list`</span> command outputs only first 100 items in the list as if it was run as <span class="notranslate">`imunify360-agent blacklist ip list --limit 100`</span>.
 To check whether specific IP address is in the list, you can run the following command:
 
 <div class="notranslate">
 
 ```
-blacklist ip list --by-ip 12.34.56.78
+imunify360-agent blacklist ip list --by-ip 12.34.56.78
 ```
 
 </div>
@@ -372,18 +329,9 @@ where 12.34.56.78 is that specific IP address.
 
    ```
    imunify360-agent blacklist --by-country-code BO
+   IP       TTL  COUNTRY  IMPORTED_FROM  COMMENT
+   1.2.3.4
    ```
-
-</div>
-
-Example of successful output:
-
-<div class="notranslate">
-
-```
-IP       TTL  COUNTRY  IMPORTED_FROM  COMMENT
-1.2.3.4
-```
 
 </div>
 
@@ -393,24 +341,27 @@ IP       TTL  COUNTRY  IMPORTED_FROM  COMMENT
 <div class="notranslate">
 
    ```
-imunify360-agent blacklist ip add 1.2.3.4 --scope group
+   imunify360-agent blacklist ip add 1.2.3.4 --scope group
+   OK
    ```
 
 </div>
 
-Example of successful output:
+To blacklist multiple IP addresses, put them into a file and add to the black list as follows:
 
 <div class="notranslate">
 
-   ```
-OK
-   ```
+```
+cat list.txt | xargs -n 1 imunify360-agent blacklist ip add
+```
 
 </div>
 
+The alternative would be using the [external white/black list feature](/features/#external-black-whitelist-management).
 
 :::warning Warning
-For now, ipset supports only IPv6/64 networks
+For now, ipset supports only IPv6/64 networks. In most cases, it is enough to specify the mask `/64`. An example of 
+ a proper IPv6 address with the subnet mask: `2001:db8:abcd:0012::0/64`.
 :::
 
 ## Blocked ports
@@ -452,12 +403,26 @@ imunify360-agent blocked-port [command] <value> [--option]
 
 **Example:**
 
-The following command blocks port 5555 for tcp connections with a comment <span class="notranslate">“Some comment”</span>:
+The following command blocks port 5555 for tcp connections with a comment <span class="notranslate">"Some comment"</span>:
 
 <div class="notranslate">
 
 ```
-imunify360-agent blocked-port add 5555:tcp --comment “Some comment”
+imunify360-agent blocked-port add 5555:tcp --comment "Some comment"
+```
+
+</div>
+
+This one includes the list of example IPs and ports blocked:
+
+<div class="notranslate">
+
+```
+# imunify360-agent blocked-port list
+
+COMMENT       ID  IPS                                                                                   PORT  PROTO
+              1   []                                                                                    3306  tcp  
+Some comment  2   [{'comment': None, 'ip': '111.111.111.111'}, {'comment': None, 'ip': '22.22.22.22'}]  5555  tcp 
 ```
 
 </div>
@@ -495,12 +460,13 @@ imunify360-agent blocked-port-ip [command] <value> [--option]
 
 **Example:**
 
-The following command adds IP address 12.34.56.78 to the blocked port 5555 for tcp connections with a comment <span class="notranslate">“Some comment”</span>:
+The following command adds IP address 12.34.56.78 to the blocked port 5555 for tcp connections with a comment <span class="notranslate">'Some comment'</span>:
 
 <div class="notranslate">
 
 ```
-imunify360-agent blocked-port-ip add 12.34.56.78 5555:tcp --comment “Some comment”
+imunify360-agent blocked-port-ip add 5555:tcp --ips 12.34.56.78 --comment 'Some comment'
+OK
 ```
 
 </div>
@@ -557,19 +523,11 @@ The following command sends the domains list for a check to the Imunify360 centr
 
 ```
 imunify360-agent check-domains
+OK
 ```
 
 </div>
 
-Example of successful output:
-
-<div class="notranslate">
-
-   ```
-OK
-   ```
-
-</div>
 
 ## Check modsec directives
 	
@@ -593,21 +551,13 @@ The following command checks whether the global ModSecurity directives have valu
 
 ```
 imunify360-agent check modsec directives
+WARNING: {'ignored': False, 'id': '1000', 'fix': 'Run `imunify360-agent fix modsec directives` command', 'title': "Wrong value for SecConnEngine ModSecurity directive. Expected: 'Off' Got: None", 'url': 'https://docs.imunify360.com/'}
+WARNING: {'ignored': False, 'id': '1000', 'fix': 'Run `imunify360-agent fix modsec directives` command', 'title': "Wrong value for SecAuditEngine ModSecurity directive. Expected: 'RelevantOnly' Got: None", 'url': 'https://docs.imunify360.com/'}
+WARNING: {'ignored': False, 'id': '1000', 'fix': 'Run `imunify360-agent fix modsec directives` command', 'title': "Wrong value for SecRuleEngine ModSecurity directive. Expected: 'On' Got: None", 'url': 'https://docs.imunify360.com/'}
 ```
 
 </div>
 
-Example of successful output:
-
-<div class="notranslate">
-
-```
-WARNING: {'ignored': False, 'id': '1000', 'fix': 'Run `imunify360-agent fix modsec directives` command', 'title': "Wrong value for SecConnEngine ModSecurity directive. Expected: 'Off' Got: None", 'url': 'https://docs.imunify360.com/issues/1000'}
-WARNING: {'ignored': False, 'id': '1000', 'fix': 'Run `imunify360-agent fix modsec directives` command', 'title': "Wrong value for SecAuditEngine ModSecurity directive. Expected: 'RelevantOnly' Got: None", 'url': 'https://docs.imunify360.com/issues/1000'}
-WARNING: {'ignored': False, 'id': '1000', 'fix': 'Run `imunify360-agent fix modsec directives` command', 'title': "Wrong value for SecRuleEngine ModSecurity directive. Expected: 'On' Got: None", 'url': 'https://docs.imunify360.com/issues/1000'}
-```
-</div>
-	
 ## Clean
 
 Clean the incident list.
@@ -631,12 +581,13 @@ imunify360-agent clean [--optional arguments]
 
 **Example:**
 
-The following command deletes all incidents that are older than 5 days from today and leave only 5000 new incidents:
-	
+The following command deletes all incidents that are older than 5 days from today and leave only 5000 new incidents. The output identifies the number of the incidents cleaned.
+
 <div class="notranslate">
 
 ```
-imunify360-agent clean --days 5 --limit 5000
+# imunify360-agent clean --days 5 --limit 5000
+2521
 ```
 
 </div>
@@ -675,6 +626,8 @@ imunify360-agent config update ‘{"MALWARE_SCAN_INTENSITY": {"cpu": 5}}’
 ```
 </div>
 
+The successful output should display the configuration file content.
+
 ## Doctor
 
 Collecting information about Imunify360 state, generating the report and sending it to Imunify360 Support Team. This command can be used in case of any troubles or issues with Imunify360. This command will generate a key to be sent to Imunify360 Support Team. With that key Imunify360 Support Team can help with any problem as fast as possible.
@@ -685,10 +638,12 @@ Collecting information about Imunify360 state, generating the report and sending
 
 ```
 imunify360-agent doctor
+Please, provide this key:
+SSXX11xXXXxxxxXX.1a1bcd1e-222f-33g3-hi44-5551k5lmn555
+to Imunify360 Support Team
 ```
 
 </div>
- 
 
 ## Eula
 
@@ -763,17 +718,8 @@ imunify360-agent features [command] <feature name>
 
    ```
    imunify360-agent features status kernelcare
+   {'status': 'not_installed', 'message': 'KernelCare is not installed'}
    ```
-
-   </div>
-
-Example of successful output:
-
-<div class="notranslate">
-
-```
-{'status': 'not_installed', 'message': 'KernelCare is not installed'}
-```
 </div>
 
 2. The following command installs KernelCare:
@@ -868,15 +814,6 @@ imunify360-agent feature-management native disable
 
 </div>
 
-Example of successful output:
-
-<div class="notranslate">
-
-```
-OK
-```
-</div>
-
 Once the command executed:
 
 * The <span class="notranslate">Native Features Management</span> will be deactivated
@@ -892,12 +829,13 @@ Imunify360 will keep applying users <span class="notranslate">Features Managemen
 <span class="notranslate">`feature-management enable/disable --feature av`</span> and <span class="notranslate">`feature-management enable/disable --feature proactive`</span> commands will start functioning.
 :::
 
-3. The following command enables the <span class="notranslate">Native Features Management</span>
+1. The following command enables the <span class="notranslate">Native Features Management</span>
 
 <div class="notranslate">
 
 ```
 imunify360-agent feature-management native enable
+OK
 ```
 
 </div>
@@ -940,10 +878,13 @@ The following command sets the ModSecurity directives values to ones recommended
 <div class="notranslate">
 
 ```
-imunify360-agent fix modsec directives 
+imunify360-agent fix modsec directives
+OK
 ```
 	
 </div>
+
+If the execution was unsuccessful, the actual error message will be displayed if there are any issues with that.
 
 ## Get
 
@@ -989,6 +930,23 @@ imunify360-agent get --period 1h --by-country-code UA --by-list black --json
 
 </div>
 
+This one will show the incidents with the severity level 5 of triggered rules, e.g.:
+
+<div class="notranslate">
+
+```
+# imunify360-agent get --period 20d --severity 5
+
+TIMESTAMP   ABUSER        COUNTRY  TIMES    NAME                         SEVERITY
+1600162404  11.22.33.44    CN        1      SSHD authentication failed.  5       
+1600154599  11.22.33.44    CN        1      SSHD authentication failed.  5       
+1600138163  11.22.33.44    CN        1      Process exiting (killed).    5 
+```
+
+</div>
+
+To get more detailed output to check the plugin or the rule ID these incidents belong to, use the ```--json``` argument.
+
 ## Graylist
 
 This command allows to view or edit IP <span class="notranslate">Gray List</span>.
@@ -1025,7 +983,7 @@ To check whether specific IP address is in the list, you can run the following c
 <div class="notranslate">
 
 ```
-graylist ip list --by-ip 12.34.56.78
+imunify360-agent graylist ip list --by-ip 12.34.56.78
 ```
 
 </div>
@@ -1040,11 +998,14 @@ The following command will remove IP `1.2.3.4` from the Gray List:
 
 ```
 imunify360-agent graylist ip delete 1.2.3.4
+OK
 ```
 
 </div>
 
-## Hooks
+## Hooks <Badge text="Deprecated" type="warning"/>
+
+You can use a new notification system via [CLI](/command_line_interface/#notifications-config) and [UI](/features/#notifications).
 
 You can find more about hooks [here](/features/#hooks).
 
@@ -1076,15 +1037,16 @@ imunify360-agent hook [command] --event [event_name|all] [--path </path/to/hook_
 
 **Example:**
 
-The following command shows existing event handlers:
+The following command shows existing event handlers. If you have any hooks configured, the output will include something similar to this:
 
 <div class="notranslate">
 
 ```
-imunify360-agent hook list
+imunify360-agent hook list --event all
+Event: malware-detected, Path: /root/directory/im360mwscannereventhooks/get_user.py
 ```
-
 </div>
+
 
 ## Import
 
@@ -1143,12 +1105,14 @@ imunify360-agent infected-domains [--optional arguments]
 
 **Example:**
 
-The following command displays the results of the <span class="notranslate">`check-domains`</span> command:
+The following command displays the results of the <span class="notranslate">`check-domains`</span> command. In case there are no infected domains located on the server, you will see no output. If there are any, you will get the following output:
 
 <div class="notranslate">
 
 ```
 imunify360-agent infected-domains
+'domain1.com'
+'domain2.com'
 ```
 
 </div>
@@ -1191,16 +1155,16 @@ Optional arguments for <span class="notranslate">`pam`</span>:
 **Example**:
 
 1. You can use the <span class="notranslate">`login get`</span> command to implement your own authorization mechanism for stand-alone Imunify.
-For example, you can generate tokens for users which are already authorized in your system/panel, and redirect to stand-alone Imunify UI with <span class="notranslate">`?token=<TOKEN>`</span> in URL. (You can also set it in localStorage: <span class="notranslate">`localStorage.setItem('I360_AUTH_TOKEN', '<TOKEN>');`</span>)
+For example, you can generate tokens for users which are already authorized in your system/panel, and redirect to stand-alone Imunify UI with <span class="notranslate">`?token=<TOKEN>`</span> in URL. (You can also set it in localStorage: <span class="notranslate">`localStorage.setItem('I360_AUTH_TOKEN', '<TOKEN>');`</span>). The output will display similar to the following:
 
 <div class="notranslate">
 
 ```
 imunify360-agent login get --username my-user1
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MDAyNDQwMTAuMDk5MzE5LCJ1c2VyX3R5cGUiOiJjbGllbnQiLCJ1c2VybmFtZSI6ImNsdGVzdCJ9.V_Q03hYw4dNLX5cewEb_h46hOw96KWBWP0E0ChbP3dA
 ```
 
 </div>
-
 
 2. This command is used internally by stand-alone Imunify UI as the default authorization method.
 
@@ -1272,13 +1236,11 @@ where PATHS are the absolute paths to files or folders divided by a whitespace.
 |<span class="notranslate">`cleanup`</span>|clean up infected ITEMS for a USER|
 |<span class="notranslate">`cleanup-all`</span>|clean up all files that have been detected as infected for all users|
 |<span class="notranslate">`restore-original`</span>|restore the original (malicious/infected) file to its original location|
-|<span class="notranslate">`delete`</span>|delete malicious/infected files|
 |<span class="notranslate">`list`</span>|list malicious/infected files|
 |<span class="notranslate">`move-to-ignore`</span>|move a <span class="notranslate">Malicious List</span> entry to the (malware) <span class="notranslate">Ignore List</span>|
-|<span class="notranslate">`quarantine-malicious`</span>|add malicious/infected files to the quarantine|
 |<span class="notranslate">`remove-from-list`</span>|remove malicious/infected files from the <span class="notranslate">Malicious List</span>|
 |<span class="notranslate">`restore-from-backup`</span>|restore a clean version of infected file from backup|
-|<span class="notranslate">`restore-from-quarantine`</span>|restore a quarantined file. The file will be automatically re-scanned|
+|<span class="notranslate">`restore-from-quarantine`</span>|<b>deprecated in ver. 5.9.</b> Restore a quarantined file. The file will be automatically re-scanned|
 
 
 <span class="notranslate">`action`</span> is the second positional argument for <span class="notranslate">`on-demand`</span> and can be one of the following:
@@ -1307,10 +1269,8 @@ The optional arguments for <span class="notranslate">`on-demand start`</span> an
 
 | | |
 |-|-|
-|<span class="notranslate">`delete`</span>|delete a <span class="notranslate">Suspicious List</span> entry|
 |<span class="notranslate">`list`</span>|obtain the list of <span class="notranslate">Suspicious List</span> entries|
 |<span class="notranslate">`move-to-ignore`</span>|move a <span class="notranslate">Suspicious List</span> entry to the (malware) <span class="notranslate">Ignore List</span>|
-|<span class="notranslate">`move-to-quarantine`</span>|move a <span class="notranslate">Suspicious List</span> entry to the quarantine|
 
 
 <span class="notranslate">`action`</span> is the second positional argument for <span class="notranslate">`user`</span> and can be one of the following:
@@ -1389,6 +1349,23 @@ imunify360-agent malware malicious list --user cltest --limit 500
 ```
 </div>
 
+The list of the infected files found will be looking in the following way:
+
+<div class="notranslate">
+
+```
+
+CLEANED_AT  CREATED     EXTRA_DATA  FILE  HASH  ID  MALICIOUS  SCAN_ID  SCAN_TYPE  SIZE  STATUS  TYPE  USERNAME
+None        1599955297  {}          /home/cltest/public_html/test/TsMeJD.php        275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f  1627  True       1996cd86e6b14b12a1c165e79e3540d9  background  68    found   SMW-SA-05057-eicar.tst-4  cltest   
+None        1599955297  {}          /home/cltest/public_html/test/TZlfnU.php        275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f  1628  True       1996cd86e6b14b12a1c165e79e3540d9  background  68    found   SMW-SA-05057-eicar.tst-4  cltest   
+None        1599955297  {}          /home/cltest/public_html/test/Ke7V8n.php        275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f  1629  True       1996cd86e6b14b12a1c165e79e3540d9  background  68    found   SMW-SA-05057-eicar.tst-4  cltest   
+None        1599955297  {}          /home/cltest/public_html/yoUq0L.php             275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f  1630  True       1996cd86e6b14b12a1c165e79e3540d9  background  68    found   SMW-SA-05057-eicar.tst-4  cltest   
+None        1599955297  {}          /home/cltest/public_html/test/PKiuhY.php        275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f  1631  True       1996cd86e6b14b12a1c165e79e3540d9  background  68    found   SMW-SA-05057-eicar.tst-4  cltest   
+None        1599955297  {}          /home/cltest/public_html/public_html/Zqrsvh.php  275a021bbfb6489e54d471899f7db9d1663fc695
+
+```
+</div>
+
 8. The following command adds the specified path to the Ignore List
 
 <div class="notranslate">
@@ -1416,9 +1393,16 @@ imunify360-agent malware user list
 ```
 </div>
 
+The successful initiation/stopping of a scanning process or adding of ignore directories/files should give you ```OK``` in the output.
+
 ## Notifications config
 
-Allows to show and update notifications in the configuration file via CLI.
+Allows administrators to do the following:
+
+* configure email addresses to submit reports on events execution
+* execute custom scripts on events execution
+* show the full notification config as a JSON-file
+* update the notification config via CLI
 
 **Usage:**
 
@@ -1434,92 +1418,266 @@ imunify360-agent notifications-config [command] [configuration options]
 
 | | |
 |-|-|
-|<span class="notranslate">`show`</span>|returns the whole config as a JSON|
-|<span class="notranslate">`update`</span>|updates the config (partial update is supported) and returns the whole updated config as a JSON|
+|<span class="notranslate">`show`</span>|returns the full config as a JSON|
+|<span class="notranslate">`update`</span>|updates the config (partial update is supported) and returns the full updated config as a JSON|
 
-You can find all configuration options [here](/config_file_description/) and instructions on how to apply configuration changes from CLI [here](/config_file_description/#how-to-apply-changes-from-cli).
+We advise administrators to use the <span class="notranslate">`notifications-config show`</span> to get the full config, pick what they want to edit, and feed it to the <span class="notranslate">`notifications-config update`</span>.
 
-**Examples:**
-
-1. The <span class="notranslate">`imunify360-agent notifications-config show`</span> command output:
+The general structure of the <span class="notranslate">`imunify360-agent notifications-config show`</span> command output:
 
 <div class="notranslate">
 
-``` json
+```json
 {
-    "admin": {
-        "default_emails": [
-            "email1",
-            "email2"
-        ],
-        "locale": "en-US",
-        "notify_from_email": "root@hosting.example.com"
-    },
-    "rules": {
-        "EVENT_ID": {
-            "ADMIN": {
-                "admin_emails": [
-                    "email3",
-                    "email4",
-                    "default"
-                ],
-                "enabled": true,
-                "period": 3600
-            },
-            "SCRIPT": {
-                "enabled": true,
-                "period": 10,
-                "scripts": [
-                    "/path/to/script"
-                ]
-            }
-        },
-        "EVENT_ID_2": {
-            "ADMIN": {
-                "admin_emails": [
-                    "email3",
-                    "email4",
-                    "default"
-                ]
-            },
-            "SCRIPT": {
-                "scripts": [
-                    "/path/to/script"
-                ]
-            }
-        }
+   "rules": {
+      "SCRIPT_BLOCKED": {
+         "SCRIPT": {
+            "scripts": [], 
+            "period": 1,
+            "enabled": False
+         }, 
+         "ADMIN": {
+            "period": 1,
+            "admin_emails": [],
+            "enabled": False
+         }
+      },
+      "USER_SCAN_FINISHED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "USER_SCAN_MALWARE_FOUND": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         },
+         "ADMIN": {
+         "admin_emails": [],
+         "enabled": False
+         }
+      },
+      "USER_SCAN_STARTED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "CUSTOM_SCAN_STARTED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "REALTIME_MALWARE_FOUND": {
+         "SCRIPT": {
+            "scripts": [], 
+            "period": 1,
+            "enabled": False
+         },
+         "ADMIN": {
+            "period": 1,
+            "admin_emails": [],
+            "enabled": False
+         }
+      },
+      "CUSTOM_SCAN_FINISHED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "CUSTOM_SCAN_MALWARE_FOUND": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         },
+         "ADMIN": {
+            "admin_emails": [],
+            "enabled": False
+         }
+      }
+   },
+   "admin": {
+      "notify_from_email": None,
+      "default_emails": []
+   }
+}
 ```
 
 </div>
 
-2. Update admin default emails:
+Let's review all the options.
+
+Rules:
+
+* <span class="notranslate">SCRIPT_BLOCKED</span> – occurs when the Proactive Defense has blocked malicious script.
+* <span class="notranslate">USER_SCAN_FINISHED</span> – occurs immediately after the user scanning has finished, regardless the malware has found or not.
+* <span class="notranslate">USER_SCAN_MALWARE_FOUND</span> – occurs when the malware scanning process of a user account has finished and malware found.
+* <span class="notranslate">USER_SCAN_STARTED</span> – occurs immediately after the user scanning has started.
+* <span class="notranslate">CUSTOM_SCAN_STARTED</span> – occurs immediately after on-demand (manual) scanning has started.
+* <span class="notranslate">REALTIME_MALWARE_FOUND</span> – occurs when malware is detected during the real-time scanning.
+* <span class="notranslate">CUSTOM_SCAN_FINISHED</span> – occurs immediately after on-demand (manual) scanning has finished, regardless the malware has found or not.
+* <span class="notranslate">CUSTOM_SCAN_MALWARE_FOUND</span> – occurs when the on-demand scanning process has finished and malware found.
+
+
+Admin:
+
+* <span class="notranslate">default_emails</span> – specify the default list of emails used for all enabled admin email notifications.
+* <span class="notranslate">notify_from_email</span> – specify a sender of all emails sent by the Hooks.
+
+Let's review all options for a specific event on the <span class="notranslate">REALTIME_MALWARE_FOUND</span> example:
+
+<div class="notranslate">
+
+```json
+   "REALTIME_MALWARE_FOUND": {
+      "SCRIPT": {
+         "scripts": [], 
+         "period": 1,
+         "enabled": False
+      },
+      "ADMIN": {
+         "period": 1,
+         "admin_emails": [],
+         "enabled": False
+      }
+```
+</div>
+
+<span class="notranslate">**SCRIPT**</span>
+
+* <span class="notranslate">scripts</span> – specify the full path to the script(s) or any other Linux executable to be launched on event occurrence. Make sure that the script has an executable bit (+x) on. A line-separated list of scripts is supported.
+* <span class="notranslate">period</span> – set a notification interval in seconds. The data for all events that happened within the interval will be accumulated and sent altogether.
+* <span class="notranslate">enabled</span> – run (`True`) a script (event handler) upon event occurrence.
+
+
+<span class="notranslate">**ADMIN**</span>:
+
+* <span class="notranslate">period</span> – set a notification interval in minutes. The data for all events that happened within the interval will be accumulated and sent altogether.
+* <span class="notranslate">admin_emails</span> – set `default` to use the default administrator emails and/or specify your emails for notifications.
+* <span class="notranslate">enabled</span> – notify (`True`) the administrator and a custom user list via email upon event occurrence.
+
+**Examples**:
+
+1. Update admin default emails:
 
 <div class="notranslate">
 
 ```
-imunify360-agent notifications-config update '{"admin": {"default_emails": ["email1", "email2"]}}'
+imunify360-agent notifications-config update '{"admin": {"default_emails": ["email1@email.com", "email2@email.com"]}}'
 ```
 </div>
 
-3. Enable and configure email notifications for <span class="notranslate">ADMIN</span> for the <span class="notranslate">REALTIME_MALWARE_FOUND</span> event:
+2. Enable and configure email notifications for <span class="notranslate">ADMIN</span> for the <span class="notranslate">REALTIME_MALWARE_FOUND</span> event:
 
 <div class="notranslate">
 
 ```
-imunify360-agent notifications-config update '{"rules": {"REALTIME_MALWARE_FOUND": {"ADMIN": {"enabled": true, "period": 3600, "admin_emails": ["email3", "email4", "default"]}}}}'
+imunify360-agent notifications-config update '{"rules": {"REALTIME_MALWARE_FOUND": {"ADMIN": {"enabled": true, "period": 3600, "admin_emails": ["email3@email.com", "email4@email.com", "default"]}}}}'
 ```
 </div>
 
-4. Disable email notifications for <span class="notranslate">ADMIN</span> for the <span class="notranslate">REALTIME_MALWARE_FOUND</span> event:
+After the successful execution, the <span class="notranslate">`imunify360-agent notifications-config update`</span> command returns the full config with changes. 
+
+The <span class="notranslate">`imunify360-agent notifications-config show`</span> command output after applying the examples 1 and 2:
+
+<div class="notranslate">
+
+```json
+{
+   "rules": {
+      "SCRIPT_BLOCKED": {
+         "ADMIN": {
+            "admin_emails": [],
+            "period": 1,
+            "enabled": False
+         },
+         "SCRIPT": {
+            "scripts": [],
+            "period": 1,
+            "enabled": False
+         }
+      },
+      "USER_SCAN_FINISHED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      }, 
+      "USER_SCAN_MALWARE_FOUND": {
+         "ADMIN": {
+            "admin_emails": [],
+            "enabled": False
+         },
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "CUSTOM_SCAN_STARTED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "REALTIME_MALWARE_FOUND": {
+         "ADMIN": {
+            "admin_emails": ['email3@email.com', 'email4@email.com', 'default'],
+            "period": 3600,
+            "enabled": True
+         },
+         "SCRIPT": {
+            "scripts": [],
+            "period": 1,
+            "enabled": False
+         }
+      },
+      "USER_SCAN_STARTED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "CUSTOM_SCAN_FINISHED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "CUSTOM_SCAN_MALWARE_FOUND": {
+         "ADMIN": {
+            "admin_emails": [],
+            "enabled": False
+         },
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      }
+   },
+   "admin": {
+      "notify_from_email": None,
+      "default_emails": ['email1@email.com', 'email2@email.com']
+   }
+}
+```
+
+</div>
+
+**More examples**:
+
+3. Run the custom script on the <span class="notranslate">USER_SCAN_FINISHED</span> event occurrence:
 
 <div class="notranslate">
 
 ```
-imunify360-agent notifications-config update '{"rules": {"REALTIME_MALWARE_FOUND": {"ADMIN": {"enabled": false}}}}'
+imunify360-agent notifications-config update '{"rules": {"USER_SCAN_FINISHED": {"SCRIPT": {"scripts": ["/script/my-handler.py"], "enabled": true}}}}'
 ```
 </div>
 
-5. Change the period for the <span class="notranslate">SCRIPT</span> hook for the <span class="notranslate">REALTIME_MALWARE_FOUND</span> event to 1 minute:
+4. Change the period for the <span class="notranslate">SCRIPT</span> hook for the <span class="notranslate">REALTIME_MALWARE_FOUND</span> event to 1 minute:
 
 <div class="notranslate">
 
@@ -1527,6 +1685,97 @@ imunify360-agent notifications-config update '{"rules": {"REALTIME_MALWARE_FOUND
 imunify360-agent notifications-config update '{"rules": {"REALTIME_MALWARE_FOUND": {"SCRIPT": {"period": 60}}}}'
 ```
 </div>
+
+
+After the successful execution, the <span class="notranslate">`imunify360-agent notifications-config update`</span> command returns the full config with changes. 
+
+The <span class="notranslate">`imunify360-agent notifications-config show`</span> command output after applying the examples 3 and 4:
+
+<div class="notranslate">
+
+```json
+{
+   "rules": {
+      "CUSTOM_SCAN_MALWARE_FOUND": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         },
+         "ADMIN': {
+            "enabled": False,
+            "admin_emails": []
+         }
+      },
+      "USER_SCAN_STARTED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "CUSTOM_SCAN_FINISHED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "SCRIPT_BLOCKED": {
+         "SCRIPT": {
+            "period": 1,
+            "scripts": [],
+            "enabled": False
+         },
+         "ADMIN": {
+            "period": 1,
+            "enabled": False,
+            "admin_emails": []
+         }
+      },
+      "CUSTOM_SCAN_STARTED": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         }
+      },
+      "USER_SCAN_MALWARE_FOUND": {
+         "SCRIPT": {
+            "scripts": [],
+            "enabled": False
+         },
+         "ADMIN": {
+            "enabled": False,
+            "admin_emails": []
+         }
+      },
+      "REALTIME_MALWARE_FOUND": {
+         "SCRIPT": {
+            "period": 60,
+            "scripts": [],
+            "enabled": False
+         },
+         "ADMIN": {
+            "period": 3600,
+            "enabled": True,
+            "admin_emails": ['email3@email.com', 'email4@email.com', 'default']
+         }
+      },
+      "USER_SCAN_FINISHED": {
+         "SCRIPT": {
+            "scripts": ['/script/my-handler.py'],
+            "enabled": True
+         }
+      }
+   },
+   "admin': {
+      "notify_from_email": None,
+      "default_emails": ['email1@email.com', 'email2@email.com']
+   }
+}
+```
+
+</div>
+
+
+
 
 ## Proactive
 
@@ -1575,6 +1824,7 @@ It means that <span class="notranslate">Proactive Defense</span> will not analyz
 
    ```
    imunify360-agent proactive ignore add --path /home/user/index.php --rule-id 12 --rule-name 'Suspicious detection rule'
+   OK
    ```
 </div>
 
@@ -1584,9 +1834,11 @@ It means that <span class="notranslate">Proactive Defense</span> will not analyz
 
    ```
    imunify360-agent proactive ignore delete path <path to file 1> <path to file 2>
+   OK
    ```
 
    </div>
+   
 
 ## Register
 
@@ -1618,6 +1870,7 @@ The following command will register and activate Imunify360 with the provided ac
 
 ```
 imunify360-agent register IM250sdfkKK245kJHIL
+OK
 ```
 
 </div>
@@ -1630,6 +1883,7 @@ If you have an IP-based license, you can use <span class="notranslate">`IPL`</sp
 
 ```
 imunify360-agent register IPL
+OK
 ```
 
 </div>
@@ -1657,9 +1911,11 @@ To use external files with the list of Black/White-listed IPs, you should place 
 
 ```
 imunify360-agent reload-lists
+OK
 ```
 
 </div>
+
 	
 ## Remote-proxy	
 
@@ -1738,6 +1994,7 @@ The following command adds proxy subnet 1.1.2.0/24 with name <span class="notran
 
 ```
 imunify360-agent remote-proxy add 1.1.2.0/24 --name "my_own_proxy"
+OK
 ```
 
 </div>
@@ -1755,6 +2012,40 @@ imunify360-agent rstatus [--optional arguments]
 ```
 
 </div>
+
+An extended variation (otherwise, you receive ```OK``` if everything is fine with the license registered):
+
+<div class="notranslate">
+
+```
+imunify360-agent rstatus --json -v
+
+{
+  "expiration": null,
+  "id": "SSXX11xXXXxxxxXX",
+  "license": {
+    "expiration": null,
+    "id": "SSXX11xXXXxxxxXX",
+    "license_type": "imunify360",
+    "message": "",
+    "redirect_url": " ",
+    "status": true,
+    "user_count": 100,
+    "user_limit": 2147483647
+  },
+  "license_type": "imunify360",
+  "message": "",
+  "redirect_url": " ",
+  "status": true,
+  "strategy": "PRIMARY_IDS",
+  "user_count": 100,
+  "user_limit": 2147483647,
+  "version": "5.1.2-1"
+}
+```
+
+</div>
+
 
 ## Rules
 
@@ -1795,6 +2086,7 @@ Option can be:
 
    ```
    imunify360-agent rules disable --id 42 --plugin modsec --name 'Rule name'
+   OK
    ```
 
    </div>
@@ -1805,6 +2097,7 @@ Option can be:
 
    ```
    imunify360-agent rules enable --id 42 --plugin modsec
+   OK
    ```
 
    </div>
@@ -1823,7 +2116,7 @@ Option can be:
 
    <div class="notranslate">
 
-   ``` Python
+   ``` json
    {'plugin': 'modsec', 'id': '214920', 'domains': ['captchatest.com'], 'name': 'Imported from config'}
 
    {'plugin': 'modsec', 'id': '42', 'domains': None, 'name': 'Rule name'}
@@ -1846,12 +2139,13 @@ Option can be:
    :::
 
  
-4. The following command updates WAF ruleset configurator immediately:
+4. The following command updates the WAF ruleset configurator immediately:
 
 <div class="notranslate">
 
    ```
    imunify360-agent rules update-app-specific-rules
+   OK
    ```
 
 </div>
@@ -1878,11 +2172,12 @@ To submit file as false negative (if Imunify360 considers file as a non-maliciou
 
 ```
 imunify360-agent submit false-negative <file>
+OK
 ```
 
 </div>
-
-Optional arguments:
+ 
+ Optional arguments:
 
 | | |
 |-|-|
@@ -1903,9 +2198,11 @@ To remove Imunify360 from the server it needs to be [uninstalled](/uninstall/).
 
 ```
 imunify360-agent unregister [--optional arguments]
+OK
 ```
 
 </div>
+
 
 ## Vendors
 
@@ -1936,6 +2233,7 @@ The following command uninstalls the <span class="notranslate">ModSecurity</span
 
 ```
 imunify360-agent uninstall-vendors
+OK
 ```
 
 </div>
@@ -1950,15 +2248,6 @@ Allows to view the actual Imunify360 version installed on the server.
 
 ```
 imunify360-agent version [--json]
-```
-
-</div>
-
-Example of successful output:
-
-<div class="notranslate">
-
-```
 4.9.5-3
 ```
 
@@ -2001,13 +2290,13 @@ A domain whitelisting will affect only greylisted IPs. It will not affect ModSec
 |<span class="notranslate">`list`</span>|List items(-s) in the <span class="notranslate">White List</span>.|
 |<span class="notranslate">`reset-to`</span>|Replace whitelisted domains list with a new list.|
 
-Please note that by default <span class="notranslate">`list`</span> command outputs only first 100 items in the list as if it was run as <span class="notranslate">`whitelist ip list --limit 100`</span>.
+Please note that by default <span class="notranslate">`list`</span> command outputs only first 100 items in the list as if it was run as <span class="notranslate">`imunify360-agent whitelist ip list --limit 100`</span>.
 To check whether specific IP address is in the list, you can run the following command:
 
 <div class="notranslate">
 
 ```
-whitelist ip list --by-ip 12.34.56.78
+imunify360-agent whitelist ip list --by-ip 12.34.56.78
 ```
 
 </div>
@@ -2028,12 +2317,13 @@ where `12.34.56.78` is that specific IP address.
 
 **Examples:**
 
-1. The following commands adds IP `1.2.3.4` to the <span class="notranslate">White List</span> with a comment <span class="notranslate">“one bad ip”</span>:
+1. The following commands adds IP `1.2.3.4` to the <span class="notranslate">White List</span> with a comment <span class="notranslate">“one good ip”</span>:
 
 <div class="notranslate">
 
    ```
-   imunify360-agent whitelist ip add 1.2.3.4 --comment “one good ip”
+   imunify360-agent whitelist ip add 1.2.3.4 --comment "one good ip"
+   OK
    ```
 
    </div>
@@ -2054,6 +2344,7 @@ where `12.34.56.78` is that specific IP address.
 
    ```
    imunify360-agent whitelist domain add example.com
+   OK
    ```
 
    </div>
@@ -2064,6 +2355,7 @@ where `12.34.56.78` is that specific IP address.
 
    ```
    imunify360-agent whitelist domain list
+   OK
    ```
 
 </div>
@@ -2073,7 +2365,8 @@ where `12.34.56.78` is that specific IP address.
 <div class="notranslate">
 
    ```
-imunify360-agent whitelist ip add 1.2.3.4 --scope group
+   imunify360-agent whitelist ip add 1.2.3.4 --scope group
+   OK
    ```
 
 </div>
@@ -2083,10 +2376,24 @@ imunify360-agent whitelist ip add 1.2.3.4 --scope group
 <div class="notranslate">
 
    ```
-imunify360-agent whitelist country add BO
+   imunify360-agent whitelist country add BO
+   OK
    ```
 
 </div>
+ 
+To whitelist multiple IP addresses, put them into a file and add to the white list as follows:
+
+<div class="notranslate">
+
+```
+cat list.txt | xargs -n 1 imunify360-agent whitelist ip add
+```
+
+</div>
+
+The alternative would be using the [external white/black list feature](/features/#external-black-whitelist-management).
+
 
 ## Whitelisted crawlers
 
@@ -2119,6 +2426,7 @@ imunify360-agent whitelisted-crawlers [command]
 
    ```
    imunify360-agent whitelisted-crawlers add yandex.com google.com
+   OK
    ```
 
    </div>
@@ -2129,6 +2437,7 @@ imunify360-agent whitelisted-crawlers [command]
 
    ```
    imunify360-agent whitelisted-crawlers delete yandex.com
+   OK
    ```
 
    </div>
@@ -2139,20 +2448,10 @@ imunify360-agent whitelisted-crawlers [command]
 
    ```
    imunify360-agent whitelisted-crawlers list
+   DESCRIPTION  DOMAINS                                       ID
+   Google       ['.google.com', '.googlebot.com']             1 
+   Yandex       ['.yandex.ru', '.yandex.com', '.yandex.net']  2 
    ```
 
    </div>
 
-Example of successful output:
-
-<div class="notranslate">
-
-```
-DESCRIPTION  DOMAINS                                       ID
-Google       ['.google.com', '.googlebot.com']             1 
-Yandex       ['.yandex.ru', '.yandex.com', '.yandex.net']  2 
-```
-
-</div>
-
-<Disqus/>
