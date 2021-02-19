@@ -1155,7 +1155,7 @@ Optional arguments for <span class="notranslate">`pam`</span>:
 **Example**:
 
 1. You can use the <span class="notranslate">`login get`</span> command to implement your own authorization mechanism for stand-alone Imunify.
-For example, you can generate tokens for users which are already authorized in your system/panel, and redirect to stand-alone Imunify UI with <span class="notranslate">`?token=<TOKEN>`</span> in URL. (You can also set it in localStorage: <span class="notranslate">`localStorage.setItem('I360_AUTH_TOKEN', '<TOKEN>');`</span>). The output will display similar to the following:
+For example, you can generate tokens for users which are already authorized in your system/panel, and redirect to stand-alone Imunify UI with <span class="notranslate">`https://example.com/#/login?token=<TOKEN>` or `https://example.com/#?token=<TOKEN>`</span> in URL. (You can also set it in localStorage: <span class="notranslate">`localStorage.setItem('I360_AUTH_TOKEN', '<TOKEN>');`</span>). The output will display similar to the following:
 
 <div class="notranslate">
 
@@ -1401,8 +1401,6 @@ Allows administrators to do the following:
 
 * configure email addresses to submit reports on events execution
 * execute custom scripts on events execution
-* show the full notification config as a JSON-file
-* update the notification config via CLI
 
 **Usage:**
 
@@ -1774,7 +1772,34 @@ The <span class="notranslate">`imunify360-agent notifications-config show`</span
 
 </div>
 
+#### Example of script to create custom scripts to use with notifications-config
 
+There are two script examples you can download:
+
+* [Shell script](/hook_script.sh)
+* [Python script](/hook_script.py)
+
+You can use these scripts as a reference and customize them.
+
+:::warning Note
+Set the `+x` bits to your script file to make it executable. Your script also has to be readable by the special <span class="notranslate">`_imunify`</span> user, so make sure of setting group's permission accordingly:
+
+<div class="notranslate">
+
+```
+chown root:_imunify hook_script.sh
+```
+</div>
+:::
+The agent generates messages of different types on hook events. The ‘if chain’ in the script calls the particular method corresponding to type of the event that came from the agent.
+
+For example, if you'd like to block sites for all users, that were detected as infected by realtime scan you can use the `handle_realtime_malware_found` method.
+
+To unblock user sites which were scanned as clean, you can use the `handle_user_scan_finished` method.
+
+Add your path to the related hook (or multiple hooks) and implement the custom logic of blocking and unblocking sites.
+
+Also in this script you could find the way to parse JSON that come from Imunify360 and description of this JSON schema in every possible case. Such descriptions are provided by docstring of the <span class="notranslate">`handle`</span> methods.
 
 
 ## Proactive
