@@ -1699,7 +1699,7 @@ The <span class="notranslate">`imunify360-agent notifications-config show`</span
             "scripts": [],
             "enabled": False
          },
-         "ADMIN': {
+         "ADMIN": {
             "enabled": False,
             "admin_emails": []
          }
@@ -1763,7 +1763,7 @@ The <span class="notranslate">`imunify360-agent notifications-config show`</span
          }
       }
    },
-   "admin': {
+   "admin": {
       "notify_from_email": None,
       "default_emails": ['email1@email.com', 'email2@email.com']
    }
@@ -1791,6 +1791,9 @@ chown root:_imunify hook_script.sh
 ```
 </div>
 :::
+
+#### Python script description
+
 The agent generates messages of different types on hook events. The ‘if chain’ in the script calls the particular method corresponding to type of the event that came from the agent.
 
 For example, if you'd like to block sites for all users, that were detected as infected by realtime scan you can use the `handle_realtime_malware_found` method.
