@@ -1,7 +1,8 @@
-# Imunify360 Stand-alone
+# Imunify360 Stand-alone (non-panel, generic panel integration)
 
+[[toc]]
 
-Imunify360 can be installed directly on the server, independent of any panel, regardless of the administrative interface. 
+Imunify360 can be installed directly on the server, independent of any panel, regardless of the administrative interface.
 
 #### Limitations
 
@@ -16,11 +17,14 @@ Imunify360 can be installed directly on the server, independent of any panel, re
 * RHEL 6/7
 * CloudLinux OS 
 * Ubuntu 16.04/18.04
+* Debian 9/10
+* Ubuntu 20
 
 **Web servers**
 
-* Apache
+* Apache >= 2.4.30
 * LiteSpeed
+* Nginx (starting from Imunify360 5.4)
 
 #### There are four main steps in general required for having Imunify360 Stand-alone running on your server:
 
@@ -34,16 +38,21 @@ Imunify Web-UI PHP code has to be executed under a non-root user which has acces
 :::
 
 
-## 1. Prerequisites
+### 1. Prerequisites
 
 Imunify360 Stand-alone version requires the following components installed or enabled at the server:
 
-* ModSecurity 2.9.x
-* Apache module <span class="notranslate">`mod_remoteip`</span>
+* ModSecurity 2.9.x for Apache or ModSecurity 3.0.x for Nginx
+* Apache module <span class="notranslate">`mod_remoteip`</span> or nginx module <span class="notranslate">`ngx_http_realip_module`</span>
 * PHP with <span class="notranslate">`proc_open`</span> function enabled (remove it from the <span class="notranslate">`disable_functions`</span> list in <span class="notranslate">`php.ini`</span>)
 
+:::warning Warning
+We recommend using the stable versions of ModSecurity3 (i.e. 3.0.4), because developing versions (i.e. master) can have
+stability issues (see [https://github.com/SpiderLabs/ModSecurity/issues/2381](https://github.com/SpiderLabs/ModSecurity/issues/2381) for example).
+:::
 
-## 2. Configure Imunify360 integrations
+
+### 2. Configure Imunify360 integrations
 
 Imunify360 Stand-alone version require the following integrations before installation:
 
@@ -73,26 +82,67 @@ ui_path = /var/www/vhosts/imunify360/imunify360.hosting.example.com/html/im360
 
 Ensure that the domain you are going to use for the Imunify360 web-based UI refers to this path and that there are no other scripts or files under <span class="notranslate">`ui_path`</span>, as they might be overridden by Imunify360 installation.
 
-#### Interaction with ModSecurity
+#### Integraction with ModSecurity
+
+#### Web server configuration
+
+#### Apache and LiteSpeed
 
 Configure [ModSecurity configuration directives](https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-%28v2.x%29#Configuration_Directives) (so that it can block):
 
 <div class="notranslate">
 
 ``` apacheconf
-SecAuditEngine = "RelevantOnly"
-SecConnEngine = "Off"
-SecRuleEngine = "On"
+SecAuditEngine RelevantOnly
+SecConnEngine Off
+SecRuleEngine On
 ```
 </div>
 
 Create the empty file <span class="notranslate">`/etc/sysconfig/imunify360/generic/modsec.conf`</span> and include it into the web server config as <span class="notranslate">`IncludeOptional`</span>. The file would be replaced with the actual config during the first Imunify360 installation or you can fill it via calling the Imunify360 ModSec ruleset installation <span class="notranslate">`imunify360-agent install-vendors`</span>.
 
+#### Nginx
+
+:::tip Note
+ModSecurity has different syntax comparing to Nginx configuration, thus ModSecurity directives can not be directly included to the Nginx config files.
+:::
+
+Create a separate file (i.e. <span class="notranslate">`/etc/nginx/modsec.conf`</span>) and set the following ModSecurity directives in it:
+
+<div class="notranslate">
+
+``` apacheconf
+SecAuditEngine RelevantOnly
+SecConnEngine Off
+SecRuleEngine On
+SecAuditLogFormat JSON
+# should match modsec_audit_log option in integration.conf (see below)
+SecAuditLog /var/log/nginx/modsec_audit_log
+```
+</div>
+
+:::danger Warning
+ModSecurity on Nginx does not properly re-opens audit log on SIGHUP/SIGUSR1, which can cause logrotate to break integration with Imunify360. See [https://github.com/SpiderLabs/ModSecurity-nginx/issues/121](https://github.com/SpiderLabs/ModSecurity-nginx/issues/121) for details.
+:::
+
+Create an empty file <span class="notranslate">`/etc/sysconfig/imunify360/generic/modsec.conf`</span>. The file would be replaced with the actual config during the first Imunify360 installation or you can fill it via calling the Imunify360 ModSec ruleset installation <span class="notranslate">`imunify360-agent install-vendors`</span>.
+
+Then enable ModSecurity and include both files into Nginx configuration using the <span class="notranslate">`modsecurity_rules_file`</span> directive:
+
+```
+modsecurity on;
+modsecurity_rules_file /etc/nginx/modsec.conf;
+modsecurity_rules_file /etc/sysconfig/imunify360/generic/modsec.conf;
+```
+
+
+#### Imunify360 integration configuration
+
 Set the path and graceful restart script in the <span class="notranslate">`integration.conf`</span>
 
-* <span class="notranslate">`[web_server].graceful_restart_script`​</span> – a script that restarts the web server to be called after any changes in web server config or ModSecurity rules
-* <span class="notranslate">`[web_server].modsec_audit_log​`​</span> – a path to ModSecurity audit log file
-* <span class="notranslate">`[web_server].modsec_audit_logdir​`​</span> – a path to ModSecurity audit log dir
+* <span class="notranslate">`[web_server].graceful_restart_script`</span> – a script that restarts the web server to be called after any changes in web server config or ModSecurity rules
+* <span class="notranslate">`[web_server].modsec_audit_log`</span> – a path to ModSecurity audit log file
+* <span class="notranslate">`[web_server].modsec_audit_logdir`</span> – a path to ModSecurity audit log directory (required when the <span class="notranslate">`SecAuditLogType`</span> set to the <span class="notranslate">`Concurrent`</span>)
 
 Example
 
@@ -178,12 +228,12 @@ im360-ssl-cache --add /path/to/certs.json
 ```
 </div>
 
-The <span class="notranslate">`--add`</span> parameter accepts zero or one parameter. If a parameter is given, it is taken as a path to a file in JSON format with a list of certificates and private keys to be added. Otherwise, data is expected to be sent in JSON format to STDIN as in the following example:
+The <span class="notranslate">`--add`</span> parameter accepts exactly one value. If the parameter value is not `-`, it is taken as a path to a file in JSON format with a list of certificates and private keys to be added. Otherwise, if the parameter value is `-`, data is expected to be sent in JSON format to STDIN as in the following example:
 
 <div class="notranslate">
 
 ```
-cat certs.json | im360-ssl-cache --add
+cat certs.json | im360-ssl-cache --add -
 ```
 </div>
 
@@ -253,7 +303,7 @@ To allow WebShield to handle non-SNI requests properly, include an `ip` field in
 
 WebShield will use this data to decide which certificate to serve if a request without Server Name Indication (SNI) arrives. If there are several domains with the specified IPs, WebShield will use the first one alphabetically.
 
-#### Required mod_remoteip configuration
+#### Required web server configuration to correctly detect client IP addresses from headers
 
 To ensure WebShield and Graylist are working correctly (e.g. a correct IP is passed to ModSecurity), the server must recognize WebShield as an internal proxy. For example, for Apache, `mod_remoteip` must be installed and configured like this:
 
@@ -263,15 +313,26 @@ To ensure WebShield and Graylist are working correctly (e.g. a correct IP is pas
 <IfModule remoteip_module>
     RemoteIPInternalProxy 127.0.0.1
     RemoteIPInternalProxy ::1
-    RemoteIPHeader X-Real-IP
+    RemoteIPHeader X-Forwarded-For
 </IfModule>
 ```
 </div>
 
-WebShield passes the real client IP in the <span class="notranslate">`X-Real-IP`</span> header.
+For Nginx, the <span class="notranslate">`ngx_http_realip_module`</span> module should be configured in the following way:
+
+<div class="notranslate">
+
+```
+real_ip_header X-Forwarded-For;
+set_real_ip_from 127.0.0.1;
+set_real_ip_from ::1;
+```
+</div>
+
+WebShield passes the real client IP in the <span class="notranslate">`X-Forwarded-For`</span> header.
 
 :::tip Note
-In the LogFormat configuration strings for correct representation of a remote host IP address it is required using:
+In the Apache LogFormat configuration strings for correct representation of a remote host IP address it is required using:
 
 <div class="notranslate">
 
@@ -385,11 +446,11 @@ It should point to an executable file that generates a JSON file similar to the 
 </div>
 
 
-## 3. Install Imunify360
+### 3. Install Imunify360
 
 The installation instructions are the same as for cPanel/Plesk/DirectAdmin version and can be found in the [Imunify360 documentation](/installation/#installation-instructions).
 
-## 4. Settings related to Stand-alone version
+### 4. Settings related to Stand-alone version
 
 The web-based UI is available via the domain configured in the <span class="notranslate">`ui_path`</span>.
 
@@ -495,7 +556,7 @@ A JSON file should be similar to the following:
 
 <span class="notranslate">`web_server_config_path`</span> should point to a path that is added as <span class="notranslate">`IncludeOptional`</span> in this domain's virtual host e.g., <span class="notranslate">`/path/to/example.com/specific/config/to/include`</span> path should be added for the <span class="notranslate">`example.com`</span> domain.
 
-## Integration config file
+### Integration config file
 
 The documentation for the Imunify360 Stand-alone version integration configuration file format.
 
@@ -653,12 +714,12 @@ It should point to an executable file that generates a JSON file similar to the 
     "example.com": {
       "document_root": "/home/username/public_html/",
       "is_main": true,
-      "owner": "username",
+      "owner": "username"
     },
     "subdomain.example.com": {
       "document_root": "/home/username/public_html/subdomain/",
       "is_main": false,
-      "owner": "username",
+      "owner": "username"
     }
   },
   "metadata": {
@@ -670,4 +731,4 @@ It should point to an executable file that generates a JSON file similar to the 
 
 <span class="notranslate">`web_server_config_path`</span> should point to a path that is added as <span class="notranslate">`IncludeOptional`</span> in this domain's virtual host e.g., <span class="notranslate">`/path/to/example.com/specific/config/to/include`</span> path should be added for the <span class="notranslate">`example.com`</span> domain.
 
-<Disqus/>
+

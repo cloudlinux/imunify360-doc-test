@@ -5,23 +5,25 @@
 ## Requirements
 
 **Operating system**
-* <span class="notranslate">CentOS/RHEL 6 and 7</span>
-* <span class="notranslate">CloudLinux OS</span> 6 and 7
-* <span class="notranslate">Ubuntu 16.04 LTS</span> only
-* <span class="notranslate">Ubuntu 18.04</span>
+
+* CentOS/RHEL 6 and 7
+* CloudLinux OS 6 and 7
+* Ubuntu 16.04 LTS only
+* Ubuntu 18.04
 * CentOS 8 with Plesk
 * CentOS 8 with DirectAdmin
-* CentOS 8 as stand-alone
+* CentOS 8 as [stand-alone](/stand_alone/)
 * CloudLinux OS 8 with DirectAdmin
-* CloudLinux OS 8 as stand-alone
-* <span class="notranslate">Debian 9</span> with Plesk
-* <span class="notranslate">Debian 9</span> with DirectAdmin
-* <span class="notranslate">Debian 9</span> as stand-alone
-* <span class="notranslate">Debian 10</span> with Plesk
-* <span class="notranslate">Debian 10</span> with DirectAdmin
-* <span class="notranslate">Debian 10</span> as stand-alone
-
-
+* CloudLinux OS 8 as [stand-alone](/stand_alone/)
+* Debian 9 with Plesk
+* Debian 9 with DirectAdmin
+* Debian 9 as [stand-alone](/stand_alone/)
+* Debian 10 with Plesk
+* Debian 10 with DirectAdmin
+* Debian 10 as [stand-alone](/stand_alone/)
+* Ubuntu 20 with Plesk
+* Ubuntu 20 with DirectAdmin
+* Ubuntu 20 as [stand-alone](/stand_alone/)
 
 **Virtualization**
 
@@ -38,6 +40,7 @@
 * <span class="notranslate">Plesk (Plesk</span> 12.5 is not supported)
 * <span class="notranslate">DirectAdmin</span>
 * [No hosting panel systems](/stand_alone/)
+* <span class="notranslate">CyberPanel</span> (only CloudLinux OS 7 and CloudLinux OS 8). See [3rd party integration guide from CyberPanel](https://cyberpanel.net/docs/how-to-install-and-use-imunify360-on-cyberpanel/).
 
 **Required browsers**
 
@@ -48,7 +51,8 @@
 
 **Supported Web-servers**
 * <span class="notranslate">Apache</span>
-* <span class="notranslate">LiteSpeed</span> 
+* <span class="notranslate">LiteSpeed</span>
+* Nginx (starting from Imunify360 5.4)
 
 
 ## Side by side installation with another <span class="notranslate">IDS</span>
@@ -180,7 +184,7 @@ imunify360-agent register IPL
 
 ### SELinux support
 
-If SELinux (Security-Enhanced Linux) is enabled on your server, you should install the Imunify360 SELinux policy module. Policy is shipped with Imunify360 package and is located in the <span class="notranslate">`/opt/alt/python35/share/imunify360/imunify360.te`</span>
+If SELinux (Security-Enhanced Linux) is enabled on your server, you should install the Imunify360 SELinux policy module. You can check SELinux status by `sestatus` command. Policy is shipped with Imunify360 package and is located in the <span class="notranslate">`/opt/alt/python35/share/imunify360/imunify360.te`</span>
 
 To apply it, run the following commands:
 
@@ -193,16 +197,37 @@ semodule -i /var/imunify360/imunify360.pp
 ```
 </div>
 
-After that, restart imunify360 service.
+After that, restart imunify360 and imunify360-webshield service.
 For CentOS6/CloudLinux6:
+<div class="notranslate">
+ 
 ```
 service imunify360 restart
+service imunify360-webshield restart
 ```
 
+</div>
+
 For other systems:
+
+<div class="notranslate">
+  
 ```
 systemctl restart imunify360
+systemctl restart imunify360-webshield
 ```
+</div>
+
+If <i>checkmodule</i> command is not found, please, install it:
+For CentOS8/CloudLinux 8:
+
+<div class="notranslate">
+  
+```
+yum install policycoreutils-python-utils
+```
+
+</div>
 
 ## Update Instructions
 

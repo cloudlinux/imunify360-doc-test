@@ -98,6 +98,7 @@ If your server's settings differ from the recommended, the Imunify Advisor will 
 
 ![](/images/dashboard_servers2.png)
 
+
 :::tip Note
 Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
@@ -768,8 +769,8 @@ The table has the following columns:
   * <span class="notranslate">**Restore from backup**</span> — click the <span class="notranslate">_Gear_</span> symbol ![](/images/gear.png) and select <span class="notranslate">_Try to restore from backup_</span> to restore the original file before it got infected if it exists.
 
 :::warning Warning
-  Starting from Imunify360 v.5.5, the <span class="notranslate">_Delete permanently_</span>, the <span class="notranslate">_Quarantine file_</span>, and the <span class="notranslate">_Cleanup, Quarantine as a fallback_</span> options are available only [via CLI](/config_file_description/). They will be removed completely in Imunify360 v.5.9. For more information see [this blog post](https://blog.imunify360.com/file-quarantine-is-no-longer-effective).
-  :::
+Starting from Imunify360 v.5.5, <span class="notranslate">_Delete permanently_</span>, <span class="notranslate">_Quarantine file_</span>, and <span class="notranslate">_Cleanup, Quarantine as a fallback_</span> options are not available. Restoration from the Quarantine is available until the “Quarantine” Default Action is completely removed from the product (v.5.8, April 2021). You can still manage files in the quarantine if they were quarantined earlier. For more information see [this blog post](https://blog.imunify360.com/file-quarantine-is-no-longer-effective).
+:::
 
 To perform a bulk action, tick required files and click the corresponding button above the table.
 
@@ -897,17 +898,16 @@ Wildcards are not supported when adding paths to the <span class="notranslate">I
 :::
 
 To perform a bulk action, tick required files and click the corresponding button above the table.
-
 The following filters are available:
 
 * <span class="notranslate">**Timeframe**</span> — displays the results filtered by chosen period or date.
 * <span class="notranslate">**Items per page**</span> — click the number at the table bottom.
 
-The table can be sorted by <span class="notranslate">_Added_</span> and <span class="notranslate">_Path_</span>. By default, it is sorted from newest to oldest.
-
 :::tip Note
 Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
+
+The table can be sorted by <span class="notranslate">_Added_</span> and <span class="notranslate">_Path_</span>. By default, it is sorted from newest to oldest.
 
 To search file or folder in the <span class="notranslate">Ignore List</span> use <span class="notranslate">_Search_</span> input field above the table.
 
@@ -1194,6 +1194,7 @@ Go to <span class="notranslate">_Imunify360 → Settings → General_</span>. Th
 * <span class="notranslate">[Auto White List](/dashboard/#auto-white-list)</span>
 * <span class="notranslate">[Incidents Logging](/dashboard/#incidents-logging)</span>
 * <span class="notranslate">[WebShield](/dashboard/#webshield)</span>
+* <span class="notranslate">[Anti-bot protection](/dashboard/#anti-bot-protection)</span>
 * <span class="notranslate">[OSSEC](/dashboard/#ossec)</span>
 * <span class="notranslate">[PAM](/dashboard/#pam)</span>
 * <span class="notranslate">[Error Reporting](/dashboard/#error-reporting)</span>
@@ -1320,6 +1321,10 @@ It works in the background and scans domains for installed CMS daily, after that
 
 ![](/images/cms-specific_waf_rules.png)
 
+:::tip Note
+This feature is only available for the Apache 2.4 web server
+:::
+
 #### DoS Protection
 
 <span class="notranslate">DoS Protection</span> section allows to enable or disable DoS protection. DoS protection works by counting connections from each remote IP address per local port separately.
@@ -1335,7 +1340,7 @@ imunify360-agent config update '{"DOS": {"enabled": true}}'
 It is possible to configure how Imunify360 will behave:
 
 * <span class="notranslate">_Max Connections_</span>– allows to setup the number of simultaneous connections allowed before IP will be blocked. Cannot be set lower than 100.
-* <span class="notranslate">_Check delay_</span> – allows to setup period in seconds between each DoS detection system activation that will check a server for DoS attack. Also, it is possible to set different limits for different local ports by editing the configuration file directly.
+* <span class="notranslate">_Check delay_</span> – allows to setup period in seconds between each DoS detection system activation that will check a server for DoS attack. Also, it is possible to set different limits for different local ports by editing the [configuration file](/config_file_description/) directly.
 
 **The minimum values**: 
 
@@ -1505,6 +1510,17 @@ Click <span class="notranslate">_Save changes_</span> button on the bottom of th
 
 Click <span class="notranslate">_Save changes_</span> button on the bottom of the section to save changes.
 
+#### Anti-bot protection <sup> <badge text="experimental"/></sup>
+
+Tick the <span class="notranslate">_Anti-bot protection_</span> checkbox to enable the JavaScript challenge – "Splash Screen."
+
+You can read more about Anti-bot protection [here](/webshield/#anti-bot-protection).
+	
+![](/images/AntiBotProtection.png)
+
+Click <span class="notranslate">_Save changes_</span> button on the bottom of the section to save changes.
+
+
 #### OSSEC
 
 Tick the <span class="notranslate">_Active response_</span> checkbox to block access to a specific server port being attacked. 
@@ -1534,6 +1550,10 @@ imunify360-agent config update '{"PAM": {"enable": true}}'
 Click <span class="notranslate">_Save changes_</span> button at the bottom of the section to apply changes. This will enable protection for SSH/FTP protocols.
 
 #### Exim+Dovecot brute-force attack protection
+
+:::tip Note
+This protection type is available only in cPanel/WHM.
+:::
 
 Tick the <span class="notranslate">_Exim+Dovecot brute-force attack protection_</span> checkbox to enable advanced protection against Dovecot brute-force attacks. PAM module protects against IMAP/POP3 brute-force attack and prevents mail account from being compromised via brute-forcing.
 
@@ -1651,7 +1671,7 @@ Read [CXS integration](/ids_integration/#cxs-integration) documentation carefull
   * <span class="notranslate">Cleanup</span> (default)
 
   :::warning Warning
-  Starting from Imunify360 v.5.5, the <span class="notranslate">_Delete permanently_</span>, the <span class="notranslate">_Quarantine file_</span>, and the <span class="notranslate">_Cleanup, Quarantine as a fallback_</span> options are available only [via CLI](/config_file_description/). They will be removed completely in Imunify360 v.5.9. For more information see [this blog post](https://blog.imunify360.com/file-quarantine-is-no-longer-effective).
+  Starting from Imunify360 v.5.5, <span class="notranslate">_Delete permanently_</span>, <span class="notranslate">_Quarantine file_</span>, and <span class="notranslate">_Cleanup, Quarantine as a fallback_</span> options are not available. Restoration from the Quarantine is available until the “Quarantine” Default Action is completely removed from the product (v.5.8, April 2021). You can still manage files in the quarantine if they were quarantined earlier. For more information see [this blog post](https://blog.imunify360.com/file-quarantine-is-no-longer-effective).
   :::
 
 

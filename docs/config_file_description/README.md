@@ -98,10 +98,7 @@ otherwise <span class="notranslate"><em>default_action</em></span> is applied</t
 Available options:
 <ul>
 <li><span class="notranslate"><b>notify</b></span> – just display in dashboard</li>
-<li><span class="notranslate"><b>cleanup</b></span> – cleanup malicious file (default)</li>
-<li><span class="notranslate">quarantine</span> – do not delete and move to quarantine (available only via CLI)</li>
-<li><span class="notranslate">delete</span> – delete malicious file (available only via CLI)</li>
-<li><span class="notranslate">cleanup_or_quarantine</span> choose what to do with a malicious file (available only via CLI)</li></ul></td></tr>
+<li><span class="notranslate"><b>cleanup</b></span> – cleanup malicious file (default)</li></ul></td></tr>
 <tr><td><span class="notranslate">enable_scan_inotify: True</span></td>
 <td># enable (<span class="notranslate">True</span> (default)) or disable (<span class="notranslate">False</span>) real-time scanning for modified files using <a href="https://en.wikipedia.org/wiki/Inotify" target="_blank">inotify</a> library</td></tr>
 <tr><td><span class="notranslate">enable_scan_pure_ftpd: True</span></td>
@@ -135,6 +132,8 @@ that were uploaded via http/https. Note that it requires <a href="https://modsec
 <td># speed up scans by check file hashes using cloud database</td></tr>
 <tr><td><span class="notranslate">rapid_scan: True</span></td>
 <td># speeds up (<span class="notranslate">True</span>) (default value) ot not (<span class="notranslate">False</span>) repeated scans based on smart re-scan approach, local result caching and cloud-assisted scan.</td></tr>
+<tr><td><span class="notranslate">rapid_scan_rescan_unchanging_files_frequency: null</span></td>
+<td># defines what part of all files will be rescanned during each scan. For example, if set 10 then 1/10 part of all files will be rescanned. The default value `null` - means "choose frequency based on scan schedule". E.g. month - 1, week - 5, day - 10.</td></tr>
 <tr>
 <th colspan="2" align="left"><span class="notranslate">CAPTCHA:</span></th></tr>
 <tr><td><span class="notranslate">cert_refresh_timeout: 3600</span></td>
@@ -192,7 +191,9 @@ to request CAPTCHA again</td></tr>
 <tr><td><span class="notranslate">captcha_site_key: ""</span></td>
 <td># your site key; required to show reCAPTCHA on the page</td></tr>
 <tr><td><span class="notranslate">captcha_secret_key: ""</span></td>
-<td># your secret key; required for communication between Google server and this server to get reCAPTCHA pass results</td></tr>
+<td># your secret key; required for communication between Google server and this server to get reCAPTCHA pass results</td>
+<tr><td><span class="notranslate">splash_screen: True</span></td>
+<td># enable (<span class="notranslate">True</span>) or disable (<span class="notranslate">False</span>) Anti-bot protection</td></tr>
 <tr>
 <th colspan="2" align="left"><span class="notranslate">PROACTIVE_DEFENCE:</span></th></tr>
 <tr><td><span class="notranslate">blamer: True</span></td>
@@ -240,7 +241,7 @@ to request CAPTCHA again</td></tr>
 <td># the original infected file is available for restore within the defined period. The default is 14 days. The minimum value is one day.</td></tr>
 <tr><th colspan="2" align="left"><span class="notranslate">OSSEC:</span></th></tr>
 <tr><td><span class="notranslate">active_response: False</span></td>
-<td># block (<span class="notranslate">True</span>) access to a specific server port being attacked. The default value is <span class="notranslate">False</span>.</td></tr>
+<td># block (<span class="notranslate">True</span>) access to a specific server port being attacked. The ports include FTP (21), SSH (22) and SMTP (25, 465, 587). The default value is <span class="notranslate">False</span>.</td></tr>
 <tr><th colspan="2" align="left"><span class="notranslate">ADMIN_CONTACTS:</span></th></tr>
 <tr><td><span class="notranslate">emails: youremail@email.com</span></td>
 <td># your email to receive reports about critical issues, security alerts or system misconfigurations detected on your servers.</td></tr>

@@ -1,5 +1,18 @@
 # WebShield
 
+[[toc]]
+
+:::warning Warning
+When the interface IP address is added to or deleted from the system, the restart of the webshield is required for the latter to recognize the new IP.
+:::
+
+<div class="notranslate">
+
+```
+service imunify360-webshield restart
+```
+</div>
+
 #### Setting the WebShield "Server" header
 
 Sometimes it's desired to change the WebShield "Server" header to something that suits certain requirements.
@@ -52,9 +65,6 @@ There are three files:
 To find information on supported browsers follow this link [https://support.google.com/recaptcha/answer/6223828](https://support.google.com/recaptcha/answer/6223828).
 
 ### Update Captcha localizations
-::: tip Note
-Custom Captcha localization is available starting from Imunify360 version 2.6.0 and later.
-:::
 
 A user can change the text of captcha messages for the supported languages. Note that adding custom language is not supported.
 
@@ -69,6 +79,7 @@ To change the text of the Imunify360 Captcha and update the localizations text, 
    ```
 
    </div>
+
    For example for Polish language the catalog looks like this: 
    
     <div class="notranslate">
@@ -98,6 +109,7 @@ To change the text of the Imunify360 Captcha and update the localizations text, 
    ```
 
    </div>
+
 3. To add Polish translation edit text in the <span class="notranslate">`msgstr`</span> field. To change the text for a default English translation, edit text in the <span class="notranslate">`msgid`</span> field.
 4. Save files.
 5. When translation in <span class="notranslate">`messages.po`</span> files is finished, restart <span class="notranslate">imunify360-webshield</span> service:
@@ -109,6 +121,7 @@ service imunify360-webshield restart
 ```
 
 </div>
+
 6. Block yourself (remove your IP from <span class="notranslate">Imunify360 White List</span> and try to log in to the server via ssh with wrong password until it blocks you). Then go to website and log in. Captcha should appear. Set Polish language and assert that new text is displayed.
 
 ### Changing the default keys to Google reCAPTCHA keys
@@ -127,43 +140,158 @@ captcha_secret_key <YOUR_SECRET_KEY>;
 
 Then reload WebShield.
 
-## CDN Support <sup>3.8+</sup>
+## Configuring reCAPTCHA keys
+
+See [how to setup invisible CAPTCHA](/dashboard/#invisible-captcha).
+
+#### Why do you need to specify the Google reCAPTCHA keys in the Imunify360 product
+
+Imunify360 admin should specify reCAPTCHA keys for the server since we’re planning to completely remove embedded reCAPTCHA keys in the future versions.
+
+In this article, you can find a step by step guide on how to set up a custom site and secret keys for your Imunify360 server.
+
+### How to specify the keys for the Imunify360 CAPTCHA
+
+Public and secret reCAPTCHA keys are required for integration between Imunify360 and Google reCAPTCHA service. 
+
+The site key will be publicly available and shown on pages along with reCAPTCHA widget or Invisible CAPTCHA, whereas the secret key will be stored for intercommunication between the backend of Imunify360 and Google service.
+
+:::tip Note: Due to the captcha rate limit we recommend using different reCAPTCHA keys for each server.
+[Google’s quotation](https://developers.google.com/recaptcha/docs/faq#are-there-any-qps-or-daily-limits-on-my-use-of-recaptcha):
+If you wish to make more than 1k calls per second or 1m calls per month, you must use reCAPTCHA Enterprise or fill out this form and wait for an exception approval.
+:::
+
+### Steps to configure
+
+1. Open [https://www.google.com/recaptcha/admin/create](https://www.google.com/recaptcha/admin/create)
+2. Fill in required values
+   * Set any value as a label, e.g. <span class="notranslate">_my servers cluster #1_</span>
+   * Select _reCAPTCHA v2_
+   * Select <span class="notranslate">_Invisible reCAPTCHA badge_</span>
+   * Add any dummy domain, e.g. <span class="notranslate">_example.org_</span>
+   :::tip Note
+   You don’t need to put all your domains here
+   :::
+
+   ![](/images/reCaptchaRegister.png)
+
+3. Accept terms and proceed
+4. Notice keys
+
+   ![](/images/reCaptchaNoticeKeys.png)
+
+5. You need to put these keys on the Imunify360 settings page
+
+   ![](/images/reCaptchaImunifyKeys.png)
+
+   or use the following CLI commands:
+
+   <div class="notranslate">
+
+   ```
+   # imunify360-agent config update '{"WEBSHIELD": {"captcha_site_key": "6Ldu4XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXCN6fJ"}}'
+
+   # imunify360-agent config update '{"WEBSHIELD": {"captcha_secret_key": "6Ldu4XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXQqUuk"}}'
+   ```
+   </div>
+
+6. The final step is to allow Google to process requests from any of your domains
+
+   * Open the <span class="notranslate">_Settings_</span> page
+
+      ![](/images/reCaptchaVerify.png)
+
+   * And disable the <span class="notranslate">_Verify the origin of reCAPTCHA solutions_</span>
+
+      ![](/images/reCaptchaVerifyDisable.png)
+
+That’s it.
+
+### Verification
+
+In order to make sure that you’ve done everything correctly you need to do the following:
+
+1. Make sure that your IP is not whitelisted (using the CLI):
+
+   <div class="notranslate">
+
+   ```
+   # imunify360-agent whitelist ip list
+   IP          TTL    COUNTRY  IMPORTED_FROM  COMMENT
+   1.2.3.4     10256  None     None           Whitelisted for 3 hours due to successful panel login
+
+   # imunify360-agent whitelist ip delete 1.2.3.4
+   OK
+
+   # imunify360-agent whitelist ip list
+   IP          TTL    COUNTRY  IMPORTED_FROM  COMMENT
+   ```
+   </div>
+
+2. Make sure your target domain is not [whitelisted](/terminology/):
+
+   <div class="notranslate">
+
+   ```
+   # imunify360-agent whitelist domain list
+   example.com
+   ```
+   
+   ```
+   # imunify360-agent whitelist domain delete example.com
+   OK
+   ```
+   
+   </div>
+
+3. Send at least two WAF test requests to any domain on the server
+
+   <div class="notranslate">
+
+   ```
+   # curl -v http://example.org/?i360test=88ff0adf94a190b9d1311c8b50fe2891c85af732
+   ```
+   </div>
+
+4. Open your test domain in the browser and let it pass the captcha challenge
+5. Check the list of whitelisted IPs again
+
+   <div class="notranslate">
+
+   ```
+   # imunify360-agent whitelist ip list
+   IP          TTL    COUNTRY  IMPORTED_FROM  COMMENT
+   1.2.3.4     86377  None     None           IP auto-whitelisted with expiration date: 2020-05-28 15:29:34
+
+   ```
+   </div>
+
+If you see that your IP is whitelisted then integration between Imunify360 and reCAPTCHA service was **done properly**.
+
+You can watch how invisible reCAPTCHA works at [https://www.youtube.com/watch?v=GQXmAj5hyDo](https://www.youtube.com/watch?v=GQXmAj5hyDo).
+
+:::tip Note
+It is also possible to test Captcha by the server IP. Find more information [here](/faq_and_known_issues/#_20-how-to-check-that-captcha-works)
+:::
+
+## CDN Support
 	
-Starting from version 3.8 Imunify360 correctly graylists and blocks IPs behind Cloudflare and other CDNs (see [here](/webshield/#supported-cdn-providers) for the full list).
+Imunify360 correctly graylists and blocks IPs behind Cloudflare and other CDNs (see [here](/webshield/#supported-cdn-providers) for the full list).
 	
 Imunify360 passes all requests from CDN through <span class="notranslate">WebShield</span>, and uses <span class="notranslate">CF-Connecting-IP</span> and <span class="notranslate">X-Forwarded-For</span> headers to identify real IPs.
 	
-The feature is disabled by default in Imunify360 version 3.8 but will be enabled in the future versions.
-	
-To enable it now, add the following section to the Imunify360 config file (<span class="notranslate">_/etc/sysconfig/imunify360/imunify360.config_</span>):
+To enable it now, run the command:
 	
 <div class="notranslate">
 
-```
-WEBSHIELD:
- known_proxies_support: true
-```
-
-</div>
-And restart <span class="notranslate">WebShield</span>
-For EL6:
-<div class="notranslate">
-
-```
-service imunify360-webshield restart
+```sh
+imunify360-agent config update '{"WEBSHIELD": {"known_proxies_support": true}}'
 ```
 
-</div>
-For other systems:
-<div class="notranslate">
-
-```
-systemctl restart imunify360-webshield
-```
 </div>
 
 ::: tip Note
-If you are using cPanel/EasyApache3, Imunify360 will not automatically deploy _mod_remoteip_, and log files will show local server IP for visitors coming from CDN. EasyApache 3 is EOL in December 2018, and we don't plan to add automated _mod_remoteip_ setup and configuration for it.
+If you are using cPanel/EasyApache3, Imunify360 will not automatically deploy _mod_remoteip_, and log files will show local server IP for visitors coming from CDN. EasyApache 3 is EOL since December 2018, and we don't plan to add automated _mod_remoteip_ setup and configuration for it.
 :::
 :::tip Note
 For cPanel/EasyApache 4, Plesk, DirectAdmin and LiteSpeed _mod_remoteip_ will be automatically installed and configured.
@@ -192,16 +320,25 @@ For cPanel/EasyApache 4, Plesk, DirectAdmin and LiteSpeed _mod_remoteip_ will be
 
 Imunify360 Captcha isn't available in some countries due to certain restrictions, for example, in China. To alleviate this, Chinese customers can use Imunify360 SplashScreen as Captcha.
 
-To enable SplashScreen, add the following line: 
+To enable SplashScreen, open the file <span class="notranslate">`/etc/imunify360-webshield/wscheck.conf`</span>, find the following line: 
 
 <div class="notranslate">
 
 ```
-wscheck_splashscreen_as_captcha= on
+wscheck_splashscreen_as_captcha off;
 ```
 </div>
 
-to the <span class="notranslate">`/etc/imunify360-webshield/webshield-http.conf.d/wscheck.conf`</span> and run the following command.
+Change <span class="notranslate">`off`</span> to <span class="notranslate">`on`</span>:
+
+<div class="notranslate">
+
+```
+wscheck_splashscreen_as_captcha on;
+```
+</div>
+
+Save the file and run the following command:
 
 **For Ubuntu:**
 
@@ -226,36 +363,32 @@ The graylisted visitors will see such screen for 5 seconds before redirecting to
 
 ![](/images/splash_as_captcha.png)
 
+:::warning Note
+You can find WebShield and Captcha related logs in the <span class="notranslate">`/var/log/imunify360-webshield/`</span> file.
+:::
 
 ### How to block attacks from a particular country in WebShield
 
-:::tip Note
-Imunify360 4.3+
-:::
+Country blocking is available in both [Admin UI](/dashboard/#black-list) and [CLI](/command_line_interface/#blacklist)
 
-By default, country traffic blocking is not applied to the requests that come via a legitimate proxy such as Cloudflare. Even if the country is blocked in settings. Starting from Imunify360 version 4.3, we introduce a new way of country traffic blocking.
 
-1. Add those countries to the <span class="notranslate">`/etc/imunify360-webshield/blocked_country_codes.conf`</span> file.
-For example:
 
-<div class="notranalate">
+## Anti-bot protection
 
-```
-CH 1;
-RU 1;
-```
-</div>
-2. Then reload WebShield with the following command:
+
+Starting from version 5.6, Imunify360 distinguishes bots from real visitors using the JavaScript challenge <span class="notranslate">"Splash Screen</span>." Most bots don’t solve the challenge, and their requests will not reach web applications such as WordPress, Drupal, and others. This can save the server’s resources and protects websites from scanners, automated attacks, and web-spammers.
+
+Only bad actors will be redirected to the Imunify360 <span class="notranslate">Splash Screen</span> challenge page. Legitimate visitors get original content without any verification page nor any delay. The users forced to the <span class="notranslate">Splash Screen</span> will not see the challenge or CAPTCHA and be redirected to the page with the original content. Cookies and JavaScript support are required in a browser to successfully pass the challenge of <span class="notranslate">Anti-bot protection</span>.
+
+The “Anti-bot protection” feature will not block legitimate bots (e.g., Google crawler).
+
+You can enable <span class="notranslate">Anti-bot protection</span>, in the UI. Go to the <span class="notranslate">General</span> tab -> <span class="notranslate">Settings</span> and check the <span class="notranslate">Anti-bot protection</span> checkbox. You can find the details [here](/dashboard/#anti-bot-protection).
+
+Or via CLI. To do so, run the following command:
 
 <div class="notranslate">
 
 ```
-systemctl reload imunify360-webshield
+# imunify360-agent config update '{"WEBSHIELD": {"splash_screen": true}}'
 ```
 </div>
-
-It will block traffic from those countries no matter if it goes via known proxies or directly.
-
-:::warning Note
-You can find WebShield and Captcha related logs in the <span class="notranslate">`/var/log/imunify360-webshield/`</span> file.
-:::
