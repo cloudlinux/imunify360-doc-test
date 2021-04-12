@@ -1005,7 +1005,10 @@ OK
 
 ## Hooks <Badge text="Deprecated" type="warning"/>
 
+
+:::danger Warning
 You can use a new notification system via [CLI](/command_line_interface/#notifications-config) and [UI](/features/#notifications).
+:::
 
 You can find more about hooks [here](/features/#hooks).
 
@@ -1657,7 +1660,7 @@ The <span class="notranslate">`imunify360-agent notifications-config show`</span
    },
    "admin": {
       "notify_from_email": None,
-      "default_emails": ['email1@email.com', 'email2@email.com']
+      "default_emails": ["email1@email.com", "email2@email.com"]
    }
 }
 ```
@@ -1765,7 +1768,7 @@ The <span class="notranslate">`imunify360-agent notifications-config show`</span
    },
    "admin": {
       "notify_from_email": None,
-      "default_emails": ['email1@email.com', 'email2@email.com']
+      "default_emails": ["email1@email.com", "email2@email.com"]
    }
 }
 ```
@@ -2180,7 +2183,7 @@ Option can be:
 
 ## Submit false-positive/false-negative
 
-To submit file as false positive (if Imunify360 considers file as a malicious but it actually isn't) you can use the following command (please make sure to specify the file name along with full path):
+To submit file as false positive (if Imunify360 considers file as a malicious but it actually isn't) you can use the following command. Make sure to specify the file name. Relative paths are also supported as well as full paths.
 
 <div class="notranslate">
 

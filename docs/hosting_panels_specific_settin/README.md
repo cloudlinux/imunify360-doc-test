@@ -1,5 +1,6 @@
 # Hosting Panels Firewall Rulesets Specific Settings
 
+[[toc]]
 
 This section includes specific settings for each hosting panel that Imunify360 supports. It is important to follow these instructions to setup Imunify360 plugin properly.
 
@@ -19,7 +20,7 @@ This section includes specific settings for each hosting panel that Imunify360 s
 ::: danger Important!
 If <span class="notranslate">mod_security</span> is installed after Imunify360, it is important to execute the following command to add <span class="notranslate">mod_security</span> ruleset to Imunify360:
 
-For cPanel/Plesk:
+For cPanel/Plesk/DirectAdmin/Stand-alone:
 
 <div class="notranslate">
 
@@ -42,19 +43,24 @@ It is possible to enable <span class="notranslate">Service Status</span> checker
 
 1. Go to <span class="notranslate">_Service Configuration_</span> and choose <span class="notranslate">_Service Manager_</span>.
 
-2. In <span class="notranslate">_Additional Services_</span> section tick <span class="notranslate">`imunify360-agent`</span> and <span class="notranslate">`imunify360-captcha`</span> checkboxes.
+2. In <span class="notranslate">_Additional Services_</span> section tick <span class="notranslate">`imunify360`</span> and <span class="notranslate">`imunify360-webshield`</span> checkboxes.
 
 3. Click <span class="notranslate">_Save_</span> and wait until cPanel enables the <span class="notranslate">Service Status</span> checker for Imunify360.
 
-![](/images/cpanel_set01_zoom83.png)
+![](/images/cpanel_set01.png)
 
 If succeeded, the status of Imunify360 service will be displayed at <span class="notranslate">Service Status</span> section of <span class="notranslate">Server Status</span>.
 
-![](/images/cpanel_set02.jpg)
+![](/images/cpanel_set02.png)
 
 ### ModSecurity Settings
+
+:::warning Note
+Since version 92, cPanel is adding experimental support of ModSecurity 3.x and starting from version 5.7, we implement **experimental** support of ModSecurity version 3 on cPanel. Since the support is experimental, there are some limitations. Please find them [here](/hosting_panels_specific_settin/#modsecurity-3-apache-limitations).
+:::
  
 Recommended <span class="notranslate">mod_security</span> settings are:
+
 * <span class="notranslate">Audit Log Level – Only log noteworthy transactions</span>
 * <span class="notranslate">Connections Engine – Do not process the rules</span>
 * <span class="notranslate">Rules Engine – Process the rules</span>
@@ -74,7 +80,7 @@ If there is no Imunify360 ruleset installed, run <span class="notranslate">` imu
         <div class="notranslate">
  
         ```
-        /usr/local/cpanel/scripts/modsec_vendor enable-updates imunify360_full_apache
+        /usr/local/cpanel/scripts/modsec_vendor enable-updates imunify360-full-apache
         ```
         </div>
     * For LiteSpeed run the following command:
@@ -82,7 +88,7 @@ If there is no Imunify360 ruleset installed, run <span class="notranslate">` imu
         <div class="notranslate">
  
         ```
-        /usr/local/cpanel/scripts/modsec_vendor enable-updates imunify360_full_litespeed 
+        /usr/local/cpanel/scripts/modsec_vendor enable-updates imunify360-full-litespeed 
         ```
         </div>
 
@@ -91,7 +97,17 @@ If there is no Imunify360 ruleset installed, run <span class="notranslate">` imu
     Or you can use [WHMAPI1](https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+modsec_enable_vendor_updates) to enable vendor auto-updates.
 
 * It is possible to block ModSecurity rules only for IPs that belong to some country. More info can be found in [FAQ](/faq_and_known_issues/#_9-disabling-waf-rules-for-certain-countries)
-  
+
+### ModSecurity 3 + Apache limitations
+
+Since version 92, cPanel is adding experimental support of ModSecurity 3.x and starting from version 5.7, we implement **experimental** support of ModSecurity version 3 on cPanel. There are still some issues that prevent some Imunify360 features from working property. They are summarized below:
+
+* Mod_security3 does not work properly with mod_remoteip
+* mod_ruid2 issue
+* App-specific ruleset feature does not work
+* HackerTrap does not work
+* Uploaded files scanning does not work
+* Simple password redirect feature does not work
 
 ## Plesk
 
@@ -121,7 +137,7 @@ To check, if Imunify360 ruleset is installed, run the following as root:
 
 ``` bash
 # plesk sbin modsecurity_ctl -L --enabled
-imunify360-full-apache
+custom
 ```
 
 </div>
@@ -151,7 +167,7 @@ INFO    [+ 8781ms]   defence360agent.subsys.panels.plesk.mod_security|Successful
 INFO    [+ 8782ms]                  defence360agent.subsys.web_server|Performing web_server graceful restart
 OK
 # plesk sbin modsecurity_ctl -L --enabled
-imunify360-full-apache
+custom
 ```
 
 </div>
@@ -172,4 +188,5 @@ During installation on DirectAdmin, Imunify360 will try to install <span class="
 ::: tip Note
 Automatic installation of Imunify360 ruleset is only supported with custombuild 2.0.
 :::
+
 
