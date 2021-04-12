@@ -415,3 +415,23 @@ Or via CLI. To do so, run the following command:
 # imunify360-agent config update '{"WEBSHIELD": {"splash_screen": true}}'
 ```
 </div>
+
+## How to write custom code on WebShield
+
+Starting from Imunify360 v.5.7, users can change WebShield configuration by creating custom configuration files, which will be included in general config once WebShield will start.
+
+The custom code could be added to the <div class="notranslate">`webshield-server.conf.d/*.conf`</div> file.
+
+Example of the code on Lua:
+
+<div class="notranslate">
+
+```lua
+header_filter_by_lua_block {
+   local args = ngx.var.query_string
+   if args == nil then
+       if ngx.req.get_method() == 'GET' then ngx.header.set_cookie = nil
+end
+}
+```
+</div>
