@@ -100,14 +100,14 @@ If there is no Imunify360 ruleset installed, run <span class="notranslate">` imu
 
 ### ModSecurity 3 + Apache limitations
 
-Since version 92, cPanel is adding experimental support of ModSecurity 3.x and starting from version 5.7, we implement **experimental** support of ModSecurity version 3 on cPanel. There are still some issues that prevent some Imunify360 features from working property. They are summarized below:
+Since version 92, cPanel is adding experimental support of ModSecurity 3.x and starting from version 5.7, we implement **experimental** support of ModSecurity version 3 on cPanel. There are still some issues that prevent some Imunify360 features from working property. The feature limitations are:
 
-* Mod_security3 does not work properly with mod_remoteip
-* mod_ruid2 issue
-* App-specific ruleset feature does not work
-* HackerTrap does not work
-* Uploaded files scanning does not work
-* Simple password redirect feature does not work
+* working with mod_ruid2
+* working with mod_remoteip
+* app-specific ruleset feature
+* HackerTrap
+* uploaded files scanning
+* simple password redirect
 
 ## Plesk
 

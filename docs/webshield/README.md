@@ -420,7 +420,16 @@ Or via CLI. To do so, run the following command:
 
 Starting from Imunify360 v.5.7, users can change WebShield configuration by creating custom configuration files, which will be included in general config once WebShield will start.
 
-The custom code could be added to the <div class="notranslate">`webshield-server.conf.d/*.conf`</div> file.
+To enable it, open the `/etc/imunify360-webshield/virtserver.conf` file, find the directive `set $trust_ezoic 0;`.
+
+Replace `0` with `1`, save the file and restart WebShield by running the following command:
+
+<div class="notranslate">
+
+```
+# service imunify360-webshield restart
+```
+</div>
 
 Example of the code on Lua:
 
