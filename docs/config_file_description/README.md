@@ -117,7 +117,7 @@ that were uploaded via http/https. Note that it requires <a href="https://modsec
 <tr><td><span class="notranslate">notify_on_detect: False</span></td>
 <td># notify (<span class="notranslate">True</span>) or not (<span class="notranslate">False</span>) (default value) an admin when malware is detected</td></tr>
 <tr><td><span class="notranslate">optimize_realtime_scan: True</span></td>
-<td># enable (<span class="notranslate">True</span>) (default value) or disable (<span class="notranslate">False</span>) the  <a href="https://docs.cloudlinux.com/cloudlinux_os_kernel/#file-change-api" target="_blank">File Change API</a> support to reduce the system load while watching for file changes in comparison with inotify watch</td></tr>
+<td># enable (<span class="notranslate">True</span>) (default value) or disable (<span class="notranslate">False</span>) the  <a href="https://docs.cloudlinux.com/cloudlinux_os_kernel/#file-change-api" target="_blank">File Change API</a> and <b>fanotify</b> support to reduce the system load while watching for file changes in comparison with inotify watch. You can find the comparison table <a href="/dashboard/#general-2">here</a></td></tr>
 <tr><td><span class="notranslate">sends_file_for_analysis: True</span></td>
 <td># send (<span class="notranslate">True</span>) (default value) or not (<span class="notranslate">False</span>) malicious and suspicious files to the Imunify team for analysis</td></tr>
 <tr><td><span class="notranslate">i360_clamd: False</span></td>
@@ -197,7 +197,7 @@ to request CAPTCHA again</td></tr>
 <tr>
 <th colspan="2" align="left"><span class="notranslate">PROACTIVE_DEFENCE:</span></th></tr>
 <tr><td><span class="notranslate">blamer: True</span></td>
-<td># enable (<span class="notranslate">True</span> (default)) or disable (<span class="notranslate">False) Blamer</span></td></tr>
+<td># enable (<span class="notranslate">True</span> (default)) or disable (<span class="notranslate">False) Blamer</span>. See also: <a href="https://blog.imunify360.com/forcibly-enable-blamer" target="_blank">How to forcibly enable Blamer for all users on the server</a>.</td></tr>
 <tr><td><span class="notranslate">mode: LOG</span></td>
 <td># available modes:<ul><li><span class="notranslate">KILL</span></li><li><span class="notranslate">DISABLED</span></li><li><span class="notranslate">LOG</span> (default)</li></ul></td></tr>
 <tr><td><span class="notranslate">php_immunity: False</span></td>
@@ -230,9 +230,9 @@ to request CAPTCHA again</td></tr>
 <tr><td><span class="notranslate">PAM.ftp_protection: False</span></td>
 <td># enable (<span class="notranslate">True</span>) or disable (<span class="notranslate">False</span>) (default value) FTP brute-force attack protection.</td></tr>
 <tr>
-<th align="left"><span class="notranslate">KERNELCARE:</span></th>
+<th align="left"><span class="notranslate">KERNELCARE:</span> (<b><font color="Red">deprecated</font></b>)</th>
 <th align="left"># KernelCare extension for Imunify360 which allows tracing malicious invocations to detect privilege escalation attempts</th></tr>
-<tr><td><span class="notranslate">edf: False</span></td>
+<tr><td><span class="notranslate">edf: False</span> (<b><font color="Red">deprecated</font></b>)</td>
 <td># enable (<span class="notranslate">True</span>) or disable (<span class="notranslate">False</span>) (default value) exploit detection framework</td></tr>
 <tr><th colspan="2" align="left"><span class="notranslate">MALWARE_CLEANUP:</span></th></tr>
 <tr><td><span class="notranslate">trim_file_instead_of_removal: True</span></td>
@@ -270,7 +270,10 @@ to request CAPTCHA again</td></tr>
 <td># enable (<span class="notranslate">True</span>) or disable (<span class="notranslate">False</span>) (the default value) “scan” action in the UI of the end-user.</td></tr>
 <tr>
 <td width="250px;"><span class="notranslate">advisor: True</span></td><td># enable (<span class="notranslate">True</span> - the default value) or disable (<span class="notranslate">False</span>) the Imunify Advisor.</td></tr>
-
+<tr>
+<td width="250px;"><span class="notranslate">user_override_malware_actions: False</span></td><td># <span class="notranslate">"True"</span> allows overriding of actions applied to malware by a regular user.</td></tr>
+<tr>
+<td width="250px;"><span class="notranslate">user_override_proactive_defense: False</span></td><td># <span class="notranslate">"True"</span> allows overriding of Proactive Defense work mode by a regular user.</td></tr>
 <tr><th colspan="2" align="left"><span class="notranslate">STOP_MANAGING:</span></th></tr>
 <tr><td><span class="notranslate">modsec_directives: False</span></td>
 <td># for internal usage, do not edit</td></tr>
