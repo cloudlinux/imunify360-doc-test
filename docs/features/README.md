@@ -70,6 +70,31 @@ When the <span class="notranslate">_Low Resource Usage_</span> mode is activated
 
 ![](/images/LowResourceUsage.png)
 
+#### How to switch from the Low Resource Usage mode to the normal resource usage mode
+
+You can switch the mode via CLI and in the UI.
+
+In CLI, run the following commands:
+
+<div class="notranslate">
+
+```
+imunify360-agent config update '{"WEBSHIELD": {"enable": true}}'
+imunify360-agent config update '{"MOD_SEC": {"ruleset": "FULL"}}'
+```
+</div>
+
+In the UI, do the following steps:
+
+1. Go to <span class="notranslate">_Settings_ | _General_ | _WebShield_</span> and enable _WebShield_:
+
+  ![](/images/WebShieldEnabled.jpeg)
+
+2. Go to <span class="notranslate">_Settings_ | _General_ | _WAF Settings_</span> and disable _Minimized ModSec Ruleset_:
+
+  ![](/images/MinimazedModSecRulesetDisable.jpeg)
+  
+
 ## Exim+Dovecot brute-force attack protection
 
 :::tip Note
@@ -160,7 +185,9 @@ Note that the plugin has three separate counters and a set of settings for USER/
 * If an IP is blocked by <span class="notranslate">`IP_LOCK_ATTEMPTS`</span>, then all users will not have access to the server from that specific blocked IP
 :::
 
-## Hooks
+## Hooks <Badge text="Deprecated" type="warning"/>
+
+You can use a new notification system via [CLI](/command_line_interface/#notifications-config) and [UI](/features/#notifications).
 
 ### Overview
 
@@ -785,6 +812,57 @@ Cleanup results will be stored in the <span class="notranslate">`results.json`</
 # /opt/alt/php74-imunify/usr/bin/php -n -d extension=json.so -d extension=pdo.so -d extension=mysqlnd.so -d extension=nd_mysqli.so /opt/ai-bolit/imunify_dbscan.php --port=3306 --login=user --password-from-stdin --database=$DATABASE --report-file=$REPORT --restore=`pwd`/mds_backup_1597223818.csv
 ```
 </div>
+
+
+## Overridable config
+
+Starting from Imunify360 v.5.8, we introduce the overridable config which provides the ability to provision default config for the whole fleet of Imunify servers and keep the ability for fine-tuning each particular server depending on its requirements.
+
+**Configs organization**:
+
+* A new directory for custom configs. The local overrides of the main config are put there: <span class="notranslate">`/etc/sysconfig/imunify360/imunify360.config.d/`</span>
+* The old config <span class="notranslate">`/etc/sysconfig/imunify360/imunify360.config`</span> is now linked to the <span class="notranslate">`imunify360.config.d/90-local.config`</span>. It contains changes made through UI as well as through CLI.
+* Configs in that directory will override the <span class="notranslate">`imunify360-base.config`</span> and each other in lexical order. First-level "sections" (like <span class="notranslate">`FIREWALL`</span>) are merged, while second-level "options" (like <span class="notranslate">`FIREWALL.TCP_IN_IPv4`</span>) are replaced completely.
+
+This way you can keep your local customizations, but still be able to rollout the main config.
+
+The CLI command to check the default configuration before merging with <span class="notranslate">`90-local.config`</span>:
+
+<div class="notranslate">
+
+```
+imunify360-agent config show defaults
+```
+</div>
+
+Here is an example of custom server configuration:
+
+| | |
+|-|-|
+|<span class="notranslate">`imunify360-base.config`</span><br><br>Provided by Imunify installation. Contains default recommended configuration|<span class="notranslate">`FIREWALL:`</span><br><span class="notranslate">`TCP_IN_IPv4:`</span><br>`- '20'`<br>`- '8880'`<br><span class="notranslate">`port_blocking_mode: ALLOW`</span>|
+|<span class="notranslate">`imunify360.config.d/50-common.config`</span><br><br>Provisioned by server owner to the fleet of servers.|<span class="notranslate">`FIREWALL:`</span><br><span class="notranslate">`TCP_IN_IPv4:`</span><br>`- '20'`<br>`- '21'`<br><span class="notranslate">`port_blocking_mode: DENY`</span>|
+|<span class="notranslate">`imunify360.config.d/90-local.config`</span><br><br>Contains local customization per server individually.|<span class="notranslate">`FIREWALL:`</span><br><span class="notranslate">`TCP_IN_IPv4:`</span><br>`- '20'`<br>`- '22'`<br>`- '12345'`|
+
+The resulting (merged) configuration will look like this:
+
+<div class="notranslate">
+
+```
+FIREWALL:
+  TCP_IN_IPv4:
+  - '20'
+  - '22'
+  - '12345'
+  port_blocking_mode: DENY
+```
+</div>
+
+The mechanics is as follows: first-level "sections" - for example <span class="notranslate">`FIREWALL`</span> are merged, while second-level "options" - for example <span class="notranslate">`FIREWALL.TCP_IN_IPv4`</span> are replaced completely. 
+
+Those who don’t need this type of overridable configs can continue using custom configurations in the <span class="notranslate">`/etc/sysconfig/imunify360/imunify360.config`</span>.
+
+This feature is backward compatible.
+
 
 
 

@@ -8,7 +8,7 @@ When you log in to your control panel, Imunify360 asks you to enter your email a
 
 By entering your email address you agree to receive email reports about critical issues, security alerts or system misconfigurations detected on your servers.
 
-::: tip Note
+:::tip Note
 This email address is used ONLY for receiving server reports.
 :::
 
@@ -1057,7 +1057,7 @@ The <span class="notranslate">_Ignore List_</span> table includes the following 
 
 See also: [How to edit watched and excluded patterns for Malware Scanner?](/faq_and_known_issues/#_22-how-to-edit-watched-and-excluded-patterns-for-malware-scanner).
 
-**How to test Proactive Defense**
+#### How to test Proactive Defense
 
 1. Set <span class="notranslate">Proactive Defense</span> to <span class="notranslate">_Log only_</span> mode (requests will not be blocked) or to <span class="notranslate">_Kill mode_</span> to kill all requests.
 2. Create a file with the following content:
@@ -1207,6 +1207,7 @@ Here you can install and uninstall the following components:
 * Invisible Captcha
 * KernelCare
 
+If you want to install it using CLI, please follow [this article](/command_line_interface/#features).
 ![](/images/settingsgeneralinstallation.png)
 
 
@@ -1258,7 +1259,11 @@ To install or uninstall KernelCare click on a button related. Please find additi
 KernelCare is free on the servers with Imunify360 installed.
 :::
 
-#### Privilege escalation detection & protection
+#### Privilege escalation detection & protection <Badge text="Deprecated" type="error" vertical="top"/>
+
+:::warning Warning!
+This feature is deprecated.
+:::
 
 The KernelCare extension for Imunify360 allows tracing malicious invocations to detect privilege escalation attempts.
 
@@ -1530,6 +1535,13 @@ The purpose of the feature is significantly reducing false positive rate while i
 
 Click <span class="notranslate">_Save changes_</span> button on the bottom of the section to save changes.
 
+:::tip Note
+For now, the feature covers the following ports:
+* FTP - 21 port, 
+* SSH - 22 port, and any one manually defined starting the version 5.7 
+* SMTP - 25, 465, 587 ports
+:::
+
 #### PAM
 
 #### PAM brute-force attack protection
@@ -1654,7 +1666,20 @@ Read [CXS integration](/ids_integration/#cxs-integration) documentation carefull
   ::: tip Note
   It requires inotify to be installed and may put an additional load on a system.
   :::
-* <span class="notranslate">_Optimize real-time scan_</span> – enables the [File Change API](https://docs.cloudlinux.com/cloudlinux_os_kernel/#file-change-api) support to reduce the system load while watching for file changes in comparison with inotify watchs.
+* <span class="notranslate">_Optimize real-time scan_</span> – enables the [File Change API](https://docs.cloudlinux.com/cloudlinux_os_kernel/#file-change-api) and **fanotify** support to reduce the system load while watching for file changes in comparison with inotify watchs.
+
+  | | | | |
+  |-|:-:|:-:|:-:|
+  | |**inotify**|**fanotify**|**File change API**|
+  |CentOS 6|x| | |
+  |CentOS 7|x|x| |
+  |CentOS 8|x|x| |
+  |CloudLinux OS 6|x| | |
+  |CloudLinux OS 7|x| |x|
+  |CloudLinux OS 8|x| | |
+  |Ubuntu 16|x|x| |
+  |Ububtu 18|x|x| |
+
 * <span class="notranslate">_Automatically scan any file uploaded using web_</span> – enables real-time scanning of all the files that were uploaded via http/https.
   ::: tip Note
   It requires [ModSecurity](https://modsecurity.org/) to be installed.
@@ -1681,6 +1706,12 @@ Those options may be hidden for end-user if Cleanup is disabled in Features Mana
 
 * <span class="notranslate">_Enable RapidScan_</span> – dramatically speeds up repeated scans based on smart re-scan approach, local result caching and cloud-assisted scan. When you first enable the RapidScan feature, the first scan will run as before. But subsequent scans will see a dramatic speed improvement, anywhere between 5 to 20 times faster. You can find details [here](/features/#rapidscan).
 * <span class="notranslate">_Binary (ELF) malware detection_</span> – this option allows to search for any binaries (ELF files) in the user home directories and consider them malicious.
+* <span class="notranslate">_Enable HyperScan_</span><sup>_Experimental_</sup> – this option allows to use the regex matching HyperScan library in Malware Scanner to greatly improve the scanning speed. HyperScan requires its own signatures set that will be downloaded from the files.imunify360.com and compiled locally. 
+There are few platform requirements to use this feature:
+  * HyperScan supports Debian, Ubuntu and CentOS/CloudLinux 7 and later.
+  * SSE3 processor instructions support. It is quite common nowadays, but may be lacking in virtual environments or in some rather old servers.
+
+
 
 Tick required checkboxes and click <span class="notranslate">_Save changes_</span> button.
 

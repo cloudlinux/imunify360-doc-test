@@ -59,6 +59,7 @@ Changes of config files will be applied automatically. You don’t need to resta
 <td width="250px;"><span class="notranslate">max_log_file_size: 62914560</span></td><td># defines the maximum size of the log file in bytes (default is 60 MB)</td></tr>
 <tr>
 <td width="250px;"><span class="notranslate">backup_count: 5</span></td><td># defines how many log files to store. If 5, it will store <span class="notranslate"><em>app.log</em>, <em>app.log.1</em></span>, and up to <span class="notranslate"><em>app.log.5</em></span>.</td></tr>
+<td width="250px;"><span class="notranslate">syscall_monitor: True</span></td><td># allows to use Syscall Monitor (<span class="notranslate">True</span> is the default value).<br><b>Supported operating systems</b>:<br>* CentOS 6/7<br>* CloudLinux OS 6/7.<br><b>auditd</b> needs to be installed<br><b>auditsp</b> needs to be switched off.</td></tr>
 <tr>
 <th align="left"><span class="notranslate">MOD_SEC:</span></th>
 <th align="left"><span class="notranslate"># defines ModSecurity settings</span></th>
@@ -66,9 +67,9 @@ Changes of config files will be applied automatically. You don’t need to resta
 <tr>
 <td width="250px;"><span class="notranslate">ruleset: FULL</span></td><td># defines what ruleset to use: <span class="notranslate">FULL</span> (default value) or <span class="notranslate">MINIMAL</span>. If the amount of RAM on the server is less than 2.1GB, the ruleset value is automatically set to <span class="notranslate">MINIMAL</span>.</td></tr>
 <tr>
-<td width="250px;"><span class="notranslate">cms_account_compromise_prevention: False</span></td><td># enables WordPress account brute-force protection. Default is <b>False</b>.</td></tr>
+<td width="250px;"><span class="notranslate">cms_account_compromise_prevention: False</span></td><td># enables WordPress account brute-force protection. Default is False.</td></tr>
 <tr>
-<td width="250px;"><span class="notranslate">app_specific_ruleset: True</span></td><td># enables WAF Rules Auto-Configurator. Default is <b>True</b>.</td></tr>
+<td width="250px;"><span class="notranslate">app_specific_ruleset: True</span></td><td># enables WAF Rules Auto-Configurator. Default is True.</td></tr>
 <td width="250px;"><span class="notranslate">prev_settings: </span></td><td># for internal usage, do not edit</td></tr>
 <tr>
 <th colspan="2" align="left"><span class="notranslate">MOD_SEC_BLOCK_BY_SEVERITY:</span></th></tr>
@@ -134,6 +135,8 @@ that were uploaded via http/https. Note that it requires <a href="https://modsec
 <td># speeds up (<span class="notranslate">True</span>) (default value) ot not (<span class="notranslate">False</span>) repeated scans based on smart re-scan approach, local result caching and cloud-assisted scan.</td></tr>
 <tr><td><span class="notranslate">rapid_scan_rescan_unchanging_files_frequency: null</span></td>
 <td># defines what part of all files will be rescanned during each scan. For example, if set 10 then 1/10 part of all files will be rescanned. The default value `null` - means "choose frequency based on scan schedule". E.g. month - 1, week - 5, day - 10.</td></tr>
+<tr><td><span class="notranslate">hyperscan: False</span></td>
+<td># allows to use (<span class="notranslate"True</span>) the regex matching HyperScan library in Malware Scanner to greatly improve the scanning speed. <span class="notranslate">False</span> is the default value. HyperScan requires its own signatures set that will be downloaded from the files.imunify360.com and compiled locally.<br><b>Platform requirements</b>:<br>* HyperScan supports Debian, Ubuntu and CentOS/CloudLinux 7 and later.<br>* SSE3 processor instructions support. It is quite common nowadays, but may be lacking in virtual environments or in some rather old servers.</td></tr>
 <tr>
 <th colspan="2" align="left"><span class="notranslate">CAPTCHA:</span></th></tr>
 <tr><td><span class="notranslate">cert_refresh_timeout: 3600</span></td>
@@ -271,9 +274,9 @@ to request CAPTCHA again</td></tr>
 <tr>
 <td width="250px;"><span class="notranslate">advisor: True</span></td><td># enable (<span class="notranslate">True</span> - the default value) or disable (<span class="notranslate">False</span>) the Imunify Advisor.</td></tr>
 <tr>
-<td width="250px;"><span class="notranslate">user_override_malware_actions: False</span></td><td># <span class="notranslate">"True"</span> allows overriding of actions applied to malware by a regular user.</td></tr>
+<td width="250px;"><span class="notranslate">user_override_malware_actions: False</span></td><td># <span class="notranslate">"True"</span> allows overriding of actions applied to malware by a regular user. E.g., users will be able to disable automatic cleanup for their own files even if it was enabled by the admin.</td></tr>
 <tr>
-<td width="250px;"><span class="notranslate">user_override_proactive_defense: False</span></td><td># <span class="notranslate">"True"</span> allows overriding of Proactive Defense work mode by a regular user.</td></tr>
+<td width="250px;"><span class="notranslate">user_override_proactive_defense: False</span></td><td># <span class="notranslate">"True"</span> allows overriding of Proactive Defense work mode by a regular user. E.g., users will be able to switch Proactive Defense mode to <span class="notranslate">LOG</span> for their websites even if the admin has set it to <span class="notranslate">KILL</span>.</td></tr>
 <tr><th colspan="2" align="left"><span class="notranslate">STOP_MANAGING:</span></th></tr>
 <tr><td><span class="notranslate">modsec_directives: False</span></td>
 <td># for internal usage, do not edit</td></tr>
