@@ -119,7 +119,8 @@ module.exports = {
               "/command_line_interface/",
               "/uninstall/",
               "/faq_and_known_issues/",
-              "/whmcs_plugin/"
+              "/whmcs_plugin/",
+              "/changelog/"
             ]
           }
         ]
