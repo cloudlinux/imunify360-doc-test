@@ -1690,6 +1690,7 @@ Read [CXS integration](/ids_integration/#cxs-integration) documentation carefull
   :::
 * <span class="notranslate">_Automatically send suspicious and malicious files for analysis_</span> – malicious and suspicious files will be sent to the Imunify360 Team for analysis automatically.
 * <span class="notranslate">_Try to restore from backup first_</span> – allows to restore file as soon as it was detected as malicious from backup if a clean copy exists. If a clean copy does not exist or it is outdated, default action will be applied. See also <span class="notranslate">[CloudLinux Backup](/dashboard/#backups)</span>.
+* <span class="notranslate">_Block malicious file uploads via Cpanel FileMan_</span><sup>_Experimental_</sup> – enable blocking malicious file uploads via cPanel File Manager. Also, the file operations via cPanel File Manager that turn out to be malicious are blocked. The type of operations processed are: edits and saves.
 * <span class="notranslate">_Use backups not older than (days)_</span> – allows to set the a maximum age of a clean file.
 * <span class="notranslate">_Default action on detect_</span> – configure Malware Scanner actions when detecting malicious activity:
   * <span class="notranslate">Just display in dashboard</span>
@@ -1706,9 +1707,9 @@ Those options may be hidden for end-user if Cleanup is disabled in Features Mana
 
 * <span class="notranslate">_Enable RapidScan_</span> – dramatically speeds up repeated scans based on smart re-scan approach, local result caching and cloud-assisted scan. When you first enable the RapidScan feature, the first scan will run as before. But subsequent scans will see a dramatic speed improvement, anywhere between 5 to 20 times faster. You can find details [here](/features/#rapidscan).
 * <span class="notranslate">_Binary (ELF) malware detection_</span> – this option allows to search for any binaries (ELF files) in the user home directories and consider them malicious.
-* <span class="notranslate">_Enable HyperScan_</span><sup>_Experimental_</sup> – this option allows to use the regex matching HyperScan library in Malware Scanner to greatly improve the scanning speed. HyperScan requires its own signatures set that will be downloaded from the files.imunify360.com and compiled locally. 
+* <span class="notranslate">_Enable Hyperscan_</span><sup>_Experimental_</sup> – this option allows to use the regex matching Hyperscan library in Malware Scanner to greatly improve the scanning speed. Hyperscan requires its own signatures set that will be downloaded from the files.imunify360.com and compiled locally. 
 There are few platform requirements to use this feature:
-  * HyperScan supports Debian, Ubuntu and CentOS/CloudLinux 7 and later.
+  * Hyperscan supports Debian, Ubuntu and CentOS/CloudLinux 7 and later.
   * SSE3 processor instructions support. It is quite common nowadays, but may be lacking in virtual environments or in some rather old servers.
 
 
@@ -1777,9 +1778,12 @@ The following integrated with Imunify360 backup providers are available:
 * Hosting panel Backup (cPanel, Plesk, or DirectAdmin)
 * <span class="notranslate">Acronis Backup</span>
 
-:::tip Note
-Imunify360 is integrated with the JetBackup server backup application. Anyone using JetBackup with WHM or cPanel can elect to use Imunify360. You can find more details [here](https://blog.imunify360.com/imunify360-now-integrated-with-jetbackup).
+:::warning Warning
+JetBackup server backup application is not available right now because of rework. It will be available back again in 2022.
 :::
+
+
+<!-- Imunify360 is integrated with the JetBackup server backup application. Anyone using JetBackup with WHM or cPanel can elect to use Imunify360. You can find more details [here](https://blog.imunify360.com/imunify360-now-integrated-with-jetbackup). -->
 
 **Requirements**
 
