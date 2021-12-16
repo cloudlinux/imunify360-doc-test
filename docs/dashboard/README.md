@@ -659,6 +659,56 @@ To delete a port or separate IP/subnet, click _Bin_ icon in the row of the eleme
 
 ![](/images/add_port_02.png)
 
+## Email
+
+Imunify Email scans the outbound emails on the server and allows to identify viral mailings and other viral outbound mail content for all accounts on the server. (need more to describe what's this and how it works).
+
+Click <span class="notranslate">_Email_</span> in the main menu of the Imunify360 admin interface.
+
+![](/images/EmailMain.png)
+
+The following tabs are available:
+
+* <span class="notranslate">[Quarantine](/dashboard/#quarantine)</span>
+* <span class="notranslate">[Settings](/dashboard/#settings)</span>
+
+### Quarantine
+
+Go to <span class="notranslate">Imunify360 → Email → Quarantine</span> tab. Here, there is a table with a list of accounts and actions.
+
+![](/images/EmailQuarantineTab.png)
+
+The table has the following columns:
+
+* <span class="notranslate">**Account**</span> — 
+* <span class="notranslate">**Received Date**</span> — 
+* <span class="notranslate">**Sender (From)**</span> —  
+* <span class="notranslate">**Recipients**</span> — 
+* <span class="notranslate">**Subject**</span> — 
+* <span class="notranslate">**Actions**</span> — 
+  * <span class="notranslate">**Release & Send**</span> — 
+  * <span class="notranslate">**Delete**</span> — 
+  * <span class="notranslate">**View Email**</span> — 
+
+
+### Settings
+
+Go to <span class="notranslate">Imunify360 → Email → Settings</span> tab. Here, there is a table with a list of accounts and actions.
+
+![](/images/EmailSettings.png)
+
+The table has the following columns:
+
+* <span class="notranslate">**Account**</span> — 
+* <span class="notranslate">**Limit (MB)**</span> — 
+* <span class="notranslate">**Used Space (MB)**</span> —  
+* <span class="notranslate">**State**</span> — 
+* <span class="notranslate">**Details**</span> — 
+* <span class="notranslate">**Actions**</span> — 
+  * <span class="notranslate">**Purge quarantine**</span> — 
+  * <span class="notranslate">**Add**</span> — 
+
+
 
 ## Malware Scanner
 

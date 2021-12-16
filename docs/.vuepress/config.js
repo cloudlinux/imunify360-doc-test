@@ -1,6 +1,6 @@
 ﻿const urls = require("./urls-mapping.js");
 const sidebarUrls = require("./sidebar-urls");
-const _slugify = require('@vuepress/shared-utils/lib/slugify');
+const _slugify = require('vuepress/lib/markdown/slugify');
 
 const slugifyLinks = (s) => {
   if (sidebarUrls[s]) {
@@ -74,14 +74,16 @@ module.exports = {
   theme: "cloudlinux",
   // theme: '/Users/prefer/src/cloudlinux-doc-theme', // local path
   markdown: {
-    slugify: slugifyLinks,
-    toc: {
-      slugify: slugifyLinks,
+    slugify: (s) => {
+      if (sidebarUrls[s]) {
+        return sidebarUrls[s];
+      }
+      return _slugify(s);
     }
   },
 
   themeConfig: {
-    repo: "cloudlinux/imunify360-doc",
+    repo: "cloudlinux/imunify360-doc-",
     editLinks: true,
     docsBranch: "dev",
     docsDir: "docs",
