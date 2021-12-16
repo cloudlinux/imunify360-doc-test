@@ -612,8 +612,9 @@ Use filters to show the exact list of the IPs:
 * <span class="notranslate">Comments</span> – allows filtering the list by comments. Enter a comment into the input field.
 * Use <span class="notranslate">_Items per page_</span> at the page bottom right to set the number of the incidents to be shown on the page.
 
-:::tip Note
-Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
+:::tip Notes
+* Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
+* The individually whitelisted IP addresses take precedence over the country black list. These IP addresses will retain access even if the corresponding country of origin is blocked.
 :::
 
 The following actions are available for the ports:
@@ -739,17 +740,21 @@ The table can be sorted by <span class="notranslate">_User name_</span> and <spa
 Starting from Imunify360 v. 5.5, all filter and view options are stored in the browser's local storage so you can select filter preference options once and next time you'll open the tab, the options will be preset.
 :::
 
-### Files
+### Malicious
 
-Go to <span class="notranslate">Imunify360 → Malware Scanner → Files</span> tab. Here, there is a table with a list of infected files within all domains and user accounts.
+Go to <span class="notranslate">Imunify360 → Malware Scanner → Malicious</span> tab. Here, there is a table with a list of infected files within all domains and user accounts.
 
-![](/images/malwarescanner_files.png)
+![](/images/MDSUI.png)
 
 The table has the following columns:
 
-* <span class="notranslate">**Detected**</span> — displays the exact time when a file was detected as malicious.
-* <span class="notranslate">**User name**</span> — displays file owner name.
-* <span class="notranslate">**File**</span> — the path where the file is located starting with root
+* <span class="notranslate">**Scan date**</span> — displays the exact time when a file was detected as malicious.
+* <span class="notranslate">**Type**</span> — <span class="notranslate">Malware Database Scanner</span> or <span class="notranslate">Malware Scanner</span>.
+  :::tip Note
+  To function properly <span class="notranslate">Malware Database Scanner</span> requires MariaDB/MySQL DB management system version 5.5. Recommended version is 5.6+. Note, only WordPress databases are supported as for now.
+  :::
+* <span class="notranslate">**Username**</span> — displays file owner name.
+* <span class="notranslate">**Malicious**</span> — the path where the file is located starting with root.
 * <span class="notranslate">**Reason**</span> — describes the signature which was detected during the scanning process. Names in this column depend on the signature vendor. You can derive some information from the signature ID itself. `SMW-SA-05155-wshll` – in this Signature ID:
 	* The first section can be either `SMW` or `CMW`. `SMW` stands for Server Malware and `CMW` stands for Client Malware
 	* The second section of ID can be either `INJ` or `SA`. `INJ` stands for Injection (means Malware is Injected to some legitimate file) and `SA` stands for StandAlone (means File is Completely Malicious)
@@ -1515,7 +1520,7 @@ Click <span class="notranslate">_Save changes_</span> button on the bottom of th
 
 Click <span class="notranslate">_Save changes_</span> button on the bottom of the section to save changes.
 
-#### Anti-bot protection <sup> <badge text="experimental"/></sup>
+#### Anti-bot protection
 
 Tick the <span class="notranslate">_Anti-bot protection_</span> checkbox to enable the JavaScript challenge – "Splash Screen."
 
@@ -1634,6 +1639,7 @@ Here you can configure the following:
 * [<span class="notranslate">Background Scanning</span>](/dashboard/#background-scanning)
 * [<span class="notranslate">Cleanup</span>](/dashboard/#cleanup)
 * [<span class="notranslate">Proactive Defense</span>](/dashboard/#proactive-defense-2)
+* [<span class="notranslate">Malware Database Scanner</span>](/dashboard/#malware-database-scanner)
 
 
 ::: tip Note
@@ -1690,7 +1696,7 @@ Read [CXS integration](/ids_integration/#cxs-integration) documentation carefull
   :::
 * <span class="notranslate">_Automatically send suspicious and malicious files for analysis_</span> – malicious and suspicious files will be sent to the Imunify360 Team for analysis automatically.
 * <span class="notranslate">_Try to restore from backup first_</span> – allows to restore file as soon as it was detected as malicious from backup if a clean copy exists. If a clean copy does not exist or it is outdated, default action will be applied. See also <span class="notranslate">[CloudLinux Backup](/dashboard/#backups)</span>.
-* <span class="notranslate">_Block malicious file uploads via Cpanel FileMan_</span><sup>_Experimental_</sup> – enable blocking malicious file uploads via cPanel File Manager. Also, the file operations via cPanel File Manager that turn out to be malicious are blocked. The type of operations processed are: edits and saves.
+* <span class="notranslate">_Block malicious file uploads via cPanel File Manager_</span><sup>_Experimental_</sup> – enable blocking malicious file uploads via cPanel File Manager. Also, the file operations via cPanel File Manager that turn out to be malicious are blocked. The type of operations processed are: edits and saves.
 * <span class="notranslate">_Use backups not older than (days)_</span> – allows to set the a maximum age of a clean file.
 * <span class="notranslate">_Default action on detect_</span> – configure Malware Scanner actions when detecting malicious activity:
   * <span class="notranslate">Just display in dashboard</span>
@@ -1707,7 +1713,7 @@ Those options may be hidden for end-user if Cleanup is disabled in Features Mana
 
 * <span class="notranslate">_Enable RapidScan_</span> – dramatically speeds up repeated scans based on smart re-scan approach, local result caching and cloud-assisted scan. When you first enable the RapidScan feature, the first scan will run as before. But subsequent scans will see a dramatic speed improvement, anywhere between 5 to 20 times faster. You can find details [here](/features/#rapidscan).
 * <span class="notranslate">_Binary (ELF) malware detection_</span> – this option allows to search for any binaries (ELF files) in the user home directories and consider them malicious.
-* <span class="notranslate">_Enable Hyperscan_</span><sup>_Experimental_</sup> – this option allows to use the regex matching Hyperscan library in Malware Scanner to greatly improve the scanning speed. Hyperscan requires its own signatures set that will be downloaded from the files.imunify360.com and compiled locally. 
+* <span class="notranslate">_Enable Hyperscan_</span> – this option allows to use the regex matching Hyperscan library in Malware Scanner to greatly improve the scanning speed. Hyperscan requires its own signatures set that will be downloaded from the files.imunify360.com and compiled locally. 
 There are few platform requirements to use this feature:
   * Hyperscan supports Debian, Ubuntu and CentOS/CloudLinux 7 and later.
   * SSE3 processor instructions support. It is quite common nowadays, but may be lacking in virtual environments or in some rather old servers.
@@ -1767,6 +1773,20 @@ By enabling this feature Blamer will be enabled as well and Proactive Defence sw
 
 Click <span class="notranslate">_Save changes_</span> at the page bottom to apply all changes.
 
+#### Malware Database Scanner
+
+![](/images/MDSSetUI.png)
+
+Enable <span class="notranslate">_Malware Database Scanner_</span> – a database antivirus: automated malware detection and clean-up of web applications.
+
+:::tip Note
+Requires MariaDB/MySQL DB management system version 5.5. Recommended version is 5.6+. Note, only WordPress databases are supported as for now.
+:::
+
+
+Click <span class="notranslate">_Save changes_</span> to apply changes.
+
+
 ### Backups
 
 #### Overview
@@ -1806,9 +1826,9 @@ This section describes the following:
 To enable backups log in to a hosting panel as administrator, go to Imunify360 plugin and do the following.
 * Go to <span class="notranslate">_Imunify360 → Settings → Backups_</span>. If the feature is not currently used the <span class="notranslate">_Backup and restore_</span> is <span class="notranslate">_Disabled_</span>.
 * To enable it, select backup provider from the dropdown:
-  * <span class="notranslate">[CloudLinux Backup](https://www.imunify360.com/cloudlinux-backup)</span>
-  * <span class="notranslate">[Acronis Backup](https://www.acronis.com/en-eu/)</span>
-  * cPanel, Plesk or DirectAdmin Backup (according to user’s hosting panel)
+  * <span class="notranslate">[CloudLinux Backup](/dashboard/#cloudlinux-backup)</span>
+  * <span class="notranslate">[Acronis Backup](/dashboard/#acronis-backup)</span>
+  * <span class="notranslate">[cPanel Plesk or DirectAdmin Backup](/dashboard/#cpanel-plesk-or-directadmin-backup)</span>
 
 ![](/images/settingsbackup.png)
 
@@ -1835,7 +1855,7 @@ To activate <span class="notranslate">CloudLinux Backup</span>, follow the next 
 
 ![](/images/backuprestorecloudlinux.png)
 
-**Acronis Backup**
+#### Acronis Backup
 
 Choose it if you have Acronis account. So that Imunify360 can use backups to restore malicious or suspicious files from the backup if a clean version exists.
 
@@ -1847,7 +1867,7 @@ Imunify360 checks if Acronis agent is already installed. If not, Imunify360 inst
 
 ![](/images/acronisbackup.png)
 
-**cPanel Plesk or DirectAdmin Backup**
+#### cPanel Plesk or DirectAdmin Backup
 
 * Choose cPanel/Plesk/DirectAdmin backup
 * Select <span class="notranslate">_cPanel/Plesk/DirectAdmin Backup_</span>

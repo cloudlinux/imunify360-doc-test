@@ -44,7 +44,7 @@ Specifying IPs in those files will not prevent Imunify from adding the same IPs 
 
 ## RapidScan
 
-RapidScan feature allows you to increase scanning speed by lower system resource usage and gives you an opportunity to scan more frequently, further hardening your systems’ security posture.
+RapidScan feature allows you to increase scanning speed by lowering system resource usage and gives you an opportunity to scan more frequently, further hardening your systems’ security posture.
 
 #### RapidScan techniques
 
@@ -790,7 +790,7 @@ php /opt/ai-bolit/imunify_dbscan.php [OPTIONS] [PATH]
 ```
 </div>
 
-Scan results will be stored in the <span class="notranslate">`results.json`</span>.
+Scan results will be stored in the <span class="notranslate">`report.json`</span>.
 
 #### Scan & Clean-up database
 

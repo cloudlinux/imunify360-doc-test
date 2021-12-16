@@ -6,24 +6,12 @@
 
 **Operating system**
 
-* CentOS/RHEL 6 and 7
-* CloudLinux OS 6 and 7
-* Ubuntu 16.04 LTS only
-* Ubuntu 18.04
-* CentOS 8 with Plesk
-* CentOS 8 with DirectAdmin
-* CentOS 8 as [stand-alone](/stand_alone/)
-* CloudLinux OS 8 with DirectAdmin
-* CloudLinux OS 8 as [stand-alone](/stand_alone/)
-* Debian 9 with Plesk
-* Debian 9 with DirectAdmin
-* Debian 9 as [stand-alone](/stand_alone/)
-* Debian 10 with Plesk
-* Debian 10 with DirectAdmin
-* Debian 10 as [stand-alone](/stand_alone/)
-* Ubuntu 20 with Plesk
-* Ubuntu 20 with DirectAdmin
-* Ubuntu 20 as [stand-alone](/stand_alone/)
+* CentOS/RHEL 6,7,8
+* CloudLinux OS 6,7,8
+* Ubuntu 16.04 (LTS only), 18.04 and 20.04 
+* Debian 9 and 10
+* AlmaLinux 8
+
 
 **Virtualization**
 
@@ -31,16 +19,16 @@
 
 **Hardware**
 
-* <span class="notranslate">RAM: 1Gb</span>
-* <span class="notranslate">HDD: 20Gb</span> available disk space
+* <span class="notranslate">RAM: 1GB</span>
+* <span class="notranslate">HDD: 20GB</span> available disk space
 
 **Supported hosting panels**
 
 * <span class="notranslate">cPanel</span>
-* <span class="notranslate">Plesk (Plesk</span> 12.5 is not supported)
+* <span class="notranslate">Plesk (Plesk</span> 17.5 or newer)
 * <span class="notranslate">DirectAdmin</span>
+* <span class="notranslate">CyberPanel</span> (only CloudLinux OS 7 and 8). See [3rd party integration guide from CyberPanel](https://cyberpanel.net/docs/how-to-install-and-use-imunify360-on-cyberpanel/).
 * [No hosting panel systems](/stand_alone/)
-* <span class="notranslate">CyberPanel</span> (only CloudLinux OS 7 and CloudLinux OS 8). See [3rd party integration guide from CyberPanel](https://cyberpanel.net/docs/how-to-install-and-use-imunify360-on-cyberpanel/).
 
 **Required browsers**
 
@@ -52,10 +40,10 @@
 **Supported Web-servers**
 * <span class="notranslate">Apache</span>
 * <span class="notranslate">LiteSpeed</span>
-* Nginx (starting from Imunify360 5.4)
+* Nginx ([only in Standalone mode](/stand_alone/))
 
 
-## Side by side installation with another <span class="notranslate">IDS</span>
+## Side by side installation with another IDS
 
 **Compatible**
 
@@ -96,15 +84,29 @@ On DirectAdmin, Imunify UI requires the <span class="notranslate">`proc_open`</s
    * [cPanel  hosting panel](/hosting_panels_specific_settin/#cpanel)
    * [Plesk hosting panel](/hosting_panels_specific_settin/#plesk)
    * [Stand-alone version (no hosting panel)](/stand_alone/)
+   * On  <span class="notranslate">Debian 10</span>, enable  <span class="notranslate">`buster-backports`</span>:
+  
+<div class="notranslate">
 
-3. Log in with root privileges to the server where Imunify360 should be installed.
+```
+echo "deb http://ftp.debian.org/debian buster-backports main" > /etc/apt/sources.list.d/backports.list
+apt-get update
+```
 
-4. Go to your home directory and run the commands:
+</div>
+  
+:::warning Warning
+Plesk does not have full support for backports repository. It is recommended to disable it after Imunify360 is installed.
+:::
+
+1. Log in with root privileges to the server where Imunify360 should be installed.
+
+2. Go to your home directory and run the commands:
 
 <div class="notranslate">
 
 ```
-wget https://repo.imunify360.cloudlinux.com/defence360/i360deploy.sh
+wget https://repo.imunify360.cloudlinux.com/defence360/i360deploy.sh -O i360deploy.sh
 ```
 
 </div>
@@ -135,10 +137,11 @@ If you have an IP-based license, run the same script with no arguments:
 <div class="notranslate">
 
 ```
-wget https://repo.imunify360.cloudlinux.com/defence360/i360deploy.sh
+wget https://repo.imunify360.cloudlinux.com/defence360/i360deploy.sh -O i360deploy.sh
 ```
 
 </div>
+
 <div class="notranslate">
 
 ```
@@ -184,14 +187,14 @@ imunify360-agent register IPL
 
 ### SELinux support
 
-If SELinux (Security-Enhanced Linux) is enabled on your server, you should install the Imunify360 SELinux policy module. You can check SELinux status by `sestatus` command. Policy is shipped with Imunify360 package and is located in the <span class="notranslate">`/opt/alt/python35/share/imunify360/imunify360.te`</span>
+If SELinux (Security-Enhanced Linux) is enabled on your server, you should install the Imunify360 SELinux policy module. You can check SELinux status by `sestatus` command. Policy is shipped with Imunify360 package and is located in the <span class="notranslate">`/opt/alt/python38/share/imunify360/imunify360.te`</span>
 
 To apply it, run the following commands:
 
 <div class="notranslate">
 
 ```
-checkmodule -M -m -o /var/imunify360/imunify360.mod /opt/alt/python35/share/imunify360/imunify360.te
+checkmodule -M -m -o /var/imunify360/imunify360.mod /opt/alt/python38/share/imunify360/imunify360.te
 semodule_package -o /var/imunify360/imunify360.pp -m /var/imunify360/imunify360.mod
 semodule -i /var/imunify360/imunify360.pp
 ```
@@ -200,7 +203,7 @@ semodule -i /var/imunify360/imunify360.pp
 After that, restart imunify360 and imunify360-webshield service.
 For CentOS6/CloudLinux6:
 <div class="notranslate">
- 
+
 ```
 service imunify360 restart
 service imunify360-webshield restart
@@ -211,7 +214,7 @@ service imunify360-webshield restart
 For other systems:
 
 <div class="notranslate">
-  
+
 ```
 systemctl restart imunify360
 systemctl restart imunify360-webshield
@@ -222,7 +225,7 @@ If <i>checkmodule</i> command is not found, please, install it:
 For CentOS8/CloudLinux 8:
 
 <div class="notranslate">
-  
+
 ```
 yum install policycoreutils-python-utils
 ```
@@ -232,79 +235,82 @@ yum install policycoreutils-python-utils
 ## Update Instructions
 
 :::tip Note
-Starting from Imunify360 v.4.10, the updates are unconditionally enabled and the Imunify360 service starts during the package update.
+Updates are unconditionally enabled and the Imunify360 service starts during the package update.
 :::
 
+### Beta
 
-To upgrade Imunify360, run the command:
-
-<div class="notranslate">
-
-```
-yum update imunify360-firewall
-```
-
-</div>
-
-To update Imunify360 beta version, run the command:
-
-<div class="notranslate">
+To upgrade Imunify360 on CentOS/CloudLinux/AlmaLinux systems, run the command:
 
 ```
 yum update imunify360-firewall --enablerepo=imunify360-testing
 ```
 
-</div>
+To upgrade Imunify360 on Ubuntu 16.04, run the following command:
 
-To update Imunify360 on <span class="notranslate">Ubuntu</span>, run the command:
+```
+echo 'deb https://repo.imunify360.cloudlinux.com/imunify360/ubuntu-testing/16.04/ xenial main' > /etc/apt/sources.list.d/imunify360-testing.list
+apt-get update
+apt-get install --only-upgrade imunify360-firewall
+```
 
-<div class="notranslate">
+To upgrade Imunify360 on Ubuntu 18.04, run the following command:
+
+```
+echo 'deb https://repo.imunify360.cloudlinux.com/imunify360/ubuntu-testing/18.04/ bionic main' > /etc/apt/sources.list.d/imunify360-testing.list
+apt-get update
+apt-get install --only-upgrade imunify360-firewall
+```
+
+To upgrade Imunify360 on Ubuntu 20.04, run the following command:
+
+```
+echo 'deb https://repo.imunify360.cloudlinux.com/imunify360/ubuntu-testing/20.04/ focal main' > /etc/apt/sources.list.d/imunify360-testing.list
+apt-get update
+apt-get install --only-upgrade imunify360-firewall
+```
+
+To upgrade Imunify360 on Debian 9, run the following command:
+
+```
+echo 'deb https://repo.imunify360.cloudlinux.com/imunify360/debian-testing/9/ stretch main'  > /etc/apt/sources.list.d/imunify360-testing.list
+apt-get update
+apt-get install --only-upgrade imunify360-firewall
+```
+
+To upgrade Imunify360 on Debian 10, run the following command:
+
+```
+echo 'deb https://repo.imunify360.cloudlinux.com/imunify360/debian-testing/10/ buster main'  > /etc/apt/sources.list.d/imunify360-testing.list
+apt-get update
+apt-get install --only-upgrade imunify360-firewall
+``` 
+
+### Production
+
+CentOS/CloudLinux/AlmaLinux systems:
+
+```
+yum update imunify360-firewall
+```
+
+Ubuntu 16.04, 18.04, and 20.04 systems:
 
 ```
 apt-get update
 apt-get install --only-upgrade imunify360-firewall
 ```
 
-</div>
-
-To update Imunify360 beta version on <span class="notranslate">Ubuntu 16.04</span>, run the command:
-
-<div class="notranslate">
+Debian 9 and 10 systems:
 
 ```
-echo 'deb https://repo.imunify360.cloudlinux.com/imunify360/ubuntu-testing/16.04/ xenial main'  > /etc/apt/sources.list.d/imunify360-testing.list
 apt-get update
 apt-get install --only-upgrade imunify360-firewall
 ```
 
-</div>
 
 
-To update Imunify360 beta version on <span class="notranslate">Ubuntu 18.04</span>, run the command:
-
-<div class="notranslate">
-
-```
-echo 'deb https://repo.imunify360.cloudlinux.com/imunify360/ubuntu-testing/18.04/ bionic main'  > /etc/apt/sources.list.d/imunify360-testing.list
-apt-get update
-apt-get install --only-upgrade imunify360-firewall
-```
-
-</div>
-
-If you do not want to receive updates from <span class="notranslate">beta</span>, remove <span class="notranslate">beta</span> repository:
-
-<div class="notranslate">
-
-```
-rm /etc/apt/sources.list.d/imunify360-testing.list
-apt-get update
-```
-
-</div>
-
-
-### Gradual roll-out 
+### Gradual roll-out
 
 New stable Imunify360 versions are scheduled for the gradual roll-out from our production repository and are available for all customers in about two weeks or less from the release.
 
@@ -317,5 +323,3 @@ wget https://repo.imunify360.cloudlinux.com/defence360/imunify-force-update.sh
 bash imunify-force-update.sh
 ```
 </div>
-
-

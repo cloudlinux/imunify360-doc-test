@@ -72,7 +72,7 @@ list [--until]
 
 </div>
 
-If a date string is passed as <span class="notranslate">`--until`</span>, list all backups from now up to that date or all backups otherwise. The date for <span class="notranslate">`--unitil`</span> parameter can be in any format that python-dateutil can parse, e.g. _2017-08-01_, _01 Aug 2017_, etc.
+If a date string is passed as <span class="notranslate">`--until`</span>, list all backups from now up to that date or all backups otherwise. The date for <span class="notranslate">`--until`</span> parameter can be in any format that python-dateutil can parse, e.g. _2017-08-01_, _01 Aug 2017_, etc.
 
 Example:
 
@@ -471,6 +471,4 @@ For Acronis backup two restore modes are available:
 * **<span class="notranslate">Recovery</span> mode**  – <span class="notranslate">`restore_infected`</span> just sends command to backup server and then waits for the file to be restored is actually placed to expected folder. Its size is equal to expected one.
   
 Recovery mode is used by default because it restores file owner and permissions, too. Though downloading mode can be enabled with passing <span class="notranslate">`use_download`</span> option to <span class="notranslate">`restore_infected`</span> function. The second optional parameter - <span class="notranslate">`timeout`</span> can be passed to <span class="notranslate">`restore_infected`</span> function to change the default waiting time (time to wait while a file to be restored is being pulled by recovery agent). By default timeout is 600 seconds.
-
-
 

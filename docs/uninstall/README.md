@@ -37,7 +37,7 @@ If you have already deleted <span class="notranslate">`i360deploy.sh`</span> the
 <div class="notranslate">
 
 ```
-wget http://repo.imunify360.cloudlinux.com/defence360/i360deploy.sh
+wget https://repo.imunify360.cloudlinux.com/defence360/i360deploy.sh
 ```
 
 </div>
@@ -57,6 +57,8 @@ For CloudLinux OS, please run the following commands:
 </div>
 
 to remount <span class="notranslate">CageFS</span> and remove files from user's local directories as after uninstalling these files are not removed automatically and can generate errors to Apache log.
+
+See also: [Imunify360/AV uninstallation FAQ](https://cloudlinux.zendesk.com/hc/en-us/articles/360016144139-Imunify360-AV-uninstallation-FAQ).
 
 #### How to disable updates
 
@@ -81,4 +83,3 @@ Ubuntu
 </div>
 
 
-<Disqus/>

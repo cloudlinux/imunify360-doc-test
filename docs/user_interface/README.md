@@ -2,9 +2,7 @@
 
 There are following tabs in the Imunify360 end user interface:
 
-* [Files](/user_interface/#files)
-* [History](/user_interface/#history)
-* [Ignore List](/user_interface/#ignore-list)
+[[toc]]
 
 ## Files
 
@@ -103,3 +101,4 @@ The following filters are available:
 * **Items per page displayed** — click the number at the table bottom.
 
 The table can be sorted by Added and Path. By default, it is sorted from newest to oldest.
+

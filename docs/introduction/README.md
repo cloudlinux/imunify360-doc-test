@@ -5,7 +5,7 @@ Imunify360 is the security solution for Linux web servers based on machine learn
 
 Imunify360 provides:
 
- * Advanced firewall with herd immunity and artificial intelligence for detecting new threats and protecting all servers that run the software -  capable of defending against brute force attacks, DoS attacks, and port scans.
+ * Advanced firewall with cloud heuristics and artificial intelligence for detecting new threats and protecting all servers that run the software -  capable of defending against brute force attacks, DoS attacks, and port scans.
 
  * Intrusion Detection and Protection System -  comprehensive collection of “deny” policy rules for blocking all known attacks.
 
@@ -22,5 +22,4 @@ If a user violates Imunify360 security rules (trying to enter a wrong password, 
 If, after that, a user will try to access the HTTP/S port (#80/443), he will see the [CAPTCHA](/webshield/#captcha). After entering the CAPTCHA correctly, Imunify360 will remove that user from the <span class="notranslate">Gray List</span>. In a case of repeated violation, the IP address will be automatically added to the <span class="notranslate">Gray List</span> again.
 
 An administrator can remove any IP-address from the <span class="notranslate">Gray List</span> and add to the <span class="notranslate">White List</span> if needed. In this case, the user will not be blocked when attempting to violate Imunify360 security rules.
-
 

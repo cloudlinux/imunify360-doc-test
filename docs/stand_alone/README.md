@@ -18,13 +18,13 @@ Imunify360 can be installed directly on the server, independent of any panel, re
 * CloudLinux OS 
 * Ubuntu 16.04/18.04
 * Debian 9/10
-* Ubuntu 20
+* Ubuntu 20.04
 
 **Web servers**
 
 * Apache >= 2.4.30
 * LiteSpeed
-* Nginx (starting from Imunify360 5.4)
+* Nginx
 
 #### There are four main steps in general required for having Imunify360 Stand-alone running on your server:
 
@@ -37,6 +37,21 @@ Imunify360 can be installed directly on the server, independent of any panel, re
 Imunify Web-UI PHP code has to be executed under a non-root user which has access to `/var/run/defence360agent/non_root_simple_rpc.sock`. If it runs in CageFS, you'll need to configure it accordingly.
 :::
 
+To allow non-root user in CageFS access to the socket, this workaround should be applied:
+
+```sh
+# create directory for moun-point
+mkdir /imunify-ui-shared
+# add symlink for user which belong to UI backend `imunify-web` in this example)
+ln -s /var/run/defence360agent /imunify-ui-shared/imunify-web
+# add symlink to cagefs skeleton
+rm -f /usr/share/cagefs-skeleton/var/run/defence360agent
+ln -s /imunify-ui-shared/imunify-web /usr/share/cagefs-skeleton/var/run/defence360agent
+# add mount point to cagefs
+echo "%/imunify-ui-shared" >> /etc/cagefs/cagefs.mp
+# remount all
+cagefsctl --remount-all
+```
 
 ### 1. Prerequisites
 
@@ -44,7 +59,7 @@ Imunify360 Stand-alone version requires the following components installed or en
 
 * ModSecurity 2.9.x for Apache or ModSecurity 3.0.x for Nginx
 * Apache module <span class="notranslate">`mod_remoteip`</span> or nginx module <span class="notranslate">`ngx_http_realip_module`</span>
-* PHP with <span class="notranslate">`proc_open`</span> function enabled (remove it from the <span class="notranslate">`disable_functions`</span> list in <span class="notranslate">`php.ini`</span>)
+* PHP with <span class="notranslate">`json`</span> extension loaded and <span class="notranslate">`proc_open`</span> function enabled (remove it from the <span class="notranslate">`disable_functions`</span> list in <span class="notranslate">`php.ini`</span>)
 
 :::warning Warning
 We recommend using the stable versions of ModSecurity3 (i.e. 3.0.4), because developing versions (i.e. master) can have
@@ -163,7 +178,7 @@ To enable domain-specific ModSecurity configuration, specify the <span class="no
 <div class="notranslate">
 
 ``` ini
-[web_server]
+[integration_scripts]
 modsec_domain_config_script = /path/to/inject/domain/specific/config/script.sh
 ```
 </div>
@@ -194,6 +209,23 @@ WebShield consists of four services:
 * Sentrylogs daemon watches WebShield log files to detect errors
 
 The configuration of WebShield is done by an agent, and direct editing of WebShield configuration files is generally not recommended. This is mainly because after the next reconfiguration all custom changes would be lost. However, a host administrator is allowed to set a certificate as the default one for WebShield to return.
+
+#### How to enable WebShield in the Imunify360 config file and start the service
+
+When Imunify360 stand-alone is installed, WebShield is disabled by default.
+
+You can enable it only via CLI. To do so, run the following commands:
+
+
+1. ```
+    imunify360-agent config update '{"WEBSHIELD": {"enable": true, "known_proxies_support": true}}'
+   ```
+2. ```
+    systemctl enable imunify360-webshield
+   ```
+3. ```
+    systemctl restart imunify360-webshield
+   ```
 
 #### Set default SSL certificate explicitly
 
@@ -374,6 +406,7 @@ Example
 <div class="notranslate">
 
 ``` ini
+[malware]
 basedir = /home
 pattern_to_watch = ^/home/.+?/(public_html|public_ftp|private_html)(/.*)?$
 ```

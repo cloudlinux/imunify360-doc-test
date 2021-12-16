@@ -1,4 +1,11 @@
-# Hosting Panels Firewall Rulesets Specific Settings
+---
+title: Hosting Panels Firewall Rulesets Specific Settings & ModSec
+meta:
+  - name: description
+    content: Discover Hosting Panels Firewall Rulesets specific settings including modsec rules in Imunify360 security suite.
+---
+
+# Hosting Panels Firewall Rulesets Specific Settings & ModSec
 
 [[toc]]
 
@@ -13,9 +20,9 @@ This section includes specific settings for each hosting panel that Imunify360 s
 
 <span class="notranslate">Mod_security</span> installation process is specific for different panels:
 
-* Find the official cPanel documentation on the link: [https://documentation.cpanel.net/display/EA4/Apache+Module%3A+ModSecurity#ApacheModule:ModSecurity-InstallModSecHowtoinstalloruninstallmod_security2](https://documentation.cpanel.net/display/EA4/Apache+Module%3A+ModSecurity#ApacheModule:ModSecurity-InstallModSecHowtoinstalloruninstallmod_security2)
+* Find the official cPanel documentation [here](https://documentation.cpanel.net/display/EA4/Apache+Module%3A+ModSecurity#ApacheModule:ModSecurity-InstallModSecHowtoinstalloruninstallmod_security2)
 
-* Find the official Plesk documentation on the link: [https://docs.plesk.com/en-US/onyx/administrator-guide/server-administration/web-application-firewall-modsecurity.73383/](https://docs.plesk.com/en-US/onyx/administrator-guide/server-administration/web-application-firewall-modsecurity.73383/)
+* Find the official Plesk documentation [here](https://docs.plesk.com/en-US/onyx/administrator-guide/server-administration/web-application-firewall-modsecurity.73383/)
 
 ::: danger Important!
 If <span class="notranslate">mod_security</span> is installed after Imunify360, it is important to execute the following command to add <span class="notranslate">mod_security</span> ruleset to Imunify360:
@@ -72,7 +79,7 @@ It’s also recommended to disable any third-party <span class="notranslate">mod
 To do so, go to <span class="notranslate">ModSecurity Vendors</span> section of cPanel main menu, and switch to <span class="notranslate">`Off`</span> all enabled vendors except Imunify360 ruleset.
 If there is no Imunify360 ruleset installed, run <span class="notranslate">` imunify360-agent install-vendors`</span> command.
 
-![](/images/whmmodsecurityvendors_zoom70.png)
+![](/images/ModSecVendors.png)
 
 * Enable rules auto-update. Otherwise, you won't get important updates of ModSecurity ruleset in time
     * For Apache run the following command:

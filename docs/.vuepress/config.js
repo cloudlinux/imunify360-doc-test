@@ -1,8 +1,49 @@
-const urls = require("./urls-mapping.js");
+﻿const urls = require("./urls-mapping.js");
 const sidebarUrls = require("./sidebar-urls");
-const _slugify = require('vuepress/lib/markdown/slugify');
+const _slugify = require('@vuepress/shared-utils/lib/slugify');
+
+const slugifyLinks = (s) => {
+  if (sidebarUrls[s]) {
+    return sidebarUrls[s];
+  }
+  return _slugify(s);
+};
+
+// set your global autometa options
+const autoMetaOptions = {
+  site: {
+    name : 'Imunify 360 Documentation',
+    // twitter: 'im_360_docs',
+  },
+  canonical_base: 'https://docs.imunify360.com/',
+};
 
 module.exports = {
+  plugins: [
+    ['container', {
+      type: 'warning',
+      before: info => `<div class="warning custom-block"><p class="custom-block-title">${info}</p>`,
+      after: '</div>',
+    }],
+    ['container', {
+      type: 'tip',
+      before: info => `<div class="tip custom-block"><p class="custom-block-title">${info}</p>`,
+      after: '</div>',
+    }],
+    ['container', {
+      type: 'danger',
+      before: info => `<div class="danger custom-block"><p class="custom-block-title">${info}</p>`,
+      after: '</div>',
+    }],
+//    ['disqus-spa', { shortname: 'docsimunify360com' }],
+    ['@vuepress/google-analytics',
+      {
+        'ga': 'UA-12711721-12'
+      }
+    ],
+    [ 'autometa', autoMetaOptions ],
+    [ 'separate-pages', { alwaysVisibleBlocks: ['#disqus_thread'] } ]
+  ],
   configureWebpack: {
     resolve: {
       alias: {
@@ -11,6 +52,11 @@ module.exports = {
     }
   },
   base: "/",
+  head: [
+    ["link", { rel: "icon", href: "/favicon.ico" }],
+    ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+  ],
+
   locales: {
     // The key is the path for the locale to be nested under.
     // As a special case, the default locale can use '/' as its path.
@@ -28,12 +74,10 @@ module.exports = {
   theme: "cloudlinux",
   // theme: '/Users/prefer/src/cloudlinux-doc-theme', // local path
   markdown: {
-      slugify: (s) => {
-        if (sidebarUrls[s]) {
-          return sidebarUrls[s];
-        }
-        return _slugify(s);
-      }
+    slugify: slugifyLinks,
+    toc: {
+      slugify: slugifyLinks,
+    }
   },
 
   themeConfig: {
@@ -69,6 +113,7 @@ module.exports = {
         // text for the edit-on-github link
         editLinkText: "Edit this page",
         tryFree: "Try Free",
+        submitRequest: "Submit Request",
         search: "Search",
         // config for Service Worker
         serviceWorker: {
@@ -78,24 +123,25 @@ module.exports = {
           }
         },
         algolia: {
-          apiKey: 'c2e14586074e24bec163f37da724fe7c',
-          indexName: 'imunify360'
+          apiKey: '29339fdc91169afd5a7dd2a0a9bba6d2',
+          indexName: 'imunify360',
+          appId: 'C6CXTFLPAJ'
         },
         stayInTouch: "Stay in touch",
         bottomLinks: [
             {
                 text: "How to",
-                url: "https://cloudlinux.zendesk.com/hc/sections/115001344329-How-do-I"
+                url: "https://cloudlinux.zendesk.com/hc/en-us/categories/360002375980-Imunify-Security-Products"
             },
             {
                 text: "Getting started",
-                url: "https://imunify360.com/getting-started"
+                url: "https://www.imunify360.com/getting-started"
             },
             {
                 text: "Contact support",
                 url: "https://cloudlinux.zendesk.com/hc/en-us/requests/new"
             },
-            { text: "Blog", url: "https://www.imunify360.com/blog" }
+            { text: "Blog", url: "https://blog.imunify360.com" }
         ],
         sidebar: [
           {
@@ -117,10 +163,9 @@ module.exports = {
               "/config_file_description/",
               "/features/",
               "/command_line_interface/",
-              "/uninstall/",
               "/faq_and_known_issues/",
               "/whmcs_plugin/",
-              "/changelog/"
+              "/uninstall/"
             ]
           }
         ]
@@ -131,6 +176,7 @@ module.exports = {
         label: "Русский",
         editLinkText: "Редактировать",
         tryFree: "Попробовать бесплатно",
+        submitRequest: "Отправить запрос",
         search: "Поиск",
         serviceWorker: {
           updatePopup: {
@@ -139,18 +185,19 @@ module.exports = {
           }
         },
         algolia: {
-          apiKey: 'c2e14586074e24bec163f37da724fe7c',
-          indexName: 'imunify360'
+          apiKey: '29339fdc91169afd5a7dd2a0a9bba6d2',
+          indexName: 'imunify360-ru',
+          appId: 'C6CXTFLPAJ'
         },
         stayInTouch: "Будем на связи",
         bottomLinks: [
             {
                 text: "Инструкции",
-                url: "https://cloudlinux.zendesk.com/hc/sections/115001344329-How-do-I"
+                url: "https://cloudlinux.zendesk.com/hc/en-us/categories/360002375980-Imunify-Security-Products"
             },
             {
                 text: "С чего начать",
-                url: "https://imunify360.com/getting-started"
+                url: "https://cloudlinux.zendesk.com/hc/en-us/sections/360004020779-Getting-Started"
             },
             {
                 text: "Техподдержка",
@@ -167,6 +214,7 @@ module.exports = {
               "/ru/terminology/",
               "/ru/billing/",
               "/ru/installation/",
+              "/ru/stand_alone/",
               "/ru/ids_integration/",
               "/ru/webshield/",
               "/ru/backup_providers_integration/",
@@ -175,10 +223,11 @@ module.exports = {
               "/ru/user_interface/",
               "/ru/hosting_panels_specific_settin/",
               "/ru/config_file_description/",
+              "/ru/features/",
               "/ru/command_line_interface/",
-              "/ru/uninstall/",
               "/ru/faq_and_known_issues/",
-              "/ru/whmcs_plugin/"
+              "/ru/whmcs_plugin/",
+              "/ru/uninstall/"
             ]
           }
         ]
