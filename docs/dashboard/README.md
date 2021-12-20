@@ -661,7 +661,21 @@ To delete a port or separate IP/subnet, click _Bin_ icon in the row of the eleme
 
 ## Email
 
-Imunify Email scans the outbound emails on the server and allows to identify viral mailings and other viral outbound mail content for all accounts on the server. (need more to describe what's this and how it works).
+
+### Installation
+
+хостинг админ онли
+### Managing
+
+хостинг админ онли
+
+### UI
+
+::: danger Warning!
+Beta subscription only! Available ....
+:::
+
+Imunify Email scans the outbound emails on the server and allows to identify viral mailings and other viral outbound mail content for all accounts on the server.
 
 Click <span class="notranslate">_Email_</span> in the main menu of the Imunify360 admin interface.
 
@@ -674,39 +688,52 @@ The following tabs are available:
 
 ### Quarantine
 
-Go to <span class="notranslate">Imunify360 → Email → Quarantine</span> tab. Here, there is a table with a list of accounts and actions.
+Go to <span class="notranslate">Imunify360 → Email → Quarantine</span> tab. Тут находятся имэйлы которые Им Им посчитал вирусными или вредоносными для всех аккаунтов на сервере. Смысл карантина чтобы пользователь смог проверить решение системы и либо отправить письма, либо удалить перманентно чтобы они не занимали места в карантине.
 
 ![](/images/EmailQuarantineTab.png)
 
 The table has the following columns:
 
-* <span class="notranslate">**Account**</span> — 
-* <span class="notranslate">**Received Date**</span> — 
-* <span class="notranslate">**Sender (From)**</span> —  
-* <span class="notranslate">**Recipients**</span> — 
-* <span class="notranslate">**Subject**</span> — 
-* <span class="notranslate">**Actions**</span> — 
-  * <span class="notranslate">**Release & Send**</span> — 
-  * <span class="notranslate">**Delete**</span> — 
-  * <span class="notranslate">**View Email**</span> — 
+* <span class="notranslate">**Account**</span> — название акк клиента (у пользователя нет)
+* <span class="notranslate">**Received Date**</span> — когда письмо было получено сервером для отправки
+* <span class="notranslate">**Sender (From)**</span> — непосредственно пользователь который совершил отправку
+* <span class="notranslate">**Recipients**</span> — адресаты (вкл to cc and bcc)
+* <span class="notranslate">**Subject**</span> — a subject from am email
+* <span class="notranslate">**Actions**</span>
+  * <span class="notranslate">**Release & Send**</span> — хостинг админ может делать multy select and multy send (вынуть из спама и отправить получателю, юзер может только по одному) - добавить скриншот 
+  * <span class="notranslate">**Delete**</span> — перманентно удалить (очистка места, но не обязательно, письма удаляются по фифо) - добавить скриншот
+  * <span class="notranslate">**View Email**</span> — показать содержимое письма (добавить скриншот )
+    Боди - декодированное содержимое письма с удаленными тегами 
+    Хэдер - секция заголовков письма
+    Плэйн текст - заголовки + оригинальный вид тела письма.
+
+:::tip Note
+Уведомления пока не отпрвляются ни при удалении ни при release. Будет в следующем релизе
+:::
 
 
 ### Settings
 
-Go to <span class="notranslate">Imunify360 → Email → Settings</span> tab. Here, there is a table with a list of accounts and actions.
+хостинг админ онли
+
+Go to <span class="notranslate">Imunify360 → Email → Settings</span> tab. Сеттинги позволяют менеджить место для карантина. Админ может увеличивать или уменьшать место для карантина пользователя. (Таким образом увеличивая время реакции пользователя на фолс позитив.)
+
+::: warning
+размер по умолчанию для карантина пользователя 100 МВ
+:::
 
 ![](/images/EmailSettings.png)
 
 The table has the following columns:
 
-* <span class="notranslate">**Account**</span> — 
-* <span class="notranslate">**Limit (MB)**</span> — 
-* <span class="notranslate">**Used Space (MB)**</span> —  
-* <span class="notranslate">**State**</span> — 
-* <span class="notranslate">**Details**</span> — 
-* <span class="notranslate">**Actions**</span> — 
-  * <span class="notranslate">**Purge quarantine**</span> — 
-  * <span class="notranslate">**Add**</span> — 
+* <span class="notranslate">**Account**</span> — название акк клиента
+* <span class="notranslate">**Limit (MB)**</span> — ограничение размера карантина пользователя (деф 100 МВ)
+* <span class="notranslate">**Used Space (MB)**</span> — непосредственно занято сейчас файлами в карантине (возможны небольшие превышения лимита)
+* <span class="notranslate">**State**</span> — состояние карантина клиента. эктив онли в текущей версии.
+* <span class="notranslate">**Details**</span> — сколько писем удалено перманентно за последний час*.
+* <span class="notranslate">**Actions**</span>
+  * <span class="notranslate">**Purge quarantine**</span> — очистить всё содержимое карантина для аккаунта
+  * <span class="notranslate">**Add**</span> — изменить ограничение размера карантина для аккаунта (пользователя)
 
 
 
