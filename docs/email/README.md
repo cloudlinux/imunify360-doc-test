@@ -14,9 +14,9 @@ Imunify Email beta is available for installation for registered beta testers onl
 Imunify Email Beta is simple to install. 
 
 At the moment, it runs on the following distributions:
-* CentOS 7,8
-* CloudLinux OS 7,8
-with support of cPanel / WHM control panel. 
+
+* CentOS 7,8 with support of cPanel/WHM control panel.
+* CloudLinux OS 7,8 with support of cPanel/WHM control panel. 
 
 Minimum system requirements for installation:
 * x64 | 512 Mb** | 20 Gb disk space ***
@@ -61,12 +61,12 @@ Imunify RSpamd acts as an email filter and is installed in system directories su
 * /usr/lib
 * /usr/share/rspamd
 
-Imunify Quarantine is installed in the following directory: `/opt/ie/ie-quarantine/`.
+Imunify Quarantine is installed in the following directory: `/var/imunifyemail/quarantine`.
 
 #### Quarantine directories
 
 Imunify Quarantine component keeps all quarantine content, including emails and meta data in the following directory: 
-`/opt/ie/ie-quarantine/storage`.
+`/var/imunifyemail/quarantine/storage/`.
 
 
 ### Exim configuration modifications
@@ -112,7 +112,7 @@ imunifyemail-config enable
 ```
 
 
-## UI
+## WHM user interface
 
 :::danger Note
 Hosting administrator only.
@@ -126,8 +126,8 @@ Click <span class="notranslate">_Email_</span> in the main menu of the Imunify36
 
 The following tabs are available:
 
-* <span class="notranslate">[Quarantine](/dashboard/#quarantine)</span>
-* <span class="notranslate">[Settings](/dashboard/#settings)</span>
+* <span class="notranslate">[Quarantine](/email/#quarantine)</span>
+* <span class="notranslate">[Settings](/email/#settings)</span>
 
 ## Quarantine
 
@@ -169,7 +169,7 @@ In this Beta release, the notifications are not sent both when deleting or relea
 Hosting administrator only.
 :::
 
-Go to <span class="notranslate">Imunify360 → Email → Settings</span> tab. The settings allow managing the space for quarantine. An administrator can increase or decrease the space for the user's quarantine.
+Go to <span class="notranslate">Imunify360 → Email → Settings</span> tab. The settings allow managing the space for quarantine. An administrator can increase or decrease the space for the user's quarantine. If all space is consumed, the oldest emails in quarantine will be permanently deleted.
 
 :::danger Note
 By default, the space for the user's quarantine is 100 MB.
@@ -192,6 +192,3 @@ The table has the following columns:
   * <span class="notranslate">**Add**</span> — change the limit of the space for the user's (account) quarantine
 
    ![](/images/EmailAdd.png)
-
-
-
