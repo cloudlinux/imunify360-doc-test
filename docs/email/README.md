@@ -1,7 +1,17 @@
 # Email
 
+#### Imunify Email compatibility
 
-## Installation
+Imunify Email has been checked for compatibility with following tools and mail gateways:
+
+* Config Server Services
+  * [MailScanner](https://configserver.com/cp/osm.html)
+  * [Firewall](https://configserver.com/cp/csf.html)
+* [MailChannels](https://www.mailchannels.com/) from IE 0.6 version
+* SpamAssassin (incoming and outgoing configuration)
+* [Smtp2go](https://www.smtp2go.com/)
+
+### Installation
 
 :::danger Note
 Hosting administrator only.
@@ -16,7 +26,8 @@ Imunify Email Beta is simple to install.
 At the moment, it runs on the following distributions:
 
 * CentOS 7,8 with support of cPanel/WHM control panel.
-* CloudLinux OS 7,8 with support of cPanel/WHM control panel. 
+* CloudLinux OS 7,8 with support of cPanel/WHM control panel.
+* AlmaLinux 8 with support of cPanel/WHM control panel.
 
 Minimum system requirements for installation:
 * x64 | 512 Mb** | 20 Gb disk space ***
@@ -69,27 +80,35 @@ Imunify Quarantine component keeps all quarantine content, including emails and 
 `/var/imunifyemail/quarantine/storage/`.
 
 
-### Exim configuration modifications
+#### Exim configuration modifications
 
 Imunify Email modifies Exim MTA configuration, adding RSpamd as a filter for email. 
 It is done automatically during installation. In case if filtering needs to be disabled, see [Disable Imunify Email](/email/#disable-imunify-email). When disabled, Exim configuration will not contain an RSpamd filter. To re-able Imunify Email, see [Enable Imunify Email](/email/#enable-imunify-email).
 
 The configuration change is compatible with WHM Advanced Editor, you can continue using it for other modifications. 
 
-## User interface access
+### User interface access
 
 In order to access the UI as a hosting administrator, navigate to WHM -> Plugins -> Imunify360 -> Email tab. 
 
 Your clients will be able to access the Imunify Email Quarantine under: cPanel -> Security -> Imunify360 -> Email.
 
-## Managing Imunify Email
+### Managing Imunify Email
+
+#### Check Imunify Email version
+
+To find out which version of Imunify Email is installed, run the following command as root:
+
+```
+ie-config version
+```
 
 #### Check status
 
 In order to check status of Imunify Email, run the following command as root:
 
 ```
-imunifyemail-config status
+ie-config status
 ```
 
 #### Disable Imunify Email
@@ -97,7 +116,7 @@ imunifyemail-config status
 In order to disable Imunify Email, run following command as root:
 
 ```
-imunifyemail-config disable
+ie-config disable
 ```
 
 It will remove filter configuration and stop Imunify Email services.
@@ -108,11 +127,11 @@ It will remove filter configuration and stop Imunify Email services.
 If Imunify Email was installed, but then disabled it can be re-enabled using the following command, run as root: 
 
 ```
-imunifyemail-config enable
+ie-config enable
 ```
 
 
-## WHM user interface
+### WHM user interface
 
 :::danger Note
 Hosting administrator only.
@@ -129,7 +148,7 @@ The following tabs are available:
 * <span class="notranslate">[Quarantine](/email/#quarantine)</span>
 * <span class="notranslate">[Settings](/email/#settings)</span>
 
-## Quarantine
+### Quarantine
 
 Go to <span class="notranslate">Imunify360 → Email → Quarantine</span> tab. Here, there are emails that are considered viral or malicious for all accounts on the server. You can decline or confirm the Imunify Email decision and either release and send emails or remove them completely.
 
@@ -163,7 +182,7 @@ The table has the following columns:
 In this Beta release, the notifications are not sent both when deleting or releasing an email. Will be added in the next release.
 :::
 
-## Settings
+### Settings
 
 :::danger Note
 Hosting administrator only.
@@ -192,3 +211,464 @@ The table has the following columns:
   * <span class="notranslate">**Add**</span> — change the limit of the space for the user's (account) quarantine
 
    ![](/images/EmailAdd.png)
+
+### Imunify Email Command Line Interface
+
+The Command Line Interface (CLI) is designed to simplify usage of Imunify Email and as an enabler for integration with other tools and platforms.
+
+Main command for all operations with Imunify Email: 
+
+```
+ie-cli 
+```
+
+#### Basic usage
+
+Imunify Email quarantine CLI application
+
+**Usage**:
+
+```
+ie-cli [command]
+```
+
+**Available Commands**:
+
+| | |
+|-|-|
+|`accounts`|For working with accounts|
+|`completion`|Generate the auto-completion script for the specified shell|
+|`emails`|For working with emails|
+|`help`|Help about any command|
+|`settings`|Settings command|
+|`whitelist-authusers`|Manage whitelist authusers|
+|`whitelist-recipients`|Manage whitelist recipients|
+|`whitelist-senders`|Manage whitelist senders|
+
+**Flags**:
+
+| | |
+|-|-|
+|`-h`, `--help`|Help for ie-cli|
+|`-t`, `--toggle`|Help message for toggle|
+
+
+### Operations with emails in the quarantine
+
+Emails marked as spam by Imunify Email are stored in the quarantine. The following section describes CLI for operating with emails. 
+
+:::tip Note
+The quarantine is keeping email for various users separately, but root users can see all the emails and perform any operations on them.
+:::
+
+:::tip Note
+Almost all CLI commands support output in plain text and JSON format. For switching output to JSON use `--json`
+:::
+
+#### List emails in quarantine
+
+In order to see all emails stored inside a quarantine, you must specify the account name. If you specify `root` it will show all the emails in quarantine.
+
+**Command**
+
+```
+ie-cli emails list -a <ACCOUNT_NAME> [--json]
+```
+
+**Example**
+
+```
+./ie-cli emails list -a root
+```
+
+**Output**
+
+```
+-----------------------------------------------------------------------------------------------------------
+Email_ID	 ef69f707-d547-4b29-b8f0-f5331821c930 
+Size_Bytes	 8190 
+Account_Name	 mws 
+Recipients	 me@somehost.com
+Subject        	 Ge t G:eneric V1agra f:or as 1ow as $2.50 per 50 mg
+
+----------------------------------------------------------------------------------------------------------
+Email_ID	 faf96a73-5be4-481a-9c6c-7ab8fb2e3cf0 
+Size_Bytes	 8534 
+Account_Name	 mws 
+Recipients	 frank@yahooo.com
+Subject        	 FWD: Want Pills V|AgR@ % Xan_a_x ^ Valiu|m| # At|v@`n \ Pn+ermin ' So+m+a  lNmAL
+
+-----------------------------------------------------------------------------------------------------------
+Email_ID	 fbc2efd0-1808-4e54-99ce-3082708b28ee 
+Size_Bytes	 8971 
+Account_Name	 oregdent 
+Recipients	 steve@hillcabinet.com
+Subject        	 FWD:Xanax.x Valium.m Xanax.x Vicodin.n h ogzmwggi
+
+-----------------------------------------------------------------------------------------------------------
+Max Count	 3
+```
+
+**Example with JSON as output format**
+
+```
+./ie-cli emails list -a root –-json
+```
+
+**Output**
+
+```json
+{
+   "items": [ 
+ 		{
+ 			"email_id": "ef69f707-d547-4b29-b8f0-f5331821c930",
+ 			"size_bytes": 8190,
+ 			"account_name": "mws",
+ 			"recipients": [
+ 				"me@somehost.com"
+ 			],
+ 			"subject": "Ge t G:eneric V1agra f:or as 1ow as $2.50 per 50 mg",
+ 			"script_header": {
+ 				"raw": "",
+ 				"domain": "",
+ 				"path": ""
+ 			}
+ 		},
+ 		{
+ 			"email_id": "faf96a73-5be4-481a-9c6c-7ab8fb2e3cf0",
+ 			"size_bytes": 8534,
+ 			"account_name": "mws",
+ 			"recipients": [
+ 				"frank@yahooo.com"
+ 			],
+ 			"subject": "FWD: Want Pills V|AgR@ % Xan_a_x ^ Valiu|m|  lNmAL",
+ 			"script_header": {
+ 				"raw": "",
+ 				"domain": "",
+ 				"path": ""
+ 			}
+ 		},
+ 		{
+ 			"email_id": "fbc2efd0-1808-4e54-99ce-3082708b28ee",
+ 			"size_bytes": 8971,
+ 			"account_name": "oregdent",
+ 			"recipients": [
+ 				"steve@hillcabinet.com"
+ 			],
+ 			"subject": "FWD:Xanax.x Valium.m Xanax.x Vicodin.n h ogzmwggi",
+ 			"script_header": {
+ 				"raw": "",
+ 				"domain": "",
+ 				"path": ""
+ 			}
+ 		}
+ 	],
+ 	"max_count": 3
+```
+
+### Show Email message
+
+Root user, if needed, can see any message held in a quarantine. In order to do this email ID is needed. It can be taken from the list command above.
+
+:::tip Note
+Don’t forget to specify a user account. For root user use `-a root`.
+:::
+
+:::tip Note
+For this command only plain output is available.
+:::
+
+**Command**
+
+```
+./ie-cli emails show <EMAIL_ID> -a <ACCOUNT_NAME>
+```
+
+**Example**
+
+```
+./ie-cli emails show f3367f1b-4216-4f4f-9617-f8be9f5a6e76 -a root
+```
+
+**Output**
+
+```
+EmailID: f3367f1b-4216-4f4f-9617-f8be9f5a6e76
+SizeBytes: 8534
+AccountName: mws
+Sender: mws@mywebsite.com
+Recipients:  me@somehost.com
+ReceivedDate: 1643805800
+Subject: FWD: Want Pills V|AgR@ % Xan_a_x ^ Valiu|m| # At|v@`n \ Pn+ermin ' So+m+a  lNmAL
+
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="iso-8859-7"
+Date: Fri, 13 Feb 2019 04:48:28 +0300
+From: "wilhelmina rivard" <rivard1792@hinet.net>
+MIME-Version: 1.0
+Received: from [70.100.200.300] (port=56330 helo=Myaccout) by 70.100.200.300.cprapid.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2) (envelope-from <mws@mydomain.com>) id 1nFEym-0005TO-Qs for me@somehost.com; Wed, 02 Feb 2022 12:43:20 +0000
+To: <abazis@iit.demokritos.gr>
+
+X-ImunifyEmail-Filter-Action: reject
+X-ImunifyEmail-Filter-Score: 6.1
+X-Mimeole: Produced By Microsoft MimeOLE V6.00.2900.2527
+X-Msmail-Priority: Normal
+X-Priority: 3
+X-Failed-Recipients: []
+
+Body: PCFET0NUWVBFIGh0bWwgcHVibGljICItLy9XM0MvL0RURCBIVE1MIDQuMDEgVHJhbnNpdGlvbmFsLy9FTiIgPQoiaHR0cDovL3d3dy53My5vcmcvVFIvaHRtbDQvbG9vc2UuZHRkIj4KPEhUTUw+CjxIRUFEPgo8VElUTEU+QWxsIFlvdXIgTWVkcyBIZXJlPC9USVRMRT4KPE1FVEEgaHR0cC1lcXVpdj0zRCJDb250ZW50LXR5cGUiIGNvbnRlbnQ9M0QidGV4dC9odG1sOyA9CmNoYXJzZXQ9M0RJU08tODg1OS0xIj4KPFNUWUxFIHR5cGU9M0QidGV4dC9jc3MiPgo8IS0tIC5zdHlsZTUge2ZvbnQtZmFtaWx5OiBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6ID0KMTRweDsgfT0yMAo8IS0tIC5zdHlsZTgge2ZvbnQtZmFtaWx5OiBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDhweDsgPQp9PTIwCi0tPjwvU1RZTEU
+```
+
+### Release or Delete a message from the quarantine
+
+Messages can be released from the quarantine and sent to recipients if they are false positives. They can also be deleted if needed to free up space. 
+
+:::tip Note
+The quarantine will automatically delete the oldest messages when the user's quarantine limit is reached. The limit can be adjusted in settings.
+:::
+
+#### Release
+
+**Command**
+
+```
+ie-cli emails edit -i '{"ids": ["<EMAIL_ID, EMAIL_ID>"], "operation": "release"}' -a 'account_name'
+```
+
+**Example**
+
+```
+ie-cli emails edit -a root -i '{ "ids": ["fb7c3537-8e5e-43d8-bc66-bd954c22d587"], "operation":"delete" }'
+```
+
+**Output**
+
+```
+OK
+```
+
+#### Delete
+
+**Command**
+
+```
+ie-cli emails edit -i '{"ids": ["<EMAIL_ID, EMAIL_ID>"], "operation": "delete"}' -a 'account_name' 
+```
+
+**Output**
+
+```
+OK
+```
+
+### Accounts settings
+
+ImunifyEmail stores emails marked as spam in a quarantine space. The space is divided into virtual subspaces for every system account. Subspace is created when the first spam message is quarantined. It is filled with spam messages for a particular account until the size limitation is reached. When the size limitation is reached most old messages will be automatically deleted. 
+
+:::tip Note
+Default limit for a quarantine subspace is 100 MB.
+:::
+
+:::tip Note
+In some cases ImunifyEmail can’t attribute an email to a system account. In such cases the email will be stored under root user quarantine space.
+:::
+
+There are command line commands for managing quarantine space. 
+
+#### List all accounts in the quarantine
+
+**Command**
+
+```
+ie-cli accounts list [--json]
+```
+
+**Output**
+
+```
+Name      	      LimitBytes	      UsedBytes	      State	
+mysite           125829120  	 810692     	 active 	
+dentistcenter    104857600  	 0          	 active 	
+
+Max Count 2	 
+```
+
+**Output (JSON)**
+
+```json
+{
+   "items":[
+      {
+         "name":"mysite",
+         "limit_bytes":125829120,
+         "used_bytes":810692,
+         "state":"active"
+      },
+      {
+         "name":"dentistcenter",
+         "limit_bytes":104857600,
+         "used_bytes":0,
+         "state":"active"
+      }
+   ],
+   "max_count":2
+}
+```
+
+#### Edit account size limit
+
+Sometimes it is necessary to give more (or less) space for some user accounts. It is possible to do using the following command.
+
+**Command**
+
+```
+ie-cli settings edit  -a '<ACCOUNT_NAME>'  -i '{"state": "active", "limit_bytes": 1234}'
+```
+
+**Example**
+
+```
+ie-cli settings edit  -a 'mydomain'  -i '{"state": "active", "limit_bytes": 8096}'
+```
+
+**Output (JSON)**
+
+```
+Name       LimitBytes	 UsedBytes	 State	
+mws        8096        810692     active 	
+```
+
+**Output** 
+
+```json
+{
+   "name":"mws",
+   "limit_bytes":8096,
+   "used_bytes":160461,
+   "state":"active"
+}
+```
+
+#### Clean all quarantine for an account
+
+If needed all quarantine for an account can be cleaned with one command. 
+
+**Command**
+
+```
+ie-cli settings rm <ACCOUNT_NAME>
+```
+
+**Example**
+
+```
+ie-cli settings rm root
+```
+
+**Output**
+
+```
+OK
+```
+
+### Whitelisting
+
+Imunify Email supports whitelisting configuration. It is possible to whitelist domains and/or email addresses of a sender. 
+
+:::warning Warning
+When sender is whitelisted Imunify Email bypasses it’s emails without filtering. It may affect hosting reputation if a whitelisted sender will send spam.
+:::
+
+#### See all whitelist senders
+
+**Command**
+
+```
+ie-cli wl-recipients list [--json]
+```
+
+**Output**
+
+```
+[root@77-79-198-14 ie-cli]# ./ie-cli wl-authusers list
+EMAILS
+1@example5.com
+pp@ppp.com
+qq@qq.com
+me@mydomain.com
+
+DOMAINS
+No available data
+```
+
+**Output (JSON)**
+
+```json
+{
+ 	"success": true,
+ 	"emails": [
+ 		"1@example5.com",
+ 		"pp@ppp.com",
+ 		"qq@qq.com",
+ 		"me@mydomain.com"
+ 	],
+ 	"domains": []
+ }
+```
+
+#### Whitelist a sender
+
+To whitelist a domain or an email address use the following command.
+
+**Command**
+
+```
+ie-cli wl-senders add -i  (--input) '[  { "type": "domain", "value": "domain.com" } ]'
+```
+
+**Example: whitelisting sender email address**
+
+```
+/ie-cli wl-senders add -i '[  { "type": "email", "value": "me@domain1.com" } ]'
+```
+
+**Example: whitelisting sender email address**
+
+```
+/ie-cli wl-senders add -i '[  { "type": "domain", "value": "crm.myshop.com" } ]'
+```
+
+**Output** 
+
+```
+OK
+```
+
+#### Remove whitelist for a sender
+
+If needed, the sender can be removed from the whitelist. See the following commands.
+
+**Command**
+
+```
+ie-cli wl-senders remove -i  (--input) '[  { "type": "domain", "value": "domain.com" } ]'
+```
+
+**Example: whitelisting sender email address**
+
+```
+/ie-cli wl-senders remove -i '[  { "type": "email", "value": "me@domain1.com" } ]'
+```
+
+**Example: whitelisting sender email address**
+
+```
+/ie-cli wl-senders remove -i '[  { "type": "domain", "value": "crm.myshop.com" } ]'
+```
+
+**Output** 
+
+```
+OK
+```
+
