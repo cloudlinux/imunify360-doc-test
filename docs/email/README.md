@@ -267,7 +267,7 @@ Almost all CLI commands support output in plain text and JSON format. For switch
 
 #### List emails in quarantine
 
-In order to see all emails stored inside a quarantine, you must specify the account name. If you specify `root` it will show all the emails in quarantine.
+In order to see all emails stored use the following command. By default 'root' account is used, so the command shows the whole content of the quarantine.
 
 **Command**
 
@@ -278,41 +278,41 @@ ie-cli emails list -a <ACCOUNT_NAME> [--json]
 **Example**
 
 ```
-./ie-cli emails list -a root
+ie-cli emails list -a root
 ```
 
 **Output**
 
 ```
 -----------------------------------------------------------------------------------------------------------
-Email_ID	 ef69f707-d547-4b29-b8f0-f5331821c930 
-Size_Bytes	 8190 
-Account_Name	 mws 
-Recipients	 me@somehost.com
-Subject        	 Ge t G:eneric V1agra f:or as 1ow as $2.50 per 50 mg
+Email_ID ef69f707-d547-4b29-b8f0-f5331821c930 
+Size_Bytes	      8190 
+Account_Name	  mws 
+Recipients	      me@somehost.com
+Subject        	  Ge t G:eneric V1agra f:or as 1ow as $2.50 per 50 mg
 
 ----------------------------------------------------------------------------------------------------------
-Email_ID	 faf96a73-5be4-481a-9c6c-7ab8fb2e3cf0 
-Size_Bytes	 8534 
-Account_Name	 mws 
-Recipients	 frank@yahooo.com
-Subject        	 FWD: Want Pills V|AgR@ % Xan_a_x ^ Valiu|m| # At|v@`n \ Pn+ermin ' So+m+a  lNmAL
+Email_ID faf96a73-5be4-481a-9c6c-7ab8fb2e3cf0 
+Size_Bytes	      8534 
+Account_Name	  mws 
+Recipients	      frank@yahooo.com
+Subject           FWD: Want Pills V|AgR@ % Xan_a_x ^ Valiu|m| # At|v@`n \ Pn+ermin ' So+m+a  lNmAL
 
 -----------------------------------------------------------------------------------------------------------
-Email_ID	 fbc2efd0-1808-4e54-99ce-3082708b28ee 
-Size_Bytes	 8971 
-Account_Name	 oregdent 
-Recipients	 steve@hillcabinet.com
-Subject        	 FWD:Xanax.x Valium.m Xanax.x Vicodin.n h ogzmwggi
+Email_ID fbc2efd0-1808-4e54-99ce-3082708b28ee 
+Size_Bytes	      8971 
+Account_Name	  oregdent 
+Recipients	      steve@hillcabinet.com
+Subject        	  FWD:Xanax.x Valium.m Xanax.x Vicodin.n h ogzmwggi
 
 -----------------------------------------------------------------------------------------------------------
-Max Count	 3
+Max Count	     3
 ```
 
 **Example with JSON as output format**
 
 ```
-./ie-cli emails list -a root –-json
+ie-cli emails list -a root –-json
 ```
 
 **Output**
@@ -374,47 +374,43 @@ Root user, if needed, can see any message held in a quarantine. In order to do t
 Don’t forget to specify a user account. For root user use `-a root`.
 :::
 
-:::tip Note
-For this command only plain output is available.
-:::
-
 **Command**
 
 ```
-./ie-cli emails show <EMAIL_ID> -a <ACCOUNT_NAME>
+ie-cli emails show <EMAIL_ID> [-a <ACCOUNT_NAME>] [--json]
 ```
 
 **Example**
 
 ```
-./ie-cli emails show f3367f1b-4216-4f4f-9617-f8be9f5a6e76 -a root
+ie-cli emails show f3367f1b-4216-4f4f-9617-f8be9f5a6e76 -a root
 ```
 
 **Output**
 
 ```
-EmailID: f3367f1b-4216-4f4f-9617-f8be9f5a6e76
-SizeBytes: 8534
-AccountName: mws
-Sender: mws@mywebsite.com
-Recipients:  me@somehost.com
-ReceivedDate: 1643805800
-Subject: FWD: Want Pills V|AgR@ % Xan_a_x ^ Valiu|m| # At|v@`n \ Pn+ermin ' So+m+a  lNmAL
+EmailID:                      f3367f1b-4216-4f4f-9617-f8be9f5a6e76
+SizeBytes:                    8534
+AccountName:                  mws
+Sender:                       mws@mywebsite.com
+Recipients:                   me@somehost.com
+ReceivedDate:                 1643805800
+Subject:                      FWD: Want Pills V|AgR@ % Xan_a_x ^ Valiu|m| # At|v@`n \ Pn+ermin ' So+m+a  lNmAL
 
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/html; charset="iso-8859-7"
-Date: Fri, 13 Feb 2019 04:48:28 +0300
-From: "wilhelmina rivard" <rivard1792@hinet.net>
-MIME-Version: 1.0
-Received: from [70.100.200.300] (port=56330 helo=Myaccout) by 70.100.200.300.cprapid.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2) (envelope-from <mws@mydomain.com>) id 1nFEym-0005TO-Qs for me@somehost.com; Wed, 02 Feb 2022 12:43:20 +0000
-To: <abazis@iit.demokritos.gr>
+Content-Transfer-Encoding:    quoted-printable
+Content-Type:                 text/html; charset="iso-8859-7"
+Date:                         Fri, 13 Feb 2019 04:48:28 +0300
+From:                         "wilhelmina rivard" <rivard1792@hinet.net>
+MIME-Version:                 1.0
+Received:                     from [70.100.200.300] (port=56330 helo=Myaccout) by 70.100.200.300.cprapid.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.94.2) (envelope-from <mws@mydomain.com>) id 1nFEym-0005TO-Qs for me@somehost.com; Wed, 02 Feb 2022 12:43:20 +0000
+To:                           <abazis@iit.demokritos.gr>
 
 X-ImunifyEmail-Filter-Action: reject
-X-ImunifyEmail-Filter-Score: 6.1
-X-Mimeole: Produced By Microsoft MimeOLE V6.00.2900.2527
-X-Msmail-Priority: Normal
-X-Priority: 3
-X-Failed-Recipients: []
+X-ImunifyEmail-Filter-Score:  6.1
+X-Mimeole:                    Produced By Microsoft MimeOLE V6.00.2900.2527
+X-Msmail-Priority:            Normal
+X-Priority:                   3
+X-Failed-Recipients:          []
 
 Body: PCFET0NUWVBFIGh0bWwgcHVibGljICItLy9XM0MvL0RURCBIVE1MIDQuMDEgVHJhbnNpdGlvbmFsLy9FTiIgPQoiaHR0cDovL3d3dy53My5vcmcvVFIvaHRtbDQvbG9vc2UuZHRkIj4KPEhUTUw+CjxIRUFEPgo8VElUTEU+QWxsIFlvdXIgTWVkcyBIZXJlPC9USVRMRT4KPE1FVEEgaHR0cC1lcXVpdj0zRCJDb250ZW50LXR5cGUiIGNvbnRlbnQ9M0QidGV4dC9odG1sOyA9CmNoYXJzZXQ9M0RJU08tODg1OS0xIj4KPFNUWUxFIHR5cGU9M0QidGV4dC9jc3MiPgo8IS0tIC5zdHlsZTUge2ZvbnQtZmFtaWx5OiBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6ID0KMTRweDsgfT0yMAo8IS0tIC5zdHlsZTgge2ZvbnQtZmFtaWx5OiBBcmlhbCwgSGVsdmV0aWNhLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDhweDsgPQp9PTIwCi0tPjwvU1RZTEU
 ```
@@ -432,7 +428,7 @@ The quarantine will automatically delete the oldest messages when the user's qua
 **Command**
 
 ```
-ie-cli emails edit -i '{"ids": ["<EMAIL_ID, EMAIL_ID>"], "operation": "release"}' -a 'account_name'
+ie-cli emails edit -i '{"ids": ["<EMAIL_ID, EMAIL_ID>"], "operation": "release"}' [-a 'account_name']
 ```
 
 **Example**
@@ -486,7 +482,7 @@ ie-cli accounts list [--json]
 **Output**
 
 ```
-Name      	      LimitBytes	      UsedBytes	      State	
+Name      	     LimitBytes	     UsedBytes	     State	
 mysite           125829120  	 810692     	 active 	
 dentistcenter    104857600  	 0          	 active 	
 
@@ -522,20 +518,20 @@ Sometimes it is necessary to give more (or less) space for some user accounts. I
 **Command**
 
 ```
-ie-cli settings edit  -a '<ACCOUNT_NAME>'  -i '{"state": "active", "limit_bytes": 1234}'
+ie-cli settings edit -a '<ACCOUNT_NAME>' -i '{"state": "active", "limit_bytes": 1234}'
 ```
 
 **Example**
 
 ```
-ie-cli settings edit  -a 'mydomain'  -i '{"state": "active", "limit_bytes": 8096}'
+ie-cli settings edit -a 'mydomain' -i '{"state": "active", "limit_bytes": 8096}'
 ```
 
 **Output (JSON)**
 
 ```
 Name       LimitBytes	 UsedBytes	 State	
-mws        8096        810692     active 	
+mws        8096          810692      active 	
 ```
 
 **Output** 
@@ -590,7 +586,7 @@ ie-cli wl-recipients list [--json]
 **Output**
 
 ```
-[root@77-79-198-14 ie-cli]# ./ie-cli wl-authusers list
+[root@77-79-198-14 ie-cli]# ie-cli wl-authusers list
 EMAILS
 1@example5.com
 pp@ppp.com
@@ -651,19 +647,19 @@ If needed, the sender can be removed from the whitelist. See the following comma
 **Command**
 
 ```
-ie-cli wl-senders remove -i  (--input) '[  { "type": "domain", "value": "domain.com" } ]'
+ie-cli wl-senders delete -i (--input) '[ { "type": "domain", "value": "domain.com" } ]'
 ```
 
 **Example: whitelisting sender email address**
 
 ```
-/ie-cli wl-senders remove -i '[  { "type": "email", "value": "me@domain1.com" } ]'
+/ie-cli wl-senders delete -i '[ { "type": "email", "value": "me@domain1.com" } ]'
 ```
 
 **Example: whitelisting sender email address**
 
 ```
-/ie-cli wl-senders remove -i '[  { "type": "domain", "value": "crm.myshop.com" } ]'
+/ie-cli wl-senders delete -i '[ { "type": "domain", "value": "crm.myshop.com" } ]'
 ```
 
 **Output** 
