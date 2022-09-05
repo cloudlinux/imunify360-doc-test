@@ -625,13 +625,13 @@ ie-cli wl-senders add -i  (--input) '[  { "type": "domain", "value": "domain.com
 **Example: whitelisting sender email address**
 
 ```
-/ie-cli wl-senders add -i '[  { "type": "email", "value": "me@domain1.com" } ]'
+ie-cli wl-senders add -i '[  { "type": "email", "value": "me@domain1.com" } ]'
 ```
 
 **Example: whitelisting sender email address**
 
 ```
-/ie-cli wl-senders add -i '[  { "type": "domain", "value": "crm.myshop.com" } ]'
+ie-cli wl-senders add -i '[  { "type": "domain", "value": "crm.myshop.com" } ]'
 ```
 
 **Output** 
@@ -653,13 +653,13 @@ ie-cli wl-senders delete -i (--input) '[ { "type": "domain", "value": "domain.co
 **Example: whitelisting sender email address**
 
 ```
-/ie-cli wl-senders delete -i '[ { "type": "email", "value": "me@domain1.com" } ]'
+ie-cli wl-senders delete -i '[ { "type": "email", "value": "me@domain1.com" } ]'
 ```
 
 **Example: whitelisting sender email address**
 
 ```
-/ie-cli wl-senders delete -i '[ { "type": "domain", "value": "crm.myshop.com" } ]'
+ie-cli wl-senders delete -i '[ { "type": "domain", "value": "crm.myshop.com" } ]'
 ```
 
 **Output** 
