@@ -127,8 +127,9 @@ that were uploaded via http/https. Note that it requires <a href="https://modsec
 <td># obsolete (not used)</td></tr>
 <tr><td><span class="notranslate">clamav_binary: True</span></td>
 <td># obsolete (not used)</td></tr>
-<tr><td><span class="notranslate">scan_modified_files: True</span></td>
-<td># enable (<span class="notranslate">True</span>) (default value) or disable (<span class="notranslate">False</span>) real-time scanning for modified files using inotify library. The Scanner searches for modified files in user’s DocumentRoot directories.</td></tr>
+<tr><td><span class="notranslate">scan_modified_files: Null</span></td>
+<td># enable (<span class="notranslate">True</span>) or disable (<span class="notranslate">False</span>) (default is not set). If disabled, it checks the file's timestamps (c/mtime) before scanning, and if the timestamp is not changed since the last scan, the file is skipped.
+Scanner's behaviour is based on other scan optimizations, therefore it is better to rely on default values and UI, although this parameter provides an option to overwrite this behaviour. This option is not available within UI.</td></tr>
 <tr><td><span class="notranslate">cloud_assisted_scan: True</span></td>
 <td># speed up scans by check file hashes using cloud database</td></tr>
 <tr><td><span class="notranslate">rapid_scan: True</span></td>
@@ -139,6 +140,8 @@ that were uploaded via http/https. Note that it requires <a href="https://modsec
 <td># allows to use (<span class="notranslate">True</span>) the regex matching Hyperscan library in Malware Scanner to greatly improve the scanning speed. <span class="notranslate">True</span> is the default value. Hyperscan requires its own signatures set that will be downloaded from the files.imunify360.com and compiled locally.<br><b>Platform requirements</b>:<br>* Hyperscan supports Debian, Ubuntu and CentOS/CloudLinux 7 and later.<br>* SSE3 processor instructions support. It is quite common nowadays, but may be lacking in virtual environments or in some rather old servers.</td></tr>
 <tr><td><span class="notranslate">enable_scan_cpanel: False</span></td>
 <td># enable (<span class="notranslate">True</span>) blocking malicious file uploads via cPanel File Manager. The default value is <span class="notranslate">False</span>. The type of operations processed are: edits and saves</td></tr>
+<tr><td><span class="notranslate">crontabs: False</span></td>
+<td># enable (<span class="notranslate">True</span>) scan of the system and user crontab files for malicious jobs. The default value is <span class="notranslate">False</span>.</td></tr>
 <tr>
 <th colspan="2" align="left"><span class="notranslate">CAPTCHA:</span></th></tr>
 <tr><td><span class="notranslate">cert_refresh_timeout: 3600</span></td>
@@ -213,8 +216,8 @@ to request CAPTCHA again</td></tr>
 <td># intensity level for CPU consumption. Can be set from 1 to 7, default is 2</td></tr>
 <tr><td><span class="notranslate">io: 2</span></td>
 <td># intensity level for file operations. Can be set from 1 to 7, default is 2</td></tr>
-<tr><td><span class="notranslate">ram: 2048</span></td>
-<td># intensity level for RAM consumption. Minimum value is 1024, default is 2048</td></tr>
+<tr><td><span class="notranslate">ram: 1024</span></td>
+<td># intensity level for RAM consumption. The default value is 1024</td></tr>
 <tr>
 <th colspan="2" align="left"><span class="notranslate">MALWARE_SCAN_SCHEDULE:</span></th></tr>
 <tr><td><span class="notranslate">day_of_month: &lt;next day after installation&gt;</span></td>
@@ -234,6 +237,8 @@ to request CAPTCHA again</td></tr>
 <td># enable (<span class="notranslate">True</span>) or disable (<span class="notranslate">False</span>) (default value) Exim+Dovecot brute-force attack protection against Dovecot brute-force attacks.</td></tr>
 <tr><td><span class="notranslate">PAM.ftp_protection: False</span></td>
 <td># enable (<span class="notranslate">True</span>) or disable (<span class="notranslate">False</span>) (default value) FTP brute-force attack protection.</td></tr>
+<tr><td><span class="notranslate">PAM.exim_dovecot_native: False</span></td>
+<td># enable (<span class="notranslate">True</span>) or disable (<span class="notranslate">False</span>) (default value) the Dovecot native module.</td></tr>
 <tr>
 <th align="left"><span class="notranslate">KERNELCARE:</span> (<b><font color="Red">deprecated</font></b>)</th>
 <th align="left"># KernelCare extension for Imunify360 which allows tracing malicious invocations to detect privilege escalation attempts</th></tr>
@@ -314,7 +319,7 @@ systemctl restart imunify360
 
 </div>
 
-### How to apply changes from CLI
+#### How to apply changes from CLI
 
 In order to apply changes via command-line interface (CLI), you can use the following command:
 
@@ -340,6 +345,15 @@ It is also possible to apply several parameters at once. For example:
 
 ```
 imunify360-agent config update '{"PAM": {"exim_dovecot_protection": false, "enable":true}}'
+```
+</div>
+
+For string configuration values, such as the administrator's email address, it is necessary to use the following command format:
+
+<div class="notranslate">
+
+```
+imunify360-agent config update '{"ADMIN_CONTACTS": {"emails": ["email@domain.com"]}}'
 ```
 </div>
 
